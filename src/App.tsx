@@ -38,7 +38,7 @@ export function App() {
         <ServicesSection />
 
         {/* Frames 09-11: Our Specialist Wave & Carousel */}
-        <SpecialistsSection />
+        <SpecialistsSection onOpenBooking={() => handleOpenBooking()} />
 
         {/* Clinic Branches Section (Valanchery & Edayoor) */}
         <BranchesSection onOpenBooking={handleOpenBooking} />
