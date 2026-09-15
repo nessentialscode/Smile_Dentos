@@ -144,7 +144,7 @@ export const SpecialistsSection: React.FC = () => {
       <div
         style={{
           width: '100%',
-          overflow: 'hidden',
+          overflow: 'visible',
           lineHeight: 0,
           position: 'relative',
         }}
@@ -166,14 +166,14 @@ export const SpecialistsSection: React.FC = () => {
           />
         </svg>
 
-        {/* Apex Concentric Circular Badge: +See All (Centered at the lowest dip of the curve in Frame 09) */}
+        {/* Apex Concentric Circular Badge: +See All (Fully visible 100% circle, never clipped) */}
         <div
           style={{
             position: 'absolute',
-            bottom: 'clamp(4px, 1.5vw, 12px)',
+            bottom: 0,
             left: '50%',
-            transform: 'translateX(-50%)',
-            zIndex: 10,
+            transform: 'translate(-50%, 50%)',
+            zIndex: 20,
           }}
         >
           <a
@@ -182,20 +182,21 @@ export const SpecialistsSection: React.FC = () => {
               display: 'inline-flex',
               alignItems: 'center',
               justifyContent: 'center',
-              width: 'clamp(56px, 7vw, 74px)',
-              height: 'clamp(56px, 7vw, 74px)',
+              width: 'clamp(62px, 7vw, 76px)',
+              height: 'clamp(62px, 7vw, 76px)',
               borderRadius: '50%',
               backgroundColor: 'var(--color-lime)',
               color: '#5E2614',
               fontFamily: 'var(--font-main)',
-              fontSize: 'clamp(0.72rem, 1.1vw, 0.82rem)',
+              fontSize: 'clamp(0.75rem, 1.1vw, 0.84rem)',
               fontWeight: 700,
-              boxShadow: '0 6px 18px rgba(0,0,0,0.14)',
-              border: '2px solid var(--color-lime)',
-              outline: '2px solid rgba(215, 248, 70, 0.45)',
+              boxShadow: '0 6px 20px rgba(0,0,0,0.18)',
+              border: '2.5px solid var(--color-lime)',
+              outline: '2.5px solid rgba(215, 248, 70, 0.55)',
               outlineOffset: '3px',
               textDecoration: 'none',
               transition: 'transform 0.25s ease, box-shadow 0.25s ease',
+              whiteSpace: 'nowrap',
             }}
             onMouseEnter={(e) => {
               e.currentTarget.style.transform = 'scale(1.08)';
@@ -203,7 +204,7 @@ export const SpecialistsSection: React.FC = () => {
             }}
             onMouseLeave={(e) => {
               e.currentTarget.style.transform = 'scale(1)';
-              e.currentTarget.style.boxShadow = '0 6px 18px rgba(0,0,0,0.14)';
+              e.currentTarget.style.boxShadow = '0 6px 20px rgba(0,0,0,0.18)';
             }}
           >
             +See All
