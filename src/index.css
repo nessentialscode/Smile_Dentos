@@ -1,0 +1,166 @@
+/* ==========================================================================
+   SMILE DENTOS FAMILY DENTAL CLINIC — GLOBAL DESIGN SYSTEM & TOKENS
+   ========================================================================== */
+
+:root {
+  /* Color Palette */
+  --color-rust: #8F4225;
+  --color-rust-dark: #4A1D11;
+  --color-rust-deep: #5E2614;
+  --color-rust-subtle: #A35436;
+  --color-cream: #FAF4E8;
+  --color-cream-card: #FFFFFF;
+  --color-cream-border: rgba(94, 38, 20, 0.18);
+  
+  --color-lime: #D7F846;
+  --color-lime-glow: rgba(215, 248, 70, 0.4);
+  --color-lime-dark: #B9D934;
+
+  --color-lavender: #B2A4EC;
+  --color-lavender-light: #D9CBF7;
+  --color-lavender-tag: #C9B8F8;
+
+  --color-white: #FFFFFF;
+  --color-black: #0E0A08;
+
+  /* Typography */
+  --font-main: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-display: 'Outfit', 'Plus Jakarta Sans', sans-serif;
+
+  /* Spacing & Radii */
+  --radius-pill: 9999px;
+  --radius-card: 28px;
+  --radius-sm: 14px;
+  
+  /* Transitions */
+  --ease-smooth: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-family: var(--font-main);
+  background-color: var(--color-rust);
+  color: var(--color-white);
+  scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
+  line-height: 1.5;
+  color: var(--color-white);
+  background: var(--color-rust);
+}
+
+/* Accessibility */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: #2D140B;
+}
+::-webkit-scrollbar-thumb {
+  background: #8F4225;
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-lime);
+}
+
+/* Selection */
+::selection {
+  background: var(--color-lime);
+  color: var(--color-rust-dark);
+}
+
+/* Button & Link reset */
+button {
+  border: none;
+  background: none;
+  font-family: inherit;
+  cursor: pointer;
+  outline: none;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+/* Utilities */
+.container {
+  width: 100%;
+  max-width: 1380px;
+  margin: 0 auto;
+  padding: 0 2rem;
+}
+
+@media (max-width: 768px) {
+  .container {
+    padding: 0 1.25rem;
+  }
+}
+
+@media (max-width: 420px) {
+  .container {
+    padding: 0 1rem;
+  }
+}
+
+/* Rotating Stamp Animation */
+@keyframes spinClockwise {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.spin-slow {
+  animation: spinClockwise 18s linear infinite;
+}
+
+/* Subtle Floating Physics */
+@keyframes floatGentle {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-8px);
+  }
+}
+
+.float-slow {
+  animation: floatGentle 5s ease-in-out infinite;
+}
+
+/* Starburst Symbol Styling */
+.starburst-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  vertical-align: middle;
+  line-height: 1;
+  color: var(--color-lime);
+}
