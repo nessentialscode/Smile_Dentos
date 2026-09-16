@@ -122,9 +122,9 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onOpenBooking }) => {
             <h1
               style={{
                 fontFamily: 'var(--font-display)',
-                fontSize: 'clamp(2.4rem, 6.5vw, 6.8rem)',
+                fontSize: 'clamp(2.6rem, 7.2vw, 7.8rem)',
                 fontWeight: 700,
-                lineHeight: 1,
+                lineHeight: 1.02,
                 letterSpacing: '-0.035em',
                 color: 'var(--color-white)',
                 textShadow: '0 4px 20px rgba(0,0,0,0.4)',

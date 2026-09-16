@@ -100,10 +100,12 @@ interface SpecialistsSectionProps {
 }
 
 export const SpecialistsSection: React.FC<SpecialistsSectionProps> = ({ onOpenBooking }) => {
-  // Center doctor index: start with Dr. Athira S. (0) or middle
+  // Center doctor index: starts at 0 (Dr. Athira S.)
   const [currentIndex, setCurrentIndex] = useState<number>(0);
-  // Controls expanded detail card (null by default on desktop; follows currentIndex on mobile if opened)
+  // On mobile: controls which doctor's detailed card is expanded
   const [activeDoctorIndex, setActiveDoctorIndex] = useState<number | null>(null);
+  // On desktop: tracks currently hovered doctor
+  const [hoveredDoctorIndex, setHoveredDoctorIndex] = useState<number | null>(null);
   const [isMobile, setIsMobile] = useState(false);
 
   // Drag and touch swipe state
@@ -111,7 +113,6 @@ export const SpecialistsSection: React.FC<SpecialistsSectionProps> = ({ onOpenBo
   const [isDragging, setIsDragging] = useState(false);
 
   const shouldReduceMotion = useReducedMotion();
-  const leaveTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   // Touch gesture tracking refs
   const touchStartRef = useRef<{ x: number; y: number; time: number } | null>(null);
@@ -134,16 +135,15 @@ export const SpecialistsSection: React.FC<SpecialistsSectionProps> = ({ onOpenBo
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
-  // Dimensions matching the reference design
-  const baseSlotWidth = isMobile ? 150 : 165;
-  const slotGap = isMobile ? 14 : 20;
-  const cardWidth = isMobile ? 310 : 340;
-  const spreadAmount = isMobile ? 55 : 62;
+  // Dimensions: larger circles on desktop, perfectly sized for modern screens
+  const baseSlotWidth = isMobile ? 150 : 202;
+  const slotGap = isMobile ? 14 : 18;
+  const cardWidth = 310;
 
   const easingCurve = [0.16, 1, 0.3, 1] as const;
   const transitionDuration = shouldReduceMotion ? 0.01 : 0.52;
 
-  // Middle index of doctors array for flex center alignment
+  // Middle index of doctors array for flex center alignment on mobile
   const middleIdx = Math.floor(doctors.length / 2); // 3 for 7 items
 
   // Navigate to a specific doctor index with boundary clamping
@@ -162,8 +162,11 @@ export const SpecialistsSection: React.FC<SpecialistsSectionProps> = ({ onOpenBo
         ? (currentIndex + 1) % doctors.length
         : (currentIndex - 1 + doctors.length) % doctors.length;
     setCurrentIndex(nextIndex);
-    if (activeDoctorIndex !== null || isMobile) {
+    if (isMobile && activeDoctorIndex !== null) {
       setActiveDoctorIndex(nextIndex);
+    }
+    if (!isMobile) {
+      setHoveredDoctorIndex(nextIndex);
     }
   };
 
@@ -270,9 +273,9 @@ export const SpecialistsSection: React.FC<SpecialistsSectionProps> = ({ onOpenBo
     }, 60);
   };
 
-  // Mouse Drag Handlers (for desktop/tablet click-and-drag)
+  // Mouse Drag Handlers (for mobile/tablet simulation)
   const handleMouseDown = (e: React.MouseEvent) => {
-    if (e.button !== 0) return;
+    if (!isMobile || e.button !== 0) return;
     const target = e.target as HTMLElement;
     if (target.closest('button') || target.closest('a')) return;
 
@@ -283,7 +286,7 @@ export const SpecialistsSection: React.FC<SpecialistsSectionProps> = ({ onOpenBo
   };
 
   const handleMouseMove = (e: React.MouseEvent) => {
-    if (!isMouseDownRef.current || !mouseStartRef.current) return;
+    if (!isMobile || !isMouseDownRef.current || !mouseStartRef.current) return;
     const diffX = e.clientX - mouseStartRef.current.x;
 
     if (Math.abs(diffX) > 6) {
@@ -302,6 +305,7 @@ export const SpecialistsSection: React.FC<SpecialistsSectionProps> = ({ onOpenBo
   };
 
   const handleMouseUp = () => {
+    if (!isMobile) return;
     if (isMouseDownRef.current && isSwipingRef.current && mouseStartRef.current) {
       const elapsed = Date.now() - mouseStartRef.current.time;
       const isQuickFlick = elapsed < 350 && Math.abs(dragOffset) > 24;
@@ -339,8 +343,9 @@ export const SpecialistsSection: React.FC<SpecialistsSectionProps> = ({ onOpenBo
     }
   };
 
-  // Wheel / Horizontal Trackpad Scroll Handler
+  // Wheel / Horizontal Trackpad Scroll Handler (mobile/tablet only)
   const handleWheel = (e: React.WheelEvent) => {
+    if (!isMobile) return;
     if (Math.abs(e.deltaX) > 30 && Date.now() - lastWheelTimeRef.current > 380) {
       lastWheelTimeRef.current = Date.now();
       if (e.deltaX > 0) {
@@ -351,25 +356,15 @@ export const SpecialistsSection: React.FC<SpecialistsSectionProps> = ({ onOpenBo
     }
   };
 
-  // Hover handlers for desktop (with 220ms debounce grace period)
+  // Hover handlers for desktop (subtle elevate & tooltip, NO inline card disruption)
   const handleDoctorMouseEnter = (index: number) => {
     if (isMobile) return;
-    if (leaveTimeoutRef.current) {
-      clearTimeout(leaveTimeoutRef.current);
-      leaveTimeoutRef.current = null;
-    }
-    setActiveDoctorIndex(index);
-    setCurrentIndex(index);
+    setHoveredDoctorIndex(index);
   };
 
   const handleDoctorMouseLeave = () => {
     if (isMobile) return;
-    if (leaveTimeoutRef.current) {
-      clearTimeout(leaveTimeoutRef.current);
-    }
-    leaveTimeoutRef.current = setTimeout(() => {
-      setActiveDoctorIndex(null);
-    }, 220);
+    setHoveredDoctorIndex(null);
   };
 
   // Doctor click handler
@@ -384,25 +379,11 @@ export const SpecialistsSection: React.FC<SpecialistsSectionProps> = ({ onOpenBo
         setActiveDoctorIndex((prev) => (prev === index ? null : index));
       }
     } else {
-      setActiveDoctorIndex((prev) => (prev === index ? null : index));
-      setCurrentIndex(index);
+      // On desktop: opens appointment booking modal directly with this doctor selected
+      if (onOpenBooking) {
+        onOpenBooking(doctors[index].name);
+      }
     }
-  };
-
-  // Desktop hover spread calculation
-  const getDoctorTransformX = (index: number) => {
-    if (isMobile) return 0;
-    if (activeDoctorIndex === null) return 0;
-    if (index === activeDoctorIndex) return 0;
-
-    if (activeDoctorIndex === 0) {
-      return index > 0 ? spreadAmount * 1.4 : 0;
-    }
-    if (activeDoctorIndex === doctors.length - 1) {
-      return index < activeDoctorIndex ? -spreadAmount * 1.4 : 0;
-    }
-
-    return index < activeDoctorIndex ? -spreadAmount : spreadAmount;
   };
 
   // Mobile carousel translation: middle index is centered when x = 0
@@ -419,10 +400,8 @@ export const SpecialistsSection: React.FC<SpecialistsSectionProps> = ({ onOpenBo
           position: 'relative',
           paddingTop: '0',
           paddingBottom: isMobile
-            ? activeDoctorIndex !== null
-              ? 'clamp(24rem, 60vh, 27.5rem)'
-              : '3.6rem'
-            : 'clamp(6.5rem, 8vw, 8.5rem)',
+            ? '2.2rem'
+            : 'clamp(5.5rem, 7vw, 7.5rem)',
           transition: 'padding-bottom 0.45s cubic-bezier(0.16, 1, 0.3, 1)',
           overflow: 'hidden',
           zIndex: 20,
@@ -500,7 +479,7 @@ export const SpecialistsSection: React.FC<SpecialistsSectionProps> = ({ onOpenBo
         </div>
 
         {/* Header with Title & Outline Arrow Controls */}
-        <div className="container" style={{ marginTop: 'clamp(1.8rem, 3vw, 3rem)', marginBottom: 'clamp(1.2rem, 2vw, 2rem)' }}>
+        <div className="container" style={{ marginTop: 'clamp(1.8rem, 3vw, 3rem)', marginBottom: 'clamp(1.5rem, 2.5vw, 2.5rem)' }}>
           <div
             style={{
               display: 'flex',
@@ -625,13 +604,14 @@ export const SpecialistsSection: React.FC<SpecialistsSectionProps> = ({ onOpenBo
           </div>
         </div>
 
-        {/* Doctor Cards Interactive Carousel Wrapper */}
+        {/* Doctor Cards Interactive Carousel / Desktop Row Wrapper */}
         <div
           className="container"
           style={{
             position: 'relative',
+            maxWidth: isMobile ? undefined : '1520px',
             overflow: 'visible',
-            touchAction: 'pan-y',
+            touchAction: isMobile ? 'pan-y' : 'auto',
             cursor: isDragging ? 'grabbing' : isMobile ? 'grab' : 'default',
             userSelect: 'none',
             WebkitUserSelect: 'none',
@@ -646,7 +626,7 @@ export const SpecialistsSection: React.FC<SpecialistsSectionProps> = ({ onOpenBo
           onMouseLeave={handleMouseLeaveContainer}
           onWheel={handleWheel}
         >
-          {/* Mobile Floating Side Arrows (instantly accessible when scrolled down) */}
+          {/* Mobile Floating Side Arrows */}
           {isMobile && (
             <>
               <button
@@ -716,7 +696,7 @@ export const SpecialistsSection: React.FC<SpecialistsSectionProps> = ({ onOpenBo
             </>
           )}
 
-          {/* Sliding Doctor Row Track */}
+          {/* Doctor Row Track */}
           <motion.div
             animate={{
               x: isMobile ? mobileTranslateX : 0,
@@ -728,21 +708,22 @@ export const SpecialistsSection: React.FC<SpecialistsSectionProps> = ({ onOpenBo
             style={{
               width: '100%',
               display: 'flex',
-              alignItems: 'flex-start',
+              alignItems: 'center',
               justifyContent: 'center',
-              gap: `${slotGap}px`,
+              gap: isMobile ? `${slotGap}px` : 'clamp(14px, 1.4vw, 24px)',
               overflowX: 'visible',
               overflowY: 'visible',
               paddingTop: '0.8rem',
-              paddingBottom: '0.4rem',
+              paddingBottom: '0.6rem',
               willChange: 'transform',
             }}
           >
             {doctors.map((doc, idx) => {
-              const isActive = activeDoctorIndex === idx;
-              const isCentered = currentIndex === idx;
-              const isAnyActive = activeDoctorIndex !== null;
+              const isActive = isMobile && activeDoctorIndex === idx;
+              const isCentered = isMobile && currentIndex === idx;
+              const isAnyActive = isMobile && activeDoctorIndex !== null;
               const isSubtle = isAnyActive && !isActive;
+              const isHovered = !isMobile && hoveredDoctorIndex === idx;
 
               return (
                 <motion.div
@@ -752,14 +733,9 @@ export const SpecialistsSection: React.FC<SpecialistsSectionProps> = ({ onOpenBo
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   animate={{
-                    x: shouldReduceMotion ? 0 : getDoctorTransformX(idx),
                     opacity: isMobile ? (isCentered ? 1 : 0.78) : (isSubtle ? 0.76 : 1),
                   }}
                   transition={{
-                    x: {
-                      duration: transitionDuration,
-                      ease: easingCurve,
-                    },
                     opacity: {
                       duration: shouldReduceMotion ? 0.01 : 0.38,
                       ease: 'easeOut',
@@ -782,22 +758,18 @@ export const SpecialistsSection: React.FC<SpecialistsSectionProps> = ({ onOpenBo
                     position: 'relative',
                     cursor: 'pointer',
                     outline: 'none',
-                    zIndex: isActive ? 50 : isCentered ? 30 : 10,
+                    zIndex: isActive ? 50 : isHovered ? 40 : isCentered ? 30 : 10,
                     willChange: 'transform, opacity',
                   }}
                 >
                   {/* Circular Avatar Container with Scaling & Ambient Aura */}
                   <motion.div
                     animate={{
-                      scale: isActive
-                        ? shouldReduceMotion
-                          ? 1
-                          : 1.28
-                        : isMobile && isCentered
-                        ? 1.14
-                        : isSubtle
-                        ? 0.94
-                        : 1,
+                      scale: isMobile
+                        ? isActive
+                          ? shouldReduceMotion ? 1 : 1.28
+                          : isCentered ? 1.14 : isSubtle ? 0.94 : 1
+                        : isHovered ? 1.08 : 1,
                     }}
                     transition={{
                       scale: {
@@ -808,31 +780,38 @@ export const SpecialistsSection: React.FC<SpecialistsSectionProps> = ({ onOpenBo
                     style={{
                       position: 'relative',
                       zIndex: 70,
-                      marginBottom: '0.8rem',
                       transformOrigin: 'center center',
                       willChange: 'transform',
                     }}
                   >
                     <div
                       style={{
-                        width: 'clamp(135px, 13vw, 168px)',
-                        height: 'clamp(135px, 13vw, 168px)',
+                        width: isMobile ? 'clamp(135px, 35vw, 155px)' : 'clamp(172px, 12.5vw, 202px)',
+                        height: isMobile ? 'clamp(135px, 35vw, 155px)' : 'clamp(172px, 12.5vw, 202px)',
                         borderRadius: '50%',
                         overflow: 'hidden',
                         backgroundColor: doc.bg,
-                        boxShadow: isActive
-                          ? `0 16px 36px rgba(0,0,0,0.22), 0 0 45px ${doc.bg}cc`
-                          : isMobile && isCentered
-                          ? `0 12px 28px rgba(0,0,0,0.18), 0 0 25px ${doc.bg}88`
-                          : '0 10px 24px rgba(0,0,0,0.12)',
+                        boxShadow: isMobile
+                          ? isActive
+                            ? `0 16px 36px rgba(0,0,0,0.22), 0 0 45px ${doc.bg}cc`
+                            : isCentered
+                            ? `0 12px 28px rgba(0,0,0,0.18), 0 0 25px ${doc.bg}88`
+                            : '0 10px 24px rgba(0,0,0,0.12)'
+                          : isHovered
+                          ? `0 20px 45px rgba(0,0,0,0.28), 0 0 38px ${doc.bg}cc`
+                          : '0 10px 28px rgba(0,0,0,0.16)',
                         display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'center',
-                        border: isActive
+                        border: isMobile
+                          ? isActive
+                            ? '4.5px solid #FFFFFF'
+                            : isCentered
+                            ? '3.5px solid rgba(255, 255, 255, 0.95)'
+                            : '3px solid transparent'
+                          : isHovered
                           ? '4.5px solid #FFFFFF'
-                          : isMobile && isCentered
-                          ? '3.5px solid rgba(255, 255, 255, 0.95)'
-                          : '3px solid transparent',
+                          : '4px solid rgba(255, 255, 255, 0.82)',
                         transition: 'border 0.35s ease, box-shadow 0.45s ease',
                       }}
                     >
@@ -850,59 +829,112 @@ export const SpecialistsSection: React.FC<SpecialistsSectionProps> = ({ onOpenBo
                     </div>
                   </motion.div>
 
-
-
-                  {/* Active Expanded State: Anchored DIRECTLY below the circular photo */}
-                  <div
-                    style={{
-                      position: 'absolute',
-                      top: 'clamp(92px, 9.2vw, 108px)',
-                      left: '50%',
-                      transform: 'translateX(-50%)',
-                      width: `${cardWidth}px`,
-                      zIndex: 60,
-                      pointerEvents: isActive ? 'auto' : 'none',
-                    }}
-                  >
+                  {/* Desktop Hover Floating Badge: Clean minimal pill */}
+                  {!isMobile && (
                     <motion.div
                       initial={false}
                       animate={{
-                        opacity: isActive ? 1 : 0,
-                        y: isActive ? 0 : 14,
-                        scale: isActive ? 1 : 0.94,
+                        opacity: isHovered ? 1 : 0,
+                        y: isHovered ? 0 : 8,
+                        scale: isHovered ? 1 : 0.95,
                       }}
-                      transition={{
-                        opacity: {
-                          duration: shouldReduceMotion ? 0.01 : 0.35,
-                          ease: 'easeOut',
-                        },
-                        y: {
-                          duration: transitionDuration,
-                          ease: easingCurve,
-                        },
-                        scale: {
-                          duration: transitionDuration,
-                          ease: easingCurve,
-                        },
-                      }}
+                      transition={{ duration: 0.22, ease: 'easeOut' }}
                       style={{
-                        width: '100%',
-                        backgroundColor: 'var(--color-white)',
-                        borderRadius: '28px',
-                        padding: 'clamp(4.2rem, 4.6vw, 4.8rem) 1.5rem 1.6rem 1.5rem',
-                        boxShadow: '0 24px 55px rgba(45, 18, 10, 0.28)',
-                        textAlign: 'center',
-                        transformOrigin: 'top center',
-                        willChange: 'transform, opacity',
-                        position: 'relative',
-                      }}
-                      onClick={(e) => {
-                        // Prevent click on text/card from closing the card
-                        e.stopPropagation();
+                        position: 'absolute',
+                        top: 'calc(100% + 12px)',
+                        left: '50%',
+                        transform: 'translateX(-50%)',
+                        backgroundColor: 'rgba(28, 16, 12, 0.92)',
+                        backdropFilter: 'blur(10px)',
+                        WebkitBackdropFilter: 'blur(10px)',
+                        color: '#FFFFFF',
+                        padding: '0.45rem 0.95rem',
+                        borderRadius: 'var(--radius-pill)',
+                        border: '1px solid rgba(255, 255, 255, 0.2)',
+                        boxShadow: '0 8px 24px rgba(0,0,0,0.3)',
+                        pointerEvents: 'none',
+                        whiteSpace: 'nowrap',
+                        zIndex: 80,
+                        display: 'flex',
+                        flexDirection: 'column',
+                        alignItems: 'center',
                       }}
                     >
-                      {/* Close button on mobile for instant intuitive dismissal */}
-                      {isMobile && (
+                      <span
+                        style={{
+                          fontFamily: 'var(--font-display)',
+                          fontSize: '0.9rem',
+                          fontWeight: 700,
+                          color: '#FFFFFF',
+                          lineHeight: 1.2,
+                        }}
+                      >
+                        {doc.name}
+                      </span>
+                      <span
+                        style={{
+                          fontFamily: 'var(--font-main)',
+                          fontSize: '0.72rem',
+                          color: 'var(--color-lime)',
+                          fontWeight: 600,
+                          letterSpacing: '0.04em',
+                        }}
+                      >
+                        {doc.specialty}
+                      </span>
+                    </motion.div>
+                  )}
+
+                  {/* Active Expanded State: ONLY on Mobile */}
+                  {isMobile && (
+                    <div
+                      style={{
+                        position: 'absolute',
+                        top: 'clamp(92px, 9.2vw, 108px)',
+                        left: '50%',
+                        transform: 'translateX(-50%)',
+                        width: `${cardWidth}px`,
+                        zIndex: 60,
+                        pointerEvents: isActive ? 'auto' : 'none',
+                      }}
+                    >
+                      <motion.div
+                        initial={false}
+                        animate={{
+                          opacity: isActive ? 1 : 0,
+                          y: isActive ? 0 : 14,
+                          scale: isActive ? 1 : 0.94,
+                        }}
+                        transition={{
+                          opacity: {
+                            duration: shouldReduceMotion ? 0.01 : 0.35,
+                            ease: 'easeOut',
+                          },
+                          y: {
+                            duration: transitionDuration,
+                            ease: easingCurve,
+                          },
+                          scale: {
+                            duration: transitionDuration,
+                            ease: easingCurve,
+                          },
+                        }}
+                        style={{
+                          width: '100%',
+                          backgroundColor: 'var(--color-white)',
+                          borderRadius: '28px',
+                          padding: 'clamp(4.2rem, 4.6vw, 4.8rem) 1.5rem 1.6rem 1.5rem',
+                          boxShadow: '0 24px 55px rgba(45, 18, 10, 0.28)',
+                          textAlign: 'center',
+                          transformOrigin: 'top center',
+                          willChange: 'transform, opacity',
+                          position: 'relative',
+                        }}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                        }}
+                      >
+                        {/* Close button on mobile for instant intuitive dismissal */}
                         <button
                           type="button"
                           onClick={(e) => {
@@ -929,193 +961,193 @@ export const SpecialistsSection: React.FC<SpecialistsSectionProps> = ({ onOpenBo
                         >
                           <X size={18} strokeWidth={2.2} />
                         </button>
-                      )}
 
-                      {/* Active Doctor Name */}
-                      <h3
-                        style={{
-                          fontFamily: 'var(--font-display)',
-                          fontSize: 'clamp(1.25rem, 1.4vw, 1.45rem)',
-                          fontWeight: 700,
-                          color: '#18181B',
-                          marginBottom: '0.2rem',
-                          letterSpacing: '-0.02em',
-                        }}
-                      >
-                        {doc.name}
-                      </h3>
-
-                      {/* Active Doctor Specialty */}
-                      <p
-                        style={{
-                          fontFamily: 'var(--font-main)',
-                          fontSize: '0.86rem',
-                          fontWeight: 600,
-                          color: '#7C3AED',
-                          marginBottom: '0.75rem',
-                        }}
-                      >
-                        {doc.specialty}
-                      </p>
-
-                      {/* Doctor Short Bio */}
-                      <p
-                        style={{
-                          fontFamily: 'var(--font-main)',
-                          fontSize: '0.81rem',
-                          lineHeight: 1.45,
-                          color: '#4B5563',
-                          marginBottom: '1.15rem',
-                        }}
-                      >
-                        {doc.bio}
-                      </p>
-
-                      {/* Credentials 3-Column Info Grid */}
-                      <div
-                        style={{
-                          display: 'grid',
-                          gridTemplateColumns: 'repeat(3, 1fr)',
-                          gap: '0.4rem',
-                          paddingTop: '0.85rem',
-                          paddingBottom: '0.85rem',
-                          borderTop: '1px solid rgba(0, 0, 0, 0.07)',
-                          borderBottom: '1px solid rgba(0, 0, 0, 0.07)',
-                          marginBottom: '1.2rem',
-                        }}
-                      >
-                        {/* Qualification / Degree */}
-                        <div
+                        {/* Active Doctor Name */}
+                        <h3
                           style={{
-                            display: 'flex',
-                            flexDirection: 'column',
-                            alignItems: 'center',
-                            textAlign: 'center',
+                            fontFamily: 'var(--font-display)',
+                            fontSize: 'clamp(1.25rem, 1.4vw, 1.45rem)',
+                            fontWeight: 700,
+                            color: '#18181B',
+                            marginBottom: '0.2rem',
+                            letterSpacing: '-0.02em',
                           }}
                         >
-                          <GraduationCap
-                            size={18}
-                            color="#7C3AED"
-                            style={{ marginBottom: '0.3rem' }}
-                          />
-                          <span
-                            style={{
-                              fontFamily: 'var(--font-main)',
-                              fontSize: '0.71rem',
-                              fontWeight: 600,
-                              color: '#374151',
-                              lineHeight: 1.25,
-                              whiteSpace: 'pre-line',
-                            }}
-                          >
-                            {doc.degree}
-                          </span>
-                        </div>
+                          {doc.name}
+                        </h3>
 
-                        {/* Experience */}
-                        <div
+                        {/* Active Doctor Specialty */}
+                        <p
                           style={{
-                            display: 'flex',
-                            flexDirection: 'column',
-                            alignItems: 'center',
-                            textAlign: 'center',
-                            borderLeft: '1px solid rgba(0, 0, 0, 0.07)',
-                            borderRight: '1px solid rgba(0, 0, 0, 0.07)',
+                            fontFamily: 'var(--font-main)',
+                            fontSize: '0.86rem',
+                            fontWeight: 600,
+                            color: '#7C3AED',
+                            marginBottom: '0.75rem',
                           }}
                         >
-                          <Award
-                            size={18}
-                            color="#7C3AED"
-                            style={{ marginBottom: '0.3rem' }}
-                          />
-                          <span
-                            style={{
-                              fontFamily: 'var(--font-main)',
-                              fontSize: '0.71rem',
-                              fontWeight: 600,
-                              color: '#374151',
-                              lineHeight: 1.25,
-                              whiteSpace: 'pre-line',
-                            }}
-                          >
-                            {doc.experience}
-                          </span>
-                        </div>
+                          {doc.specialty}
+                        </p>
 
-                        {/* Happy Patients */}
-                        <div
+                        {/* Doctor Short Bio */}
+                        <p
                           style={{
-                            display: 'flex',
-                            flexDirection: 'column',
-                            alignItems: 'center',
-                            textAlign: 'center',
+                            fontFamily: 'var(--font-main)',
+                            fontSize: '0.81rem',
+                            lineHeight: 1.45,
+                            color: '#4B5563',
+                            marginBottom: '1.15rem',
                           }}
                         >
-                          <Users
-                            size={18}
-                            color="#7C3AED"
-                            style={{ marginBottom: '0.3rem' }}
-                          />
-                          <span
+                          {doc.bio}
+                        </p>
+
+                        {/* Credentials 3-Column Info Grid */}
+                        <div
+                          style={{
+                            display: 'grid',
+                            gridTemplateColumns: 'repeat(3, 1fr)',
+                            gap: '0.4rem',
+                            paddingTop: '0.85rem',
+                            paddingBottom: '0.85rem',
+                            borderTop: '1px solid rgba(0, 0, 0, 0.07)',
+                            borderBottom: '1px solid rgba(0, 0, 0, 0.07)',
+                            marginBottom: '1.2rem',
+                          }}
+                        >
+                          {/* Qualification / Degree */}
+                          <div
                             style={{
-                              fontFamily: 'var(--font-main)',
-                              fontSize: '0.71rem',
-                              fontWeight: 600,
-                              color: '#374151',
-                              lineHeight: 1.25,
-                              whiteSpace: 'pre-line',
+                              display: 'flex',
+                              flexDirection: 'column',
+                              alignItems: 'center',
+                              textAlign: 'center',
                             }}
                           >
-                            {doc.patients}
-                          </span>
-                        </div>
-                      </div>
+                            <GraduationCap
+                              size={18}
+                              color="#7C3AED"
+                              style={{ marginBottom: '0.3rem' }}
+                            />
+                            <span
+                              style={{
+                                fontFamily: 'var(--font-main)',
+                                fontSize: '0.71rem',
+                                fontWeight: 600,
+                                color: '#374151',
+                                lineHeight: 1.25,
+                                whiteSpace: 'pre-line',
+                              }}
+                            >
+                              {doc.degree}
+                            </span>
+                          </div>
 
-                      {/* Lime High-Contrast CTA Button */}
-                      <button
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          if (onOpenBooking) {
-                            onOpenBooking(doc.name);
-                          } else {
-                            const contactSection = document.getElementById('branches');
-                            contactSection?.scrollIntoView({ behavior: 'smooth' });
-                          }
-                        }}
-                        style={{
-                          width: '100%',
-                          display: 'inline-flex',
-                          alignItems: 'center',
-                          justifyContent: 'center',
-                          gap: '0.4rem',
-                          backgroundColor: 'var(--color-lime)',
-                          color: '#18181B',
-                          fontFamily: 'var(--font-main)',
-                          fontSize: '0.85rem',
-                          fontWeight: 700,
-                          padding: '0.7rem 1.2rem',
-                          borderRadius: 'var(--radius-pill)',
-                          boxShadow: '0 6px 18px rgba(215, 248, 70, 0.35)',
-                          cursor: 'pointer',
-                          border: 'none',
-                          transition: 'transform 0.2s ease, box-shadow 0.2s ease',
-                        }}
-                        onMouseEnter={(e) => {
-                          e.currentTarget.style.transform = 'translateY(-2px)';
-                          e.currentTarget.style.boxShadow =
-                            '0 10px 24px rgba(215, 248, 70, 0.5)';
-                        }}
-                        onMouseLeave={(e) => {
-                          e.currentTarget.style.transform = 'translateY(0)';
-                          e.currentTarget.style.boxShadow =
-                            '0 6px 18px rgba(215, 248, 70, 0.35)';
-                        }}
-                      >
-                        <span>View Full Profile</span>
-                        <ArrowRight size={16} strokeWidth={2.2} />
-                      </button>
-                    </motion.div>
-                  </div>
+                          {/* Experience */}
+                          <div
+                            style={{
+                              display: 'flex',
+                              flexDirection: 'column',
+                              alignItems: 'center',
+                              textAlign: 'center',
+                              borderLeft: '1px solid rgba(0, 0, 0, 0.07)',
+                              borderRight: '1px solid rgba(0, 0, 0, 0.07)',
+                            }}
+                          >
+                            <Award
+                              size={18}
+                              color="#7C3AED"
+                              style={{ marginBottom: '0.3rem' }}
+                            />
+                            <span
+                              style={{
+                                fontFamily: 'var(--font-main)',
+                                fontSize: '0.71rem',
+                                fontWeight: 600,
+                                color: '#374151',
+                                lineHeight: 1.25,
+                                whiteSpace: 'pre-line',
+                              }}
+                            >
+                              {doc.experience}
+                            </span>
+                          </div>
+
+                          {/* Happy Patients */}
+                          <div
+                            style={{
+                              display: 'flex',
+                              flexDirection: 'column',
+                              alignItems: 'center',
+                              textAlign: 'center',
+                            }}
+                          >
+                            <Users
+                              size={18}
+                              color="#7C3AED"
+                              style={{ marginBottom: '0.3rem' }}
+                            />
+                            <span
+                              style={{
+                                fontFamily: 'var(--font-main)',
+                                fontSize: '0.71rem',
+                                fontWeight: 600,
+                                color: '#374151',
+                                lineHeight: 1.25,
+                                whiteSpace: 'pre-line',
+                              }}
+                            >
+                              {doc.patients}
+                            </span>
+                          </div>
+                        </div>
+
+                        {/* Lime High-Contrast CTA Button */}
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            if (onOpenBooking) {
+                              onOpenBooking(doc.name);
+                            } else {
+                              const contactSection = document.getElementById('branches');
+                              contactSection?.scrollIntoView({ behavior: 'smooth' });
+                            }
+                          }}
+                          style={{
+                            width: '100%',
+                            display: 'inline-flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            gap: '0.4rem',
+                            backgroundColor: 'var(--color-lime)',
+                            color: '#18181B',
+                            fontFamily: 'var(--font-main)',
+                            fontSize: '0.85rem',
+                            fontWeight: 700,
+                            padding: '0.7rem 1.2rem',
+                            borderRadius: 'var(--radius-pill)',
+                            boxShadow: '0 6px 18px rgba(215, 248, 70, 0.35)',
+                            cursor: 'pointer',
+                            border: 'none',
+                            transition: 'transform 0.2s ease, box-shadow 0.2s ease',
+                          }}
+                          onMouseEnter={(e) => {
+                            e.currentTarget.style.transform = 'translateY(-2px)';
+                            e.currentTarget.style.boxShadow =
+                              '0 10px 24px rgba(215, 248, 70, 0.5)';
+                          }}
+                          onMouseLeave={(e) => {
+                            e.currentTarget.style.transform = 'translateY(0)';
+                            e.currentTarget.style.boxShadow =
+                              '0 6px 18px rgba(215, 248, 70, 0.35)';
+                          }}
+                        >
+                          <span>View Full Profile</span>
+                          <ArrowRight size={16} strokeWidth={2.2} />
+                        </button>
+                      </motion.div>
+                    </div>
+                  )}
                 </motion.div>
               );
             })}
@@ -1129,7 +1161,7 @@ export const SpecialistsSection: React.FC<SpecialistsSectionProps> = ({ onOpenBo
                 alignItems: 'center',
                 justifyContent: 'center',
                 gap: '8px',
-                marginTop: activeDoctorIndex !== null ? 'clamp(23.8rem, 58vh, 26.5rem)' : '1.1rem',
+                marginTop: activeDoctorIndex !== null ? 'clamp(21rem, 50vh, 22.8rem)' : '1rem',
                 transition: 'margin-top 0.45s cubic-bezier(0.16, 1, 0.3, 1)',
                 position: 'relative',
                 zIndex: 45,

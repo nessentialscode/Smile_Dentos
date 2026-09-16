@@ -37,7 +37,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenBooking }) => {
           right: 0,
           zIndex: 100,
           transition: 'background-color 0.35s ease, backdrop-filter 0.35s ease, padding 0.35s ease',
-          padding: scrolled ? '1rem 0' : '1.5rem 0',
+          padding: scrolled ? '0.75rem 0' : '1.15rem 0',
           backgroundColor: scrolled ? 'rgba(74, 31, 16, 0.92)' : 'transparent',
           backdropFilter: scrolled ? 'blur(16px)' : 'none',
           borderBottom: scrolled ? '1px solid rgba(255, 255, 255, 0.08)' : 'none',
@@ -67,10 +67,11 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenBooking }) => {
                 src="/images/smile_dentos_logo.png"
                 alt="Smile Dentos Family Dental Care"
                 style={{
-                  height: 'clamp(40px, 4.5vw, 52px)',
+                  height: scrolled ? 'clamp(46px, 4.4vw, 64px)' : 'clamp(52px, 5.2vw, 80px)',
                   width: 'auto',
                   display: 'block',
                   objectFit: 'contain',
+                  transition: 'height 0.3s ease',
                 }}
               />
             </a>
@@ -81,7 +82,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenBooking }) => {
               style={{
                 display: 'flex',
                 alignItems: 'center',
-                gap: '1.8rem',
+                gap: 'clamp(1.15rem, 1.7vw, 2rem)',
               }}
             >
               {navLinks.map((link) => (
@@ -90,7 +91,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenBooking }) => {
                   href={link.href}
                   style={{
                     fontFamily: 'var(--font-main)',
-                    fontSize: '0.82rem',
+                    fontSize: 'clamp(0.82rem, 0.88vw, 0.92rem)',
                     fontWeight: 600,
                     letterSpacing: '0.12em',
                     color: 'var(--color-white)',
