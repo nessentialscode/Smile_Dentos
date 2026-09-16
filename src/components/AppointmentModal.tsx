@@ -7,17 +7,20 @@ interface AppointmentModalProps {
   isOpen: boolean;
   onClose: () => void;
   selectedBranch?: string;
+  selectedDoctor?: string;
 }
 
-export const AppointmentModal: React.FC<AppointmentModalProps> = ({ isOpen, onClose, selectedBranch }) => {
+export const AppointmentModal: React.FC<AppointmentModalProps> = ({ isOpen, onClose, selectedBranch, selectedDoctor }) => {
   const [branchOverride, setBranchOverride] = useState<string | null>(null);
   const defaultBranch = selectedBranch && selectedBranch.includes('Edayoor') ? 'Edayoor Branch' : 'Valanchery Main Clinic';
   const branch = branchOverride ?? defaultBranch;
 
+  const [doctorOverride, setDoctorOverride] = useState<string | null>(null);
+  const doctor = doctorOverride ?? (selectedDoctor || 'Dr. Athira S.');
+
   const [name, setName] = useState('');
   const [phone, setPhone] = useState('');
   const [service, setService] = useState('Teeth whitening');
-  const [doctor, setDoctor] = useState('Dr. John Smith');
   const [type, setType] = useState<'Online' | 'In-person'>('In-person');
   const [date, setDate] = useState('2026-09-15');
   const [submitted, setSubmitted] = useState(false);
@@ -408,7 +411,7 @@ export const AppointmentModal: React.FC<AppointmentModalProps> = ({ isOpen, onCl
                       </label>
                       <select
                         value={doctor}
-                        onChange={(e) => setDoctor(e.target.value)}
+                        onChange={(e) => setDoctorOverride(e.target.value)}
                         style={{
                           width: '100%',
                           padding: '0.65rem 0.9rem',
@@ -421,11 +424,13 @@ export const AppointmentModal: React.FC<AppointmentModalProps> = ({ isOpen, onCl
                           outline: 'none'
                         }}
                       >
-                        <option value="Dr. John Smith">Dr. John Smith — Orthodontics</option>
-                        <option value="Dr. David Kim">Dr. David Kim — Endodontics</option>
-                        <option value="Dr. Sarah Lee">Dr. Sarah Lee — Periodontics</option>
-                        <option value="Dr. Steven Lee">Dr. Steven Lee — Cosmetic</option>
-                        <option value="Dr. Jennifer Kim">Dr. Jennifer Kim — Orthodontics</option>
+                        <option value="Dr. Athira S.">Dr. Athira S. — Chief Dental Surgeon</option>
+                        <option value="Dr. Bhagiya R.">Dr. Bhagiya R. — Lady Dental Surgeon</option>
+                        <option value="Dr. Lijeesh Kadambil">Dr. Lijeesh Kadambil — Dental Surgeon</option>
+                        <option value="Dr. Ayisha Nizmiya K.">Dr. Ayisha Nizmiya K. — Consultant Orthodontist</option>
+                        <option value="Dr. Shanahaz">Dr. Shanahaz — Consultant Orthodontist</option>
+                        <option value="Dr. Jabir Kottammal">Dr. Jabir Kottammal — Oral & Maxillofacial Surgeon</option>
+                        <option value="Dr. Muhammad Haris P.M">Dr. Muhammad Haris P.M — Consultant Periodontist</option>
                       </select>
                     </div>
 

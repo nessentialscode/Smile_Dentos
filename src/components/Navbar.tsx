@@ -57,48 +57,22 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenBooking }) => {
             <a
               href="#hero"
               style={{
-                display: 'flex',
-                flexDirection: 'column',
-                gap: '2px',
+                display: 'inline-flex',
+                alignItems: 'center',
                 textDecoration: 'none',
               }}
+              aria-label="Smile Dentos Home"
             >
-              <div
+              <img
+                src="/images/smile_dentos_logo.png"
+                alt="Smile Dentos Family Dental Care"
                 style={{
-                  fontFamily: 'var(--font-display)',
-                  fontSize: 'clamp(1.6rem, 2.3vw, 2.1rem)',
-                  fontWeight: 800,
-                  letterSpacing: '-0.03em',
-                  color: 'var(--color-white)',
-                  lineHeight: 1,
-                  display: 'inline-flex',
-                  alignItems: 'center',
-                  gap: '6px',
+                  height: 'clamp(40px, 4.5vw, 52px)',
+                  width: 'auto',
+                  display: 'block',
+                  objectFit: 'contain',
                 }}
-              >
-                Smile Dentos
-                <span
-                  style={{
-                    display: 'inline-block',
-                    width: '8px',
-                    height: '8px',
-                    borderRadius: '50%',
-                    backgroundColor: 'var(--color-lime)',
-                  }}
-                />
-              </div>
-              <span
-                style={{
-                  fontFamily: 'var(--font-main)',
-                  fontSize: '0.68rem',
-                  fontWeight: 600,
-                  letterSpacing: '0.12em',
-                  color: 'var(--color-lime)',
-                  textTransform: 'uppercase',
-                }}
-              >
-                Family Dental Clinic
-              </span>
+              />
             </a>
 
             {/* Desktop Nav Links + Phone quick pill */}

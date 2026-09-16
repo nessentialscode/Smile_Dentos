@@ -1,6 +1,15 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, useReducedMotion } from 'framer-motion';
-import { ArrowLeft, ArrowRight, GraduationCap, Award, Users, X } from 'lucide-react';
+import {
+  ArrowLeft,
+  ArrowRight,
+  GraduationCap,
+  Award,
+  Users,
+  X,
+  ChevronLeft,
+  ChevronRight,
+} from 'lucide-react';
 
 export interface Doctor {
   name: string;
@@ -15,54 +24,74 @@ export interface Doctor {
 
 const doctors: Doctor[] = [
   {
-    name: 'Dr. John Smith',
-    specialty: 'Orthodontics Specialist',
-    image: '/images/doctor_john_smith.jpg',
+    name: 'Dr. Athira S.',
+    specialty: 'Chief Dental Surgeon',
+    image: '/images/doctor_athira_s.jpg',
     bg: '#F5A47E',
-    bio: 'Pioneering digital smile design, Invisalign, and modern orthodontic alignment for patients of all ages.',
-    degree: 'BDS, MDS\n(Orthodontics)',
-    experience: '10+ Years\nExperience',
-    patients: '2,400+\nHappy Patients',
+    bio: 'Leading the clinical team at Smile Dentos with exceptional dedication to comprehensive family dentistry, gentle restorative care, and precision diagnosis.',
+    degree: 'BDS\n(Dental Surgery)',
+    experience: '8+ Years\nExperience',
+    patients: '2,500+\nHappy Patients',
   },
   {
-    name: 'Dr. David Kim',
-    specialty: 'Endodontics Specialist',
-    image: '/images/doctor_david_kim.jpg',
+    name: 'Dr. Bhagiya R.',
+    specialty: 'Lady Dental Surgeon',
+    image: '/images/doctor_bhagiya_r.jpg',
     bg: '#D0B4F8',
-    bio: 'Specializing in single-visit root canals, microscopic endodontics, and gentle tooth preservation.',
-    degree: 'DDS, MS\n(Endodontics)',
-    experience: '8+ Years\nExperience',
+    bio: 'Dedicated to compassionate, anxiety-free dental care for women, children, and families, specializing in preventive prophylaxis and gentle smile preservation.',
+    degree: 'BDS\n(Dental Surgery)',
+    experience: '6+ Years\nExperience',
     patients: '1,800+\nHappy Patients',
   },
   {
-    name: 'Dr. Sarah Lee',
-    specialty: 'Periodontics Specialist',
-    image: '/images/doctor_sarah_lee.jpg',
+    name: 'Dr. Lijeesh Kadambil',
+    specialty: 'Dental Surgeon',
+    image: '/images/doctor_lijeesh_kadambil.jpg',
     bg: '#F7DE76',
-    bio: 'Specializes in gum care, dental implants, and advanced periodontal treatments. Dedicated to helping you achieve a healthier smile.',
-    degree: 'BDS, MDS\n(Periodontology)',
-    experience: '5+ Years\nExperience',
-    patients: '1,000+\nHappy Patients',
+    bio: 'Expert in painless single-visit root canal treatments, aesthetic composite restorations, crowns, bridges, and holistic preventive dentistry.',
+    degree: 'BDS\n(Dental Surgery)',
+    experience: '7+ Years\nExperience',
+    patients: '2,100+\nHappy Patients',
   },
   {
-    name: 'Dr. Steven Lee',
-    specialty: 'Cosmetic Dentistry',
-    image: '/images/doctor_steven_lee.jpg',
+    name: 'Dr. Ayisha Nizmiya K.',
+    specialty: 'Consultant Orthodontist',
+    image: '/images/doctor_ayisha_nizmiya.jpg',
     bg: '#BFE0F7',
-    bio: 'Crafting bespoke porcelain veneers, laser teeth whitening, and complete aesthetic smile makeovers.',
-    degree: 'DDS, FICOI\n(Cosmetic)',
-    experience: '7+ Years\nExperience',
+    bio: 'Advanced specialist in contemporary orthodontic alignment, digital clear aligners, ceramic braces, and pediatric interceptive smile corrections.',
+    degree: 'BDS, MDS\n(Orthodontics)',
+    experience: '9+ Years\nExperience',
+    patients: '1,700+\nHappy Patients',
+  },
+  {
+    name: 'Dr. Shanahaz',
+    specialty: 'Consultant Orthodontist',
+    image: '/images/doctor_shanahaz.jpg',
+    bg: '#C4E8D6',
+    bio: 'Passionate about custom orthodontic mechanics, correcting complex dental malocclusions, invisible aligners, and aesthetic teenage smile transformations.',
+    degree: 'BDS, MDS\n(Orthodontics)',
+    experience: '8+ Years\nExperience',
     patients: '1,500+\nHappy Patients',
   },
   {
-    name: 'Dr. Jennifer Kim',
-    specialty: 'Orthodontics Specialist',
-    image: '/images/doctor_jennifer_kim.jpg',
-    bg: '#C4E8D6',
-    bio: 'Dedicated to gentle, personalized orthodontic treatments, invisible aligners, and adolescent smile corrections.',
-    degree: 'BDS, MS\n(Orthodontics)',
-    experience: '6+ Years\nExperience',
-    patients: '1,200+\nHappy Patients',
+    name: 'Dr. Jabir Kottammal',
+    specialty: 'Consultant Oral & Maxillofacial Surgeon',
+    image: '/images/doctor_jabir_kottammal.jpg',
+    bg: '#FED7AA',
+    bio: 'Specialist in surgical wisdom tooth extractions, advanced dental implantology, facial trauma management, and painless minor oral surgeries.',
+    degree: 'BDS, MDS\n(Oral Surgery)',
+    experience: '11+ Years\nExperience',
+    patients: '3,200+\nHappy Patients',
+  },
+  {
+    name: 'Dr. Muhammad Haris P.M',
+    specialty: 'Consultant Periodontist',
+    image: '/images/doctor_muhammad_haris.jpg',
+    bg: '#DDD6FE',
+    bio: 'Specialized in advanced periodontal gum therapy, laser gingival depigmentation, bone grafting, and long-term tooth stabilization.',
+    degree: 'BDS, MDS\n(Periodontics)',
+    experience: '10+ Years\nExperience',
+    patients: '2,400+\nHappy Patients',
   },
 ];
 
@@ -71,56 +100,258 @@ interface SpecialistsSectionProps {
 }
 
 export const SpecialistsSection: React.FC<SpecialistsSectionProps> = ({ onOpenBooking }) => {
-  // Only opens when cursor is on that doctor's circular card (null by default)
+  // Center doctor index: start with Dr. Athira S. (0) or middle
+  const [currentIndex, setCurrentIndex] = useState<number>(0);
+  // Controls expanded detail card (null by default on desktop; follows currentIndex on mobile if opened)
   const [activeDoctorIndex, setActiveDoctorIndex] = useState<number | null>(null);
   const [isMobile, setIsMobile] = useState(false);
+
+  // Drag and touch swipe state
+  const [dragOffset, setDragOffset] = useState(0);
+  const [isDragging, setIsDragging] = useState(false);
 
   const shouldReduceMotion = useReducedMotion();
   const leaveTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
+  // Touch gesture tracking refs
+  const touchStartRef = useRef<{ x: number; y: number; time: number } | null>(null);
+  const isHorizontalSwipeRef = useRef<boolean | null>(null);
+  const isSwipingRef = useRef(false);
+
+  // Mouse drag tracking refs
+  const mouseStartRef = useRef<{ x: number; time: number } | null>(null);
+  const isMouseDownRef = useRef(false);
+
+  // Wheel debounce ref
+  const lastWheelTimeRef = useRef(0);
+
   useEffect(() => {
     const handleResize = () => {
-      setIsMobile(window.innerWidth < 768);
+      setIsMobile(window.innerWidth < 1024);
     };
     handleResize();
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
-  // On mobile: Close details when tapping anywhere outside the active specialist card
+  // Dimensions matching the reference design
+  const baseSlotWidth = isMobile ? 150 : 165;
+  const slotGap = isMobile ? 14 : 20;
+  const cardWidth = isMobile ? 310 : 340;
+  const spreadAmount = isMobile ? 55 : 62;
+
+  const easingCurve = [0.16, 1, 0.3, 1] as const;
+  const transitionDuration = shouldReduceMotion ? 0.01 : 0.52;
+
+  // Middle index of doctors array for flex center alignment
+  const middleIdx = Math.floor(doctors.length / 2); // 3 for 7 items
+
+  // Navigate to a specific doctor index with boundary clamping
+  const navigateToDoctor = (newIndex: number) => {
+    const clampedIndex = Math.max(0, Math.min(doctors.length - 1, newIndex));
+    setCurrentIndex(clampedIndex);
+    if (activeDoctorIndex !== null) {
+      setActiveDoctorIndex(clampedIndex);
+    }
+  };
+
+  // Header and floating arrow navigation (with circular wrap)
+  const handleArrowNav = (direction: 'left' | 'right') => {
+    const nextIndex =
+      direction === 'right'
+        ? (currentIndex + 1) % doctors.length
+        : (currentIndex - 1 + doctors.length) % doctors.length;
+    setCurrentIndex(nextIndex);
+    if (activeDoctorIndex !== null || isMobile) {
+      setActiveDoctorIndex(nextIndex);
+    }
+  };
+
+  // On mobile: Close details only when tapping outside the entire specialists carousel/slots
   useEffect(() => {
     if (!isMobile || activeDoctorIndex === null) return;
 
-    const handleOutsideClick = (e: MouseEvent | TouchEvent) => {
+    const handleOutsideClick = (e: MouseEvent) => {
+      if (isSwipingRef.current) return;
       const target = e.target as HTMLElement | null;
       if (!target) return;
-      const activeSlot = document.querySelector('.doctor-slot[aria-expanded="true"]');
-      if (activeSlot && activeSlot.contains(target)) return;
+
+      // Don't close if tapping inside any slot, navigation button, dot, or booking modal
+      if (
+        target.closest('.doctor-slot') ||
+        target.closest('.specialist-nav-btn') ||
+        target.closest('.specialist-dot') ||
+        target.closest('#appointment-modal')
+      ) {
+        return;
+      }
+
       setActiveDoctorIndex(null);
     };
 
     const timer = setTimeout(() => {
       document.addEventListener('click', handleOutsideClick);
-      document.addEventListener('touchend', handleOutsideClick);
-    }, 50);
+    }, 80);
 
     return () => {
       clearTimeout(timer);
       document.removeEventListener('click', handleOutsideClick);
-      document.removeEventListener('touchend', handleOutsideClick);
     };
   }, [isMobile, activeDoctorIndex]);
 
-  const handleArrowNav = (direction: 'left' | 'right') => {
-    const currentIdx = activeDoctorIndex !== null ? activeDoctorIndex : 2;
-    const nextIndex =
-      direction === 'right'
-        ? (currentIdx + 1) % doctors.length
-        : (currentIdx - 1 + doctors.length) % doctors.length;
-    setActiveDoctorIndex(nextIndex);
+  // Touch Swipe Handlers (for mobile & touchscreens)
+  const handleTouchStart = (e: React.TouchEvent) => {
+    const touch = e.touches[0];
+    touchStartRef.current = { x: touch.clientX, y: touch.clientY, time: Date.now() };
+    isHorizontalSwipeRef.current = null;
+    isSwipingRef.current = false;
+    setDragOffset(0);
   };
 
-  // Hover handlers with 220ms grace period debounce
+  const handleTouchMove = (e: React.TouchEvent) => {
+    if (!touchStartRef.current) return;
+    const touch = e.touches[0];
+    const diffX = touch.clientX - touchStartRef.current.x;
+    const diffY = touch.clientY - touchStartRef.current.y;
+
+    if (isHorizontalSwipeRef.current === null) {
+      if (Math.abs(diffX) > 7 || Math.abs(diffY) > 7) {
+        isHorizontalSwipeRef.current = Math.abs(diffX) > Math.abs(diffY);
+      }
+    }
+
+    if (isHorizontalSwipeRef.current) {
+      isSwipingRef.current = true;
+      setIsDragging(true);
+
+      // Rubber-band resistance at boundaries
+      let effectiveOffset = diffX;
+      if (
+        (currentIndex === 0 && diffX > 0) ||
+        (currentIndex === doctors.length - 1 && diffX < 0)
+      ) {
+        effectiveOffset = diffX * 0.28;
+      }
+      setDragOffset(effectiveOffset);
+    }
+  };
+
+  const handleTouchEnd = () => {
+    if (touchStartRef.current && isHorizontalSwipeRef.current) {
+      const elapsed = Date.now() - touchStartRef.current.time;
+      const isQuickFlick = elapsed < 320 && Math.abs(dragOffset) > 22;
+      const isPastThreshold = Math.abs(dragOffset) > 40;
+
+      if (isQuickFlick || isPastThreshold) {
+        if (dragOffset < 0) {
+          // Swiped left -> advance to next doctor
+          if (currentIndex < doctors.length - 1) {
+            navigateToDoctor(currentIndex + 1);
+          } else {
+            navigateToDoctor(0); // Circular wrap at end
+          }
+        } else {
+          // Swiped right -> go to previous doctor
+          if (currentIndex > 0) {
+            navigateToDoctor(currentIndex - 1);
+          } else {
+            navigateToDoctor(doctors.length - 1); // Circular wrap at beginning
+          }
+        }
+      }
+    }
+
+    setDragOffset(0);
+    setIsDragging(false);
+    touchStartRef.current = null;
+    isHorizontalSwipeRef.current = null;
+    setTimeout(() => {
+      isSwipingRef.current = false;
+    }, 60);
+  };
+
+  // Mouse Drag Handlers (for desktop/tablet click-and-drag)
+  const handleMouseDown = (e: React.MouseEvent) => {
+    if (e.button !== 0) return;
+    const target = e.target as HTMLElement;
+    if (target.closest('button') || target.closest('a')) return;
+
+    mouseStartRef.current = { x: e.clientX, time: Date.now() };
+    isMouseDownRef.current = true;
+    isSwipingRef.current = false;
+    setDragOffset(0);
+  };
+
+  const handleMouseMove = (e: React.MouseEvent) => {
+    if (!isMouseDownRef.current || !mouseStartRef.current) return;
+    const diffX = e.clientX - mouseStartRef.current.x;
+
+    if (Math.abs(diffX) > 6) {
+      isSwipingRef.current = true;
+      setIsDragging(true);
+
+      let effectiveOffset = diffX;
+      if (
+        (currentIndex === 0 && diffX > 0) ||
+        (currentIndex === doctors.length - 1 && diffX < 0)
+      ) {
+        effectiveOffset = diffX * 0.28;
+      }
+      setDragOffset(effectiveOffset);
+    }
+  };
+
+  const handleMouseUp = () => {
+    if (isMouseDownRef.current && isSwipingRef.current && mouseStartRef.current) {
+      const elapsed = Date.now() - mouseStartRef.current.time;
+      const isQuickFlick = elapsed < 350 && Math.abs(dragOffset) > 24;
+      const isPastThreshold = Math.abs(dragOffset) > 42;
+
+      if (isQuickFlick || isPastThreshold) {
+        if (dragOffset < 0) {
+          if (currentIndex < doctors.length - 1) {
+            navigateToDoctor(currentIndex + 1);
+          } else {
+            navigateToDoctor(0);
+          }
+        } else {
+          if (currentIndex > 0) {
+            navigateToDoctor(currentIndex - 1);
+          } else {
+            navigateToDoctor(doctors.length - 1);
+          }
+        }
+      }
+    }
+
+    setDragOffset(0);
+    setIsDragging(false);
+    isMouseDownRef.current = false;
+    mouseStartRef.current = null;
+    setTimeout(() => {
+      isSwipingRef.current = false;
+    }, 60);
+  };
+
+  const handleMouseLeaveContainer = () => {
+    if (isMouseDownRef.current) {
+      handleMouseUp();
+    }
+  };
+
+  // Wheel / Horizontal Trackpad Scroll Handler
+  const handleWheel = (e: React.WheelEvent) => {
+    if (Math.abs(e.deltaX) > 30 && Date.now() - lastWheelTimeRef.current > 380) {
+      lastWheelTimeRef.current = Date.now();
+      if (e.deltaX > 0) {
+        handleArrowNav('right');
+      } else {
+        handleArrowNav('left');
+      }
+    }
+  };
+
+  // Hover handlers for desktop (with 220ms debounce grace period)
   const handleDoctorMouseEnter = (index: number) => {
     if (isMobile) return;
     if (leaveTimeoutRef.current) {
@@ -128,6 +359,7 @@ export const SpecialistsSection: React.FC<SpecialistsSectionProps> = ({ onOpenBo
       leaveTimeoutRef.current = null;
     }
     setActiveDoctorIndex(index);
+    setCurrentIndex(index);
   };
 
   const handleDoctorMouseLeave = () => {
@@ -136,24 +368,28 @@ export const SpecialistsSection: React.FC<SpecialistsSectionProps> = ({ onOpenBo
       clearTimeout(leaveTimeoutRef.current);
     }
     leaveTimeoutRef.current = setTimeout(() => {
-      // Closes card when cursor leaves
       setActiveDoctorIndex(null);
     }, 220);
   };
 
-  // Clicking toggles the card: opens if closed, disappears if clicked again
+  // Doctor click handler
   const handleDoctorClick = (index: number) => {
-    setActiveDoctorIndex((prev) => (prev === index ? null : index));
+    if (isSwipingRef.current) return;
+
+    if (isMobile) {
+      if (currentIndex !== index) {
+        setCurrentIndex(index);
+        setActiveDoctorIndex(index);
+      } else {
+        setActiveDoctorIndex((prev) => (prev === index ? null : index));
+      }
+    } else {
+      setActiveDoctorIndex((prev) => (prev === index ? null : index));
+      setCurrentIndex(index);
+    }
   };
 
-  // Dimensions matching Image 3 Reference
-  const baseSlotWidth = isMobile ? 150 : 190;
-  const cardWidth = isMobile ? 310 : 345;
-  const spreadAmount = isMobile ? 55 : 68;
-
-  const easingCurve = [0.16, 1, 0.3, 1] as const;
-  const transitionDuration = shouldReduceMotion ? 0.01 : 0.52;
-
+  // Desktop hover spread calculation
   const getDoctorTransformX = (index: number) => {
     if (isMobile) return 0;
     if (activeDoctorIndex === null) return 0;
@@ -169,6 +405,9 @@ export const SpecialistsSection: React.FC<SpecialistsSectionProps> = ({ onOpenBo
     return index < activeDoctorIndex ? -spreadAmount : spreadAmount;
   };
 
+  // Mobile carousel translation: middle index is centered when x = 0
+  const mobileTranslateX = (middleIdx - currentIndex) * (baseSlotWidth + slotGap) + dragOffset;
+
   return (
     <div style={{ backgroundColor: 'var(--color-rust)', position: 'relative', zIndex: 10, paddingBottom: '1.5rem' }}>
       <section
@@ -181,11 +420,11 @@ export const SpecialistsSection: React.FC<SpecialistsSectionProps> = ({ onOpenBo
           paddingTop: '0',
           paddingBottom: isMobile
             ? activeDoctorIndex !== null
-              ? 'clamp(23.5rem, 58vh, 26.5rem)'
-              : '4.5rem'
-            : 'clamp(7.5rem, 8.8vw, 10rem)',
+              ? 'clamp(24rem, 60vh, 27.5rem)'
+              : '3.6rem'
+            : 'clamp(6.5rem, 8vw, 8.5rem)',
           transition: 'padding-bottom 0.45s cubic-bezier(0.16, 1, 0.3, 1)',
-          overflow: 'visible',
+          overflow: 'hidden',
           zIndex: 20,
         }}
       >
@@ -324,11 +563,12 @@ export const SpecialistsSection: React.FC<SpecialistsSectionProps> = ({ onOpenBo
               </motion.h2>
             </div>
 
-            {/* Thin White Outline Arrow Controls matching Image 3 */}
+            {/* Thin White Outline Arrow Controls */}
             <div style={{ display: 'flex', gap: '0.65rem' }}>
               <button
                 onClick={() => handleArrowNav('left')}
                 aria-label="Previous Specialist"
+                className="specialist-nav-btn"
                 style={{
                   width: '42px',
                   height: '42px',
@@ -356,6 +596,7 @@ export const SpecialistsSection: React.FC<SpecialistsSectionProps> = ({ onOpenBo
               <button
                 onClick={() => handleArrowNav('right')}
                 aria-label="Next Specialist"
+                className="specialist-nav-btn"
                 style={{
                   width: '46px',
                   height: '46px',
@@ -384,16 +625,104 @@ export const SpecialistsSection: React.FC<SpecialistsSectionProps> = ({ onOpenBo
           </div>
         </div>
 
-        {/* Doctor Cards Container — Clean Centered Flex Grid (NO INNER SCROLLING) */}
-        <div className="container" style={{ overflow: 'visible' }}>
+        {/* Doctor Cards Interactive Carousel Wrapper */}
+        <div
+          className="container"
+          style={{
+            position: 'relative',
+            overflow: 'visible',
+            touchAction: 'pan-y',
+            cursor: isDragging ? 'grabbing' : isMobile ? 'grab' : 'default',
+            userSelect: 'none',
+            WebkitUserSelect: 'none',
+          }}
+          onTouchStart={handleTouchStart}
+          onTouchMove={handleTouchMove}
+          onTouchEnd={handleTouchEnd}
+          onTouchCancel={handleTouchEnd}
+          onMouseDown={handleMouseDown}
+          onMouseMove={handleMouseMove}
+          onMouseUp={handleMouseUp}
+          onMouseLeave={handleMouseLeaveContainer}
+          onWheel={handleWheel}
+        >
+          {/* Mobile Floating Side Arrows (instantly accessible when scrolled down) */}
+          {isMobile && (
+            <>
+              <button
+                type="button"
+                className="specialist-nav-btn"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  handleArrowNav('left');
+                }}
+                aria-label="Previous Specialist"
+                style={{
+                  position: 'absolute',
+                  left: '6px',
+                  top: '64px',
+                  width: '38px',
+                  height: '38px',
+                  borderRadius: '50%',
+                  backgroundColor: 'rgba(28, 18, 12, 0.52)',
+                  backdropFilter: 'blur(8px)',
+                  WebkitBackdropFilter: 'blur(8px)',
+                  border: '1.5px solid rgba(255, 255, 255, 0.35)',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  color: '#FFFFFF',
+                  cursor: 'pointer',
+                  zIndex: 80,
+                  boxShadow: '0 4px 14px rgba(0,0,0,0.28)',
+                  transition: 'transform 0.15s ease, background-color 0.2s ease',
+                }}
+                onMouseDown={(e) => e.stopPropagation()}
+              >
+                <ChevronLeft size={22} strokeWidth={2.4} />
+              </button>
+              <button
+                type="button"
+                className="specialist-nav-btn"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  handleArrowNav('right');
+                }}
+                aria-label="Next Specialist"
+                style={{
+                  position: 'absolute',
+                  right: '6px',
+                  top: '64px',
+                  width: '38px',
+                  height: '38px',
+                  borderRadius: '50%',
+                  backgroundColor: 'rgba(28, 18, 12, 0.52)',
+                  backdropFilter: 'blur(8px)',
+                  WebkitBackdropFilter: 'blur(8px)',
+                  border: '1.5px solid rgba(255, 255, 255, 0.35)',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  color: '#FFFFFF',
+                  cursor: 'pointer',
+                  zIndex: 80,
+                  boxShadow: '0 4px 14px rgba(0,0,0,0.28)',
+                  transition: 'transform 0.15s ease, background-color 0.2s ease',
+                }}
+                onMouseDown={(e) => e.stopPropagation()}
+              >
+                <ChevronRight size={22} strokeWidth={2.4} />
+              </button>
+            </>
+          )}
+
+          {/* Sliding Doctor Row Track */}
           <motion.div
             animate={{
-              x: isMobile && activeDoctorIndex !== null
-                ? (2 - activeDoctorIndex) * (baseSlotWidth + 14)
-                : 0,
+              x: isMobile ? mobileTranslateX : 0,
             }}
             transition={{
-              duration: transitionDuration,
+              duration: isDragging ? 0 : transitionDuration,
               ease: easingCurve,
             }}
             style={{
@@ -401,15 +730,17 @@ export const SpecialistsSection: React.FC<SpecialistsSectionProps> = ({ onOpenBo
               display: 'flex',
               alignItems: 'flex-start',
               justifyContent: 'center',
-              gap: isMobile ? '14px' : 'clamp(0.8rem, 2vw, 2.2rem)',
+              gap: `${slotGap}px`,
               overflowX: 'visible',
               overflowY: 'visible',
               paddingTop: '0.8rem',
               paddingBottom: '0.4rem',
+              willChange: 'transform',
             }}
           >
             {doctors.map((doc, idx) => {
               const isActive = activeDoctorIndex === idx;
+              const isCentered = currentIndex === idx;
               const isAnyActive = activeDoctorIndex !== null;
               const isSubtle = isAnyActive && !isActive;
 
@@ -422,7 +753,7 @@ export const SpecialistsSection: React.FC<SpecialistsSectionProps> = ({ onOpenBo
                   viewport={{ once: true }}
                   animate={{
                     x: shouldReduceMotion ? 0 : getDoctorTransformX(idx),
-                    opacity: isSubtle ? 0.76 : 1,
+                    opacity: isMobile ? (isCentered ? 1 : 0.78) : (isSubtle ? 0.76 : 1),
                   }}
                   transition={{
                     x: {
@@ -451,7 +782,7 @@ export const SpecialistsSection: React.FC<SpecialistsSectionProps> = ({ onOpenBo
                     position: 'relative',
                     cursor: 'pointer',
                     outline: 'none',
-                    zIndex: isActive ? 35 : 2,
+                    zIndex: isActive ? 50 : isCentered ? 30 : 10,
                     willChange: 'transform, opacity',
                   }}
                 >
@@ -462,6 +793,8 @@ export const SpecialistsSection: React.FC<SpecialistsSectionProps> = ({ onOpenBo
                         ? shouldReduceMotion
                           ? 1
                           : 1.28
+                        : isMobile && isCentered
+                        ? 1.14
                         : isSubtle
                         ? 0.94
                         : 1,
@@ -474,7 +807,7 @@ export const SpecialistsSection: React.FC<SpecialistsSectionProps> = ({ onOpenBo
                     }}
                     style={{
                       position: 'relative',
-                      zIndex: 60,
+                      zIndex: 70,
                       marginBottom: '0.8rem',
                       transformOrigin: 'center center',
                       willChange: 'transform',
@@ -489,12 +822,16 @@ export const SpecialistsSection: React.FC<SpecialistsSectionProps> = ({ onOpenBo
                         backgroundColor: doc.bg,
                         boxShadow: isActive
                           ? `0 16px 36px rgba(0,0,0,0.22), 0 0 45px ${doc.bg}cc`
+                          : isMobile && isCentered
+                          ? `0 12px 28px rgba(0,0,0,0.18), 0 0 25px ${doc.bg}88`
                           : '0 10px 24px rgba(0,0,0,0.12)',
                         display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'center',
                         border: isActive
                           ? '4.5px solid #FFFFFF'
+                          : isMobile && isCentered
+                          ? '3.5px solid rgba(255, 255, 255, 0.95)'
                           : '3px solid transparent',
                         transition: 'border 0.35s ease, box-shadow 0.45s ease',
                       }}
@@ -513,53 +850,9 @@ export const SpecialistsSection: React.FC<SpecialistsSectionProps> = ({ onOpenBo
                     </div>
                   </motion.div>
 
-                  {/* Default State: Doctor Name & Specialty */}
-                  <motion.div
-                    initial={false}
-                    animate={{
-                      opacity: isActive ? 0 : isSubtle ? 0.78 : 1,
-                      y: isActive ? -8 : 0,
-                    }}
-                    transition={{
-                      duration: shouldReduceMotion ? 0.01 : 0.28,
-                      ease: 'easeOut',
-                    }}
-                    style={{
-                      width: '100%',
-                      display: 'flex',
-                      flexDirection: 'column',
-                      alignItems: 'center',
-                      pointerEvents: isActive ? 'none' : 'auto',
-                    }}
-                  >
-                    <h4
-                      style={{
-                        fontFamily: 'var(--font-display)',
-                        fontSize: 'clamp(1.05rem, 1.25vw, 1.25rem)',
-                        fontWeight: 600,
-                        color: 'var(--color-white)',
-                        marginBottom: '0.2rem',
-                        letterSpacing: '-0.01em',
-                        whiteSpace: 'nowrap',
-                      }}
-                    >
-                      {doc.name}
-                    </h4>
-                    <p
-                      style={{
-                        fontFamily: 'var(--font-main)',
-                        fontSize: '0.82rem',
-                        color: 'rgba(255, 255, 255, 0.88)',
-                        fontWeight: 400,
-                        margin: 0,
-                        whiteSpace: 'nowrap',
-                      }}
-                    >
-                      {doc.specialty}
-                    </p>
-                  </motion.div>
 
-                  {/* Active Expanded State: Anchored DIRECTLY through the center of the circular photo grid */}
+
+                  {/* Active Expanded State: Anchored DIRECTLY below the circular photo */}
                   <div
                     style={{
                       position: 'absolute',
@@ -567,7 +860,7 @@ export const SpecialistsSection: React.FC<SpecialistsSectionProps> = ({ onOpenBo
                       left: '50%',
                       transform: 'translateX(-50%)',
                       width: `${cardWidth}px`,
-                      zIndex: 50,
+                      zIndex: 60,
                       pointerEvents: isActive ? 'auto' : 'none',
                     }}
                   >
@@ -604,12 +897,8 @@ export const SpecialistsSection: React.FC<SpecialistsSectionProps> = ({ onOpenBo
                         position: 'relative',
                       }}
                       onClick={(e) => {
-                        if (isMobile) {
-                          e.stopPropagation();
-                          setActiveDoctorIndex(null);
-                        } else {
-                          e.stopPropagation();
-                        }
+                        // Prevent click on text/card from closing the card
+                        e.stopPropagation();
                       }}
                     >
                       {/* Close button on mobile for instant intuitive dismissal */}
@@ -625,8 +914,8 @@ export const SpecialistsSection: React.FC<SpecialistsSectionProps> = ({ onOpenBo
                             position: 'absolute',
                             top: '14px',
                             right: '14px',
-                            width: '30px',
-                            height: '30px',
+                            width: '32px',
+                            height: '32px',
                             borderRadius: '50%',
                             backgroundColor: 'rgba(0, 0, 0, 0.06)',
                             display: 'flex',
@@ -634,12 +923,14 @@ export const SpecialistsSection: React.FC<SpecialistsSectionProps> = ({ onOpenBo
                             justifyContent: 'center',
                             color: '#6B7280',
                             cursor: 'pointer',
-                            zIndex: 60,
+                            zIndex: 70,
+                            border: 'none',
                           }}
                         >
-                          <X size={16} strokeWidth={2.2} />
+                          <X size={18} strokeWidth={2.2} />
                         </button>
                       )}
+
                       {/* Active Doctor Name */}
                       <h3
                         style={{
@@ -780,7 +1071,7 @@ export const SpecialistsSection: React.FC<SpecialistsSectionProps> = ({ onOpenBo
                         </div>
                       </div>
 
-                      {/* Lime High-Contrast CTA Button (Sits cleanly in the brown section) */}
+                      {/* Lime High-Contrast CTA Button */}
                       <button
                         onClick={(e) => {
                           e.stopPropagation();
@@ -806,6 +1097,7 @@ export const SpecialistsSection: React.FC<SpecialistsSectionProps> = ({ onOpenBo
                           borderRadius: 'var(--radius-pill)',
                           boxShadow: '0 6px 18px rgba(215, 248, 70, 0.35)',
                           cursor: 'pointer',
+                          border: 'none',
                           transition: 'transform 0.2s ease, box-shadow 0.2s ease',
                         }}
                         onMouseEnter={(e) => {
@@ -828,10 +1120,55 @@ export const SpecialistsSection: React.FC<SpecialistsSectionProps> = ({ onOpenBo
               );
             })}
           </motion.div>
+
+          {/* Mobile Pagination Indicator Dots */}
+          {isMobile && (
+            <div
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                gap: '8px',
+                marginTop: activeDoctorIndex !== null ? 'clamp(23.8rem, 58vh, 26.5rem)' : '1.1rem',
+                transition: 'margin-top 0.45s cubic-bezier(0.16, 1, 0.3, 1)',
+                position: 'relative',
+                zIndex: 45,
+              }}
+            >
+              {doctors.map((_, idx) => {
+                const isSelected = currentIndex === idx;
+                return (
+                  <button
+                    key={idx}
+                    type="button"
+                    className="specialist-dot"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      navigateToDoctor(idx);
+                    }}
+                    aria-label={`Go to doctor ${doctors[idx].name}`}
+                    style={{
+                      width: isSelected ? '26px' : '8px',
+                      height: '8px',
+                      borderRadius: '4px',
+                      backgroundColor: isSelected
+                        ? 'var(--color-lime)'
+                        : 'rgba(255, 255, 255, 0.42)',
+                      border: 'none',
+                      padding: 0,
+                      cursor: 'pointer',
+                      transition: 'all 0.3s cubic-bezier(0.16, 1, 0.3, 1)',
+                      boxShadow: isSelected ? '0 0 10px rgba(215, 248, 70, 0.6)' : 'none',
+                    }}
+                  />
+                );
+              })}
+            </div>
+          )}
         </div>
       </section>
 
-      {/* Decorative Wavy Line & Tag matching Image 3 Reference on the right of brown section */}
+      {/* Decorative Wavy Line & Tag matching Reference on the right of brown section */}
       <div
         style={{
           position: 'absolute',
@@ -871,6 +1208,3 @@ export const SpecialistsSection: React.FC<SpecialistsSectionProps> = ({ onOpenBo
     </div>
   );
 };
-
-
-

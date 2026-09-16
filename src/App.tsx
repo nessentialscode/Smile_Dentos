@@ -13,10 +13,14 @@ import { AppointmentModal } from './components/AppointmentModal';
 export function App() {
   const [bookingOpen, setBookingOpen] = useState(false);
   const [selectedBranch, setSelectedBranch] = useState<string>('Valanchery Main Clinic');
+  const [selectedDoctor, setSelectedDoctor] = useState<string>('Dr. Athira S.');
 
-  const handleOpenBooking = (branchName?: string) => {
+  const handleOpenBooking = (branchName?: string, doctorName?: string) => {
     if (branchName) {
       setSelectedBranch(branchName);
+    }
+    if (doctorName) {
+      setSelectedDoctor(doctorName);
     }
     setBookingOpen(true);
   };
@@ -38,7 +42,7 @@ export function App() {
         <ServicesSection />
 
         {/* Frames 09-11: Our Specialist Wave & Carousel */}
-        <SpecialistsSection onOpenBooking={() => handleOpenBooking()} />
+        <SpecialistsSection onOpenBooking={(doctorName) => handleOpenBooking(undefined, doctorName)} />
 
         {/* Clinic Branches Section (Valanchery & Edayoor) */}
         <BranchesSection onOpenBooking={handleOpenBooking} />
@@ -58,6 +62,7 @@ export function App() {
         isOpen={bookingOpen}
         onClose={() => setBookingOpen(false)}
         selectedBranch={selectedBranch}
+        selectedDoctor={selectedDoctor}
       />
     </div>
   );
