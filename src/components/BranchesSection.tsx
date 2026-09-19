@@ -68,7 +68,7 @@ export const BranchesSection: React.FC<BranchesSectionProps> = ({ onOpenBooking 
       style={{
         backgroundColor: 'var(--color-rust)',
         color: 'var(--color-white)',
-        paddingTop: 'clamp(4.5rem, 6.5vw, 7rem)',
+        paddingTop: 'clamp(5.8rem, 7.8vw, 8.5rem)',
         paddingBottom: 'clamp(4.5rem, 7vw, 7rem)',
         position: 'relative',
         overflow: 'hidden',

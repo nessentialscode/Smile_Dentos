@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, Calendar, Phone, MapPin } from 'lucide-react';
+import { X, Phone, MapPin } from 'lucide-react';
 
 interface NavbarProps {
   onOpenBooking: () => void;
+  onOpenAdmin?: () => void;
 }
 
-export const Navbar: React.FC<NavbarProps> = ({ onOpenBooking }) => {
+export const Navbar: React.FC<NavbarProps> = ({ onOpenBooking, onOpenAdmin }) => {
   const [scrolled, setScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
@@ -136,6 +137,41 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenBooking }) => {
                 <Phone size={13} />
                 <span>094959 64737</span>
               </a>
+
+              {onOpenAdmin && (
+                <button
+                  type="button"
+                  onClick={onOpenAdmin}
+                  style={{
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: '0.35rem',
+                    padding: '0.45rem 0.85rem',
+                    borderRadius: 'var(--radius-pill)',
+                    backgroundColor: 'rgba(255, 255, 255, 0.12)',
+                    border: '1px solid rgba(255, 255, 255, 0.28)',
+                    color: '#FFFFFF',
+                    fontFamily: 'var(--font-main)',
+                    fontSize: '0.78rem',
+                    fontWeight: 600,
+                    cursor: 'pointer',
+                    transition: 'all 0.2s ease',
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.backgroundColor = 'var(--color-lime)';
+                    e.currentTarget.style.color = '#3B180D';
+                    e.currentTarget.style.borderColor = 'var(--color-lime)';
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.12)';
+                    e.currentTarget.style.color = '#FFFFFF';
+                    e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.28)';
+                  }}
+                  title="Smile Dentos Admin Portal"
+                >
+                  <span>Admin</span>
+                </button>
+              )}
             </nav>
 
             {/* Mobile Header Right Actions (Phone Icon + Hamburger) */}
@@ -199,86 +235,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenBooking }) => {
         </div>
       </header>
 
-      {/* Floating Primary Action Bar */}
-      <aside
-        aria-label="Quick Actions"
-        className="floating-quick-bar"
-        style={{
-          position: 'fixed',
-          bottom: '24px',
-          left: '24px',
-          zIndex: 90,
-          display: 'flex',
-          alignItems: 'center',
-          gap: '10px',
-        }}
-      >
-        <button
-          onClick={onOpenBooking}
-          title="Book an Appointment at Smile Dentos"
-          style={{
-            display: 'inline-flex',
-            alignItems: 'center',
-            gap: '0.6rem',
-            padding: '0.68rem 1.45rem',
-            borderRadius: 'var(--radius-pill)',
-            border: '1.5px solid var(--color-lime)',
-            backgroundColor: 'var(--color-lime)',
-            color: 'var(--color-rust-dark)',
-            fontFamily: 'var(--font-main)',
-            fontSize: '0.82rem',
-            fontWeight: 800,
-            letterSpacing: '0.06em',
-            boxShadow: '0 8px 24px rgba(215, 248, 70, 0.4)',
-            cursor: 'pointer',
-            transition: 'all 0.25s ease',
-          }}
-          onMouseEnter={(e) => {
-            e.currentTarget.style.transform = 'translateY(-2px)';
-            e.currentTarget.style.boxShadow = '0 12px 30px rgba(215, 248, 70, 0.55)';
-          }}
-          onMouseLeave={(e) => {
-            e.currentTarget.style.transform = 'translateY(0)';
-            e.currentTarget.style.boxShadow = '0 8px 24px rgba(215, 248, 70, 0.4)';
-          }}
-        >
-          <Calendar size={15} />
-          <span>BOOK APPOINTMENT</span>
-        </button>
 
-        {/* Subtle companion status badge: Valanchery Clinic */}
-        <div
-          className="desktop-status-pill"
-          style={{
-            display: 'inline-flex',
-            alignItems: 'center',
-            gap: '0.5rem',
-            padding: '0.65rem 1.1rem',
-            borderRadius: 'var(--radius-pill)',
-            backgroundColor: 'rgba(30, 18, 13, 0.85)',
-            border: '1px solid rgba(255, 255, 255, 0.2)',
-            color: 'rgba(255, 255, 255, 0.92)',
-            fontFamily: 'var(--font-main)',
-            fontSize: '0.78rem',
-            fontWeight: 600,
-            letterSpacing: '0.03em',
-            backdropFilter: 'blur(12px)',
-            boxShadow: '0 8px 24px rgba(0,0,0,0.25)',
-          }}
-        >
-          <span
-            style={{
-              display: 'inline-block',
-              width: '7px',
-              height: '7px',
-              borderRadius: '50%',
-              backgroundColor: 'var(--color-lime)',
-              boxShadow: '0 0 8px var(--color-lime)',
-            }}
-          />
-          <span>Opens 10 AM · Valanchery</span>
-        </div>
-      </aside>
 
       {/* Mobile Drawer Navigation Menu */}
       <AnimatePresence>

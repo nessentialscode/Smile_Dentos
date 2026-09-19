@@ -1,130 +1,129 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { motion, useReducedMotion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import {
   ArrowLeft,
   ArrowRight,
   GraduationCap,
   Award,
   Users,
-  X,
+  Calendar,
   ChevronLeft,
   ChevronRight,
 } from 'lucide-react';
 
 export interface Doctor {
+  id: string;
   name: string;
   specialty: string;
   image: string;
   bg: string;
   bio: string;
-  degree: string;
-  experience: string;
-  patients: string;
+  degreeTitle: string;
+  degreeSub: string;
+  experienceTitle: string;
+  experienceSub: string;
+  patientsTitle: string;
+  patientsSub: string;
 }
 
 const doctors: Doctor[] = [
   {
-    name: 'Dr. Athira S.',
-    specialty: 'Chief Dental Surgeon',
-    image: '/images/doctor_athira_s.jpg',
-    bg: '#F5A47E',
-    bio: 'Leading the clinical team at Smile Dentos with exceptional dedication to comprehensive family dentistry, gentle restorative care, and precision diagnosis.',
-    degree: 'BDS\n(Dental Surgery)',
-    experience: '8+ Years\nExperience',
-    patients: '2,500+\nHappy Patients',
+    id: 'john-smith',
+    name: 'Dr. John Smith',
+    specialty: 'Orthodontics Specialist',
+    image: '/images/doctor_john_smith.jpg',
+    bg: '#EE9564', // Warm Peach / Orange from image
+    bio: 'Pioneering digital smile design, Invisalign, and modern orthodontic alignment for patients of all ages.',
+    degreeTitle: 'BDS, MDS',
+    degreeSub: '(Orthodontics)',
+    experienceTitle: '10+ Years',
+    experienceSub: 'Experience',
+    patientsTitle: '2,400+',
+    patientsSub: 'Happy Patients',
   },
   {
-    name: 'Dr. Bhagiya R.',
-    specialty: 'Lady Dental Surgeon',
-    image: '/images/doctor_bhagiya_r.jpg',
-    bg: '#D0B4F8',
-    bio: 'Dedicated to compassionate, anxiety-free dental care for women, children, and families, specializing in preventive prophylaxis and gentle smile preservation.',
-    degree: 'BDS\n(Dental Surgery)',
-    experience: '6+ Years\nExperience',
-    patients: '1,800+\nHappy Patients',
+    id: 'david-kim',
+    name: 'Dr. David Kim',
+    specialty: 'Endodontics Specialist',
+    image: '/images/doctor_david_kim.jpg',
+    bg: '#C5AEE3', // Soft Lilac / Purple from image
+    bio: 'Specializing in single-visit root canals, microscopic endodontics, and gentle tooth preservation.',
+    degreeTitle: 'DDS, MS',
+    degreeSub: '(Endodontics)',
+    experienceTitle: '8+ Years',
+    experienceSub: 'Experience',
+    patientsTitle: '1,800+',
+    patientsSub: 'Happy Patients',
   },
   {
-    name: 'Dr. Lijeesh Kadambil',
-    specialty: 'Dental Surgeon',
-    image: '/images/doctor_lijeesh_kadambil.jpg',
-    bg: '#F7DE76',
-    bio: 'Expert in painless single-visit root canal treatments, aesthetic composite restorations, crowns, bridges, and holistic preventive dentistry.',
-    degree: 'BDS\n(Dental Surgery)',
-    experience: '7+ Years\nExperience',
-    patients: '2,100+\nHappy Patients',
+    id: 'sarah-lee',
+    name: 'Dr. Sarah Lee',
+    specialty: 'Periodontics Specialist',
+    image: '/images/doctor_sarah_lee.jpg',
+    bg: '#F6C844', // Golden Yellow from image
+    bio: 'Specializes in gum care, dental implants, and advanced periodontal treatments. Dedicated to helping you achieve a healthier smile.',
+    degreeTitle: 'BDS, MDS',
+    degreeSub: '(Periodontology)',
+    experienceTitle: '5+ Years',
+    experienceSub: 'Experience',
+    patientsTitle: '1,000+',
+    patientsSub: 'Happy Patients',
   },
   {
-    name: 'Dr. Ayisha Nizmiya K.',
-    specialty: 'Consultant Orthodontist',
-    image: '/images/doctor_ayisha_nizmiya.jpg',
-    bg: '#BFE0F7',
-    bio: 'Advanced specialist in contemporary orthodontic alignment, digital clear aligners, ceramic braces, and pediatric interceptive smile corrections.',
-    degree: 'BDS, MDS\n(Orthodontics)',
-    experience: '9+ Years\nExperience',
-    patients: '1,700+\nHappy Patients',
+    id: 'steven-lee',
+    name: 'Dr. Steven Lee',
+    specialty: 'Cosmetic Dentistry',
+    image: '/images/doctor_steven_lee.jpg',
+    bg: '#82B3EB', // Ocean Sky Blue from image
+    bio: 'Crafting bespoke porcelain veneers, laser teeth whitening, and complete aesthetic smile makeovers.',
+    degreeTitle: 'DDS, FICOI',
+    degreeSub: '(Cosmetic)',
+    experienceTitle: '7+ Years',
+    experienceSub: 'Experience',
+    patientsTitle: '1,500+',
+    patientsSub: 'Happy Patients',
   },
   {
-    name: 'Dr. Shanahaz',
-    specialty: 'Consultant Orthodontist',
-    image: '/images/doctor_shanahaz.jpg',
-    bg: '#C4E8D6',
-    bio: 'Passionate about custom orthodontic mechanics, correcting complex dental malocclusions, invisible aligners, and aesthetic teenage smile transformations.',
-    degree: 'BDS, MDS\n(Orthodontics)',
-    experience: '8+ Years\nExperience',
-    patients: '1,500+\nHappy Patients',
-  },
-  {
-    name: 'Dr. Jabir Kottammal',
-    specialty: 'Consultant Oral & Maxillofacial Surgeon',
-    image: '/images/doctor_jabir_kottammal.jpg',
-    bg: '#FED7AA',
-    bio: 'Specialist in surgical wisdom tooth extractions, advanced dental implantology, facial trauma management, and painless minor oral surgeries.',
-    degree: 'BDS, MDS\n(Oral Surgery)',
-    experience: '11+ Years\nExperience',
-    patients: '3,200+\nHappy Patients',
-  },
-  {
-    name: 'Dr. Muhammad Haris P.M',
-    specialty: 'Consultant Periodontist',
-    image: '/images/doctor_muhammad_haris.jpg',
-    bg: '#DDD6FE',
-    bio: 'Specialized in advanced periodontal gum therapy, laser gingival depigmentation, bone grafting, and long-term tooth stabilization.',
-    degree: 'BDS, MDS\n(Periodontics)',
-    experience: '10+ Years\nExperience',
-    patients: '2,400+\nHappy Patients',
+    id: 'jennifer-kim',
+    name: 'Dr. Jennifer Kim',
+    specialty: 'Orthodontics Specialist',
+    image: '/images/doctor_jennifer_kim.jpg',
+    bg: '#7CBF6B', // Fresh Sage Green from image
+    bio: 'Dedicated to gentle, personalized orthodontic treatments, invisible aligners, and adolescent smile corrections.',
+    degreeTitle: 'BDS, MS',
+    degreeSub: '(Orthodontics)',
+    experienceTitle: '6+ Years',
+    experienceSub: 'Experience',
+    patientsTitle: '1,200+',
+    patientsSub: 'Happy Patients',
   },
 ];
 
 interface SpecialistsSectionProps {
   onOpenBooking?: (doctorName?: string) => void;
+  showAllServices?: boolean;
+  onToggleShowAllServices?: () => void;
 }
 
-export const SpecialistsSection: React.FC<SpecialistsSectionProps> = ({ onOpenBooking }) => {
-  // Center doctor index: starts at 0 (Dr. Athira S.)
-  const [currentIndex, setCurrentIndex] = useState<number>(0);
-  // On mobile: controls which doctor's detailed card is expanded
-  const [activeDoctorIndex, setActiveDoctorIndex] = useState<number | null>(null);
-  // On desktop: tracks currently hovered doctor
+export const SpecialistsSection: React.FC<SpecialistsSectionProps> = ({
+  onOpenBooking,
+  showAllServices,
+  onToggleShowAllServices,
+}) => {
+  // Detailed card only opens when cursor is placed on it (hover). Default is null.
   const [hoveredDoctorIndex, setHoveredDoctorIndex] = useState<number | null>(null);
   const [isMobile, setIsMobile] = useState(false);
 
-  // Drag and touch swipe state
+  // Drag and touch swipe state for mobile
   const [dragOffset, setDragOffset] = useState(0);
   const [isDragging, setIsDragging] = useState(false);
 
-  const shouldReduceMotion = useReducedMotion();
+  const leaveTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  // Touch gesture tracking refs
+  // Gesture refs
   const touchStartRef = useRef<{ x: number; y: number; time: number } | null>(null);
   const isHorizontalSwipeRef = useRef<boolean | null>(null);
   const isSwipingRef = useRef(false);
-
-  // Mouse drag tracking refs
-  const mouseStartRef = useRef<{ x: number; time: number } | null>(null);
-  const isMouseDownRef = useRef(false);
-
-  // Wheel debounce ref
-  const lastWheelTimeRef = useRef(0);
 
   useEffect(() => {
     const handleResize = () => {
@@ -135,74 +134,43 @@ export const SpecialistsSection: React.FC<SpecialistsSectionProps> = ({ onOpenBo
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
-  // Dimensions: larger circles on desktop, perfectly sized for modern screens
-  const baseSlotWidth = isMobile ? 150 : 202;
-  const slotGap = isMobile ? 14 : 18;
-  const cardWidth = 310;
-
-  const easingCurve = [0.16, 1, 0.3, 1] as const;
-  const transitionDuration = shouldReduceMotion ? 0.01 : 0.52;
-
-  // Middle index of doctors array for flex center alignment on mobile
-  const middleIdx = Math.floor(doctors.length / 2); // 3 for 7 items
-
-  // Navigate to a specific doctor index with boundary clamping
-  const navigateToDoctor = (newIndex: number) => {
-    const clampedIndex = Math.max(0, Math.min(doctors.length - 1, newIndex));
-    setCurrentIndex(clampedIndex);
-    if (activeDoctorIndex !== null) {
-      setActiveDoctorIndex(clampedIndex);
+  // Hover handlers: open detailed card when cursor is placed on a doctor
+  const handleMouseEnter = (index: number) => {
+    if (isMobile) return;
+    if (leaveTimeoutRef.current) {
+      clearTimeout(leaveTimeoutRef.current);
+      leaveTimeoutRef.current = null;
     }
+    setHoveredDoctorIndex(index);
   };
 
-  // Header and floating arrow navigation (with circular wrap)
+  const handleMouseLeave = () => {
+    if (isMobile) return;
+    if (leaveTimeoutRef.current) {
+      clearTimeout(leaveTimeoutRef.current);
+    }
+    leaveTimeoutRef.current = setTimeout(() => {
+      setHoveredDoctorIndex(null);
+    }, 220);
+  };
+
+  // Click/tap handler: on mobile, toggle card open/close; on desktop, also open
+  const handleDoctorClick = (index: number) => {
+    if (isSwipingRef.current) return;
+    setHoveredDoctorIndex((prev) => (prev === index ? null : index));
+  };
+
+  // Arrow navigation: cycles through doctors and opens their detailed card
   const handleArrowNav = (direction: 'left' | 'right') => {
-    const nextIndex =
-      direction === 'right'
-        ? (currentIndex + 1) % doctors.length
-        : (currentIndex - 1 + doctors.length) % doctors.length;
-    setCurrentIndex(nextIndex);
-    if (isMobile && activeDoctorIndex !== null) {
-      setActiveDoctorIndex(nextIndex);
-    }
-    if (!isMobile) {
-      setHoveredDoctorIndex(nextIndex);
-    }
+    setHoveredDoctorIndex((prev) => {
+      const current = prev !== null ? prev : 2;
+      return direction === 'right'
+        ? (current + 1) % doctors.length
+        : (current - 1 + doctors.length) % doctors.length;
+    });
   };
 
-  // On mobile: Close details only when tapping outside the entire specialists carousel/slots
-  useEffect(() => {
-    if (!isMobile || activeDoctorIndex === null) return;
-
-    const handleOutsideClick = (e: MouseEvent) => {
-      if (isSwipingRef.current) return;
-      const target = e.target as HTMLElement | null;
-      if (!target) return;
-
-      // Don't close if tapping inside any slot, navigation button, dot, or booking modal
-      if (
-        target.closest('.doctor-slot') ||
-        target.closest('.specialist-nav-btn') ||
-        target.closest('.specialist-dot') ||
-        target.closest('#appointment-modal')
-      ) {
-        return;
-      }
-
-      setActiveDoctorIndex(null);
-    };
-
-    const timer = setTimeout(() => {
-      document.addEventListener('click', handleOutsideClick);
-    }, 80);
-
-    return () => {
-      clearTimeout(timer);
-      document.removeEventListener('click', handleOutsideClick);
-    };
-  }, [isMobile, activeDoctorIndex]);
-
-  // Touch Swipe Handlers (for mobile & touchscreens)
+  // Touch handlers for mobile
   const handleTouchStart = (e: React.TouchEvent) => {
     const touch = e.touches[0];
     touchStartRef.current = { x: touch.clientX, y: touch.clientY, time: Date.now() };
@@ -226,40 +194,21 @@ export const SpecialistsSection: React.FC<SpecialistsSectionProps> = ({ onOpenBo
     if (isHorizontalSwipeRef.current) {
       isSwipingRef.current = true;
       setIsDragging(true);
-
-      // Rubber-band resistance at boundaries
-      let effectiveOffset = diffX;
-      if (
-        (currentIndex === 0 && diffX > 0) ||
-        (currentIndex === doctors.length - 1 && diffX < 0)
-      ) {
-        effectiveOffset = diffX * 0.28;
-      }
-      setDragOffset(effectiveOffset);
+      setDragOffset(diffX);
     }
   };
 
   const handleTouchEnd = () => {
     if (touchStartRef.current && isHorizontalSwipeRef.current) {
       const elapsed = Date.now() - touchStartRef.current.time;
-      const isQuickFlick = elapsed < 320 && Math.abs(dragOffset) > 22;
-      const isPastThreshold = Math.abs(dragOffset) > 40;
+      const isQuickFlick = elapsed < 300 && Math.abs(dragOffset) > 25;
+      const isPastThreshold = Math.abs(dragOffset) > 45;
 
       if (isQuickFlick || isPastThreshold) {
         if (dragOffset < 0) {
-          // Swiped left -> advance to next doctor
-          if (currentIndex < doctors.length - 1) {
-            navigateToDoctor(currentIndex + 1);
-          } else {
-            navigateToDoctor(0); // Circular wrap at end
-          }
+          handleArrowNav('right');
         } else {
-          // Swiped right -> go to previous doctor
-          if (currentIndex > 0) {
-            navigateToDoctor(currentIndex - 1);
-          } else {
-            navigateToDoctor(doctors.length - 1); // Circular wrap at beginning
-          }
+          handleArrowNav('left');
         }
       }
     }
@@ -273,147 +222,56 @@ export const SpecialistsSection: React.FC<SpecialistsSectionProps> = ({ onOpenBo
     }, 60);
   };
 
-  // Mouse Drag Handlers (for mobile/tablet simulation)
-  const handleMouseDown = (e: React.MouseEvent) => {
-    if (!isMobile || e.button !== 0) return;
-    const target = e.target as HTMLElement;
-    if (target.closest('button') || target.closest('a')) return;
+  // Increased distance between doctors so detailed card never hides neighboring names
+  const desktopSlotWidth = 185;
+  const desktopSlotGap = 'clamp(56px, 4.8vw, 78px)';
+  const mobileSlotWidth = 160;
+  const mobileSlotGap = 20;
 
-    mouseStartRef.current = { x: e.clientX, time: Date.now() };
-    isMouseDownRef.current = true;
-    isSwipingRef.current = false;
-    setDragOffset(0);
-  };
-
-  const handleMouseMove = (e: React.MouseEvent) => {
-    if (!isMobile || !isMouseDownRef.current || !mouseStartRef.current) return;
-    const diffX = e.clientX - mouseStartRef.current.x;
-
-    if (Math.abs(diffX) > 6) {
-      isSwipingRef.current = true;
-      setIsDragging(true);
-
-      let effectiveOffset = diffX;
-      if (
-        (currentIndex === 0 && diffX > 0) ||
-        (currentIndex === doctors.length - 1 && diffX < 0)
-      ) {
-        effectiveOffset = diffX * 0.28;
-      }
-      setDragOffset(effectiveOffset);
-    }
-  };
-
-  const handleMouseUp = () => {
-    if (!isMobile) return;
-    if (isMouseDownRef.current && isSwipingRef.current && mouseStartRef.current) {
-      const elapsed = Date.now() - mouseStartRef.current.time;
-      const isQuickFlick = elapsed < 350 && Math.abs(dragOffset) > 24;
-      const isPastThreshold = Math.abs(dragOffset) > 42;
-
-      if (isQuickFlick || isPastThreshold) {
-        if (dragOffset < 0) {
-          if (currentIndex < doctors.length - 1) {
-            navigateToDoctor(currentIndex + 1);
-          } else {
-            navigateToDoctor(0);
-          }
-        } else {
-          if (currentIndex > 0) {
-            navigateToDoctor(currentIndex - 1);
-          } else {
-            navigateToDoctor(doctors.length - 1);
-          }
-        }
-      }
-    }
-
-    setDragOffset(0);
-    setIsDragging(false);
-    isMouseDownRef.current = false;
-    mouseStartRef.current = null;
-    setTimeout(() => {
-      isSwipingRef.current = false;
-    }, 60);
-  };
-
-  const handleMouseLeaveContainer = () => {
-    if (isMouseDownRef.current) {
-      handleMouseUp();
-    }
-  };
-
-  // Wheel / Horizontal Trackpad Scroll Handler (mobile/tablet only)
-  const handleWheel = (e: React.WheelEvent) => {
-    if (!isMobile) return;
-    if (Math.abs(e.deltaX) > 30 && Date.now() - lastWheelTimeRef.current > 380) {
-      lastWheelTimeRef.current = Date.now();
-      if (e.deltaX > 0) {
-        handleArrowNav('right');
-      } else {
-        handleArrowNav('left');
-      }
-    }
-  };
-
-  // Hover handlers for desktop (subtle elevate & tooltip, NO inline card disruption)
-  const handleDoctorMouseEnter = (index: number) => {
-    if (isMobile) return;
-    setHoveredDoctorIndex(index);
-  };
-
-  const handleDoctorMouseLeave = () => {
-    if (isMobile) return;
-    setHoveredDoctorIndex(null);
-  };
-
-  // Doctor click handler
-  const handleDoctorClick = (index: number) => {
-    if (isSwipingRef.current) return;
-
-    if (isMobile) {
-      if (currentIndex !== index) {
-        setCurrentIndex(index);
-        setActiveDoctorIndex(index);
-      } else {
-        setActiveDoctorIndex((prev) => (prev === index ? null : index));
-      }
-    } else {
-      // On desktop: opens appointment booking modal directly with this doctor selected
-      if (onOpenBooking) {
-        onOpenBooking(doctors[index].name);
-      }
-    }
-  };
-
-  // Mobile carousel translation: middle index is centered when x = 0
-  const mobileTranslateX = (middleIdx - currentIndex) * (baseSlotWidth + slotGap) + dragOffset;
+  // On mobile only, slide carousel if a doctor is selected
+  const mobileTranslateX =
+    hoveredDoctorIndex !== null
+      ? (2 - hoveredDoctorIndex) * (mobileSlotWidth + mobileSlotGap) + dragOffset
+      : dragOffset;
 
   return (
-    <div style={{ backgroundColor: 'var(--color-rust)', position: 'relative', zIndex: 10, paddingBottom: '1.5rem' }}>
+    <div
+      style={{
+        backgroundColor: '#5E2614', // Rich continuous brown behind and beneath
+        position: 'relative',
+        zIndex: 10,
+        overflow: 'visible',
+      }}
+    >
+      {/* Upper Lavender Section */}
       <section
         id="specialists"
         style={{
           backgroundColor: 'var(--color-lavender)',
-          borderBottomLeftRadius: 'clamp(32px, 4vw, 44px)',
-          borderBottomRightRadius: 'clamp(32px, 4vw, 44px)',
+          borderBottomLeftRadius: 'clamp(32px, 4vw, 48px)',
+          borderBottomRightRadius: 'clamp(32px, 4vw, 48px)',
           position: 'relative',
-          paddingTop: '0',
+          paddingTop: 0,
           paddingBottom: isMobile
-            ? '2.2rem'
-            : 'clamp(5.5rem, 7vw, 7.5rem)',
-          transition: 'padding-bottom 0.45s cubic-bezier(0.16, 1, 0.3, 1)',
-          overflow: 'hidden',
+            ? (hoveredDoctorIndex !== null ? '430px' : '1.4rem')
+            : '1.4rem',
+          minHeight: isMobile
+            ? (hoveredDoctorIndex !== null ? '620px' : undefined)
+            : '500px',
+          transition: 'padding-bottom 0.4s cubic-bezier(0.16, 1, 0.3, 1), min-height 0.4s cubic-bezier(0.16, 1, 0.3, 1)',
+          overflow: 'visible',
           zIndex: 20,
+          boxShadow: '0 15px 35px rgba(0, 0, 0, 0.14)',
         }}
       >
-        {/* Downward Concave Wave Divider Transition from Cream into Lavender */}
+        {/* Top Wave Divider Transition from Cream Services into Lavender (Adjusted smoothly upwards) */}
         <div
           style={{
             width: '100%',
             overflow: 'visible',
             lineHeight: 0,
             position: 'relative',
+            marginTop: 'clamp(-2.8rem, -3.5vw, -1.8rem)',
           }}
         >
           <svg
@@ -432,7 +290,7 @@ export const SpecialistsSection: React.FC<SpecialistsSectionProps> = ({ onOpenBo
             />
           </svg>
 
-          {/* Apex Concentric Circular Badge: +See All */}
+          {/* Apex Concentric Circular Badge: +See All / –See Less */}
           <div
             style={{
               position: 'absolute',
@@ -442,8 +300,10 @@ export const SpecialistsSection: React.FC<SpecialistsSectionProps> = ({ onOpenBo
               zIndex: 20,
             }}
           >
-            <a
-              href="#specialists"
+            <button
+              type="button"
+              onClick={onToggleShowAllServices}
+              aria-label={showAllServices ? 'Show fewer services' : 'See all services'}
               style={{
                 display: 'inline-flex',
                 alignItems: 'center',
@@ -454,13 +314,13 @@ export const SpecialistsSection: React.FC<SpecialistsSectionProps> = ({ onOpenBo
                 backgroundColor: 'var(--color-lime)',
                 color: '#5E2614',
                 fontFamily: 'var(--font-main)',
-                fontSize: 'clamp(0.75rem, 1.1vw, 0.84rem)',
+                fontSize: 'clamp(0.72rem, 1.05vw, 0.82rem)',
                 fontWeight: 700,
                 boxShadow: '0 6px 20px rgba(0,0,0,0.18)',
                 border: '2.5px solid var(--color-lime)',
                 outline: '2.5px solid rgba(215, 248, 70, 0.55)',
                 outlineOffset: '3px',
-                textDecoration: 'none',
+                cursor: 'pointer',
                 transition: 'transform 0.25s ease, box-shadow 0.25s ease',
                 whiteSpace: 'nowrap',
               }}
@@ -473,13 +333,20 @@ export const SpecialistsSection: React.FC<SpecialistsSectionProps> = ({ onOpenBo
                 e.currentTarget.style.boxShadow = '0 6px 20px rgba(0,0,0,0.18)';
               }}
             >
-              +See All
-            </a>
+              {showAllServices ? '–See Less' : '+See All'}
+            </button>
           </div>
         </div>
 
-        {/* Header with Title & Outline Arrow Controls */}
-        <div className="container" style={{ marginTop: 'clamp(1.8rem, 3vw, 3rem)', marginBottom: 'clamp(1.5rem, 2.5vw, 2.5rem)' }}>
+        {/* Section Header: Title & Outline Arrows */}
+        <div
+          className="container"
+          style={{
+            marginTop: 'clamp(1.8rem, 3.2vw, 3.2rem)',
+            marginBottom: 'clamp(2rem, 3.5vw, 3.2rem)',
+            maxWidth: '1380px',
+          }}
+        >
           <div
             style={{
               display: 'flex',
@@ -488,91 +355,89 @@ export const SpecialistsSection: React.FC<SpecialistsSectionProps> = ({ onOpenBo
               gap: '1rem',
             }}
           >
+            {/* Left Header Title */}
             <div>
-              <motion.div
-                initial={{ opacity: 0, y: -10 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5 }}
+              <div
                 style={{
                   display: 'flex',
                   alignItems: 'center',
-                  gap: '0.6rem',
-                  marginBottom: '0.4rem',
+                  gap: '0.65rem',
+                  marginBottom: '0.35rem',
                 }}
               >
-                <span
-                  style={{
-                    width: '24px',
-                    height: '3px',
-                    backgroundColor: 'var(--color-lime)',
-                    borderRadius: '2px',
-                    display: 'inline-block',
-                  }}
-                />
                 <span
                   style={{
                     fontFamily: 'var(--font-main)',
                     fontSize: '0.8rem',
                     fontWeight: 700,
-                    letterSpacing: '0.12em',
+                    letterSpacing: '0.15em',
                     color: 'rgba(255, 255, 255, 0.92)',
                     textTransform: 'uppercase',
                   }}
                 >
                   MEET OUR EXPERTS
                 </span>
-              </motion.div>
+                <span
+                  style={{
+                    width: '32px',
+                    height: '3px',
+                    backgroundColor: 'var(--color-lime)',
+                    borderRadius: '2px',
+                    display: 'inline-block',
+                  }}
+                />
+              </div>
 
-              <motion.h2
-                initial={{ opacity: 0, x: -30 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
+              <h2
                 style={{
                   fontFamily: 'var(--font-display)',
-                  fontSize: 'clamp(2.1rem, 5.2vw, 4.6rem)',
-                  fontWeight: 600,
+                  fontSize: 'clamp(2.4rem, 4.8vw, 4.2rem)',
+                  fontWeight: 700,
                   letterSpacing: '-0.03em',
-                  color: 'var(--color-white)',
+                  color: '#FFFFFF',
                   margin: 0,
+                  lineHeight: 1.1,
                 }}
               >
                 Our Specialist
-              </motion.h2>
+              </h2>
             </div>
 
-            {/* Thin White Outline Arrow Controls */}
+            {/* Right Header Navigation Arrows (Matching reference outline circles) */}
             <div style={{ display: 'flex', gap: '0.65rem' }}>
               <button
+                type="button"
                 onClick={() => handleArrowNav('left')}
                 aria-label="Previous Specialist"
                 className="specialist-nav-btn"
                 style={{
-                  width: '42px',
-                  height: '42px',
+                  width: '46px',
+                  height: '46px',
                   borderRadius: '50%',
-                  border: '1.5px solid rgba(255, 255, 255, 0.75)',
+                  border: '1.5px solid rgba(255, 255, 255, 0.65)',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
-                  color: 'var(--color-white)',
+                  color: '#FFFFFF',
                   backgroundColor: 'transparent',
-                  transition: 'all 0.2s ease',
+                  transition: 'all 0.22s ease',
                   cursor: 'pointer',
                 }}
                 onMouseEnter={(e) => {
                   e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.2)';
-                  e.currentTarget.style.borderColor = 'var(--color-white)';
+                  e.currentTarget.style.borderColor = '#FFFFFF';
+                  e.currentTarget.style.transform = 'scale(1.05)';
                 }}
                 onMouseLeave={(e) => {
                   e.currentTarget.style.backgroundColor = 'transparent';
-                  e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.75)';
+                  e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.65)';
+                  e.currentTarget.style.transform = 'scale(1)';
                 }}
               >
                 <ArrowLeft size={20} strokeWidth={1.75} />
               </button>
               <button
+                type="button"
                 onClick={() => handleArrowNav('right')}
                 aria-label="Next Specialist"
                 className="specialist-nav-btn"
@@ -580,22 +445,24 @@ export const SpecialistsSection: React.FC<SpecialistsSectionProps> = ({ onOpenBo
                   width: '46px',
                   height: '46px',
                   borderRadius: '50%',
-                  border: '1.5px solid rgba(255, 255, 255, 0.75)',
+                  border: '1.5px solid rgba(255, 255, 255, 0.65)',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
-                  color: 'var(--color-white)',
+                  color: '#FFFFFF',
                   backgroundColor: 'transparent',
-                  transition: 'all 0.2s ease',
+                  transition: 'all 0.22s ease',
                   cursor: 'pointer',
                 }}
                 onMouseEnter={(e) => {
                   e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.2)';
-                  e.currentTarget.style.borderColor = 'var(--color-white)';
+                  e.currentTarget.style.borderColor = '#FFFFFF';
+                  e.currentTarget.style.transform = 'scale(1.05)';
                 }}
                 onMouseLeave={(e) => {
                   e.currentTarget.style.backgroundColor = 'transparent';
-                  e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.75)';
+                  e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.65)';
+                  e.currentTarget.style.transform = 'scale(1)';
                 }}
               >
                 <ArrowRight size={20} strokeWidth={1.75} />
@@ -604,215 +471,150 @@ export const SpecialistsSection: React.FC<SpecialistsSectionProps> = ({ onOpenBo
           </div>
         </div>
 
-        {/* Doctor Cards Interactive Carousel / Desktop Row Wrapper */}
+        {/* Doctors Row Wrapper */}
         <div
           className="container"
           style={{
             position: 'relative',
-            maxWidth: isMobile ? undefined : '1520px',
+            maxWidth: '1440px',
             overflow: 'visible',
             touchAction: isMobile ? 'pan-y' : 'auto',
-            cursor: isDragging ? 'grabbing' : isMobile ? 'grab' : 'default',
             userSelect: 'none',
             WebkitUserSelect: 'none',
+            cursor: isDragging ? 'grabbing' : isMobile ? 'grab' : 'default',
           }}
           onTouchStart={handleTouchStart}
           onTouchMove={handleTouchMove}
           onTouchEnd={handleTouchEnd}
-          onTouchCancel={handleTouchEnd}
-          onMouseDown={handleMouseDown}
-          onMouseMove={handleMouseMove}
-          onMouseUp={handleMouseUp}
-          onMouseLeave={handleMouseLeaveContainer}
-          onWheel={handleWheel}
         >
-          {/* Mobile Floating Side Arrows */}
+          {/* Mobile Quick Side Chevrons */}
           {isMobile && (
             <>
               <button
                 type="button"
-                className="specialist-nav-btn"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  handleArrowNav('left');
-                }}
+                onClick={() => handleArrowNav('left')}
                 aria-label="Previous Specialist"
                 style={{
                   position: 'absolute',
-                  left: '6px',
-                  top: '64px',
+                  left: '4px',
+                  top: '70px',
                   width: '38px',
                   height: '38px',
                   borderRadius: '50%',
-                  backgroundColor: 'rgba(28, 18, 12, 0.52)',
+                  backgroundColor: 'rgba(28, 16, 12, 0.65)',
                   backdropFilter: 'blur(8px)',
                   WebkitBackdropFilter: 'blur(8px)',
-                  border: '1.5px solid rgba(255, 255, 255, 0.35)',
+                  border: '1.5px solid rgba(255, 255, 255, 0.4)',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
                   color: '#FFFFFF',
-                  cursor: 'pointer',
                   zIndex: 80,
-                  boxShadow: '0 4px 14px rgba(0,0,0,0.28)',
-                  transition: 'transform 0.15s ease, background-color 0.2s ease',
+                  cursor: 'pointer',
                 }}
-                onMouseDown={(e) => e.stopPropagation()}
               >
-                <ChevronLeft size={22} strokeWidth={2.4} />
+                <ChevronLeft size={22} />
               </button>
               <button
                 type="button"
-                className="specialist-nav-btn"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  handleArrowNav('right');
-                }}
+                onClick={() => handleArrowNav('right')}
                 aria-label="Next Specialist"
                 style={{
                   position: 'absolute',
-                  right: '6px',
-                  top: '64px',
+                  right: '4px',
+                  top: '70px',
                   width: '38px',
                   height: '38px',
                   borderRadius: '50%',
-                  backgroundColor: 'rgba(28, 18, 12, 0.52)',
+                  backgroundColor: 'rgba(28, 16, 12, 0.65)',
                   backdropFilter: 'blur(8px)',
                   WebkitBackdropFilter: 'blur(8px)',
-                  border: '1.5px solid rgba(255, 255, 255, 0.35)',
+                  border: '1.5px solid rgba(255, 255, 255, 0.4)',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
                   color: '#FFFFFF',
-                  cursor: 'pointer',
                   zIndex: 80,
-                  boxShadow: '0 4px 14px rgba(0,0,0,0.28)',
-                  transition: 'transform 0.15s ease, background-color 0.2s ease',
+                  cursor: 'pointer',
                 }}
-                onMouseDown={(e) => e.stopPropagation()}
               >
-                <ChevronRight size={22} strokeWidth={2.4} />
+                <ChevronRight size={22} />
               </button>
             </>
           )}
 
-          {/* Doctor Row Track */}
+          {/* Smooth Carousel / Desktop Row Track */}
           <motion.div
             animate={{
               x: isMobile ? mobileTranslateX : 0,
             }}
             transition={{
-              duration: isDragging ? 0 : transitionDuration,
-              ease: easingCurve,
+              type: 'spring',
+              stiffness: 280,
+              damping: 32,
+              mass: 0.9,
             }}
             style={{
-              width: '100%',
               display: 'flex',
-              alignItems: 'center',
+              alignItems: 'flex-start',
               justifyContent: 'center',
-              gap: isMobile ? `${slotGap}px` : 'clamp(14px, 1.4vw, 24px)',
-              overflowX: 'visible',
-              overflowY: 'visible',
-              paddingTop: '0.8rem',
-              paddingBottom: '0.6rem',
+              gap: isMobile ? `${mobileSlotGap}px` : desktopSlotGap,
+              overflow: 'visible',
+              paddingTop: '0.5rem',
+              paddingBottom: '1rem',
               willChange: 'transform',
             }}
           >
             {doctors.map((doc, idx) => {
-              const isActive = isMobile && activeDoctorIndex === idx;
-              const isCentered = isMobile && currentIndex === idx;
-              const isAnyActive = isMobile && activeDoctorIndex !== null;
-              const isSubtle = isAnyActive && !isActive;
-              const isHovered = !isMobile && hoveredDoctorIndex === idx;
+              const isCardOpened = hoveredDoctorIndex === idx;
 
               return (
-                <motion.div
-                  key={doc.name}
+                <div
+                  key={doc.id}
                   className="doctor-slot"
-                  initial={{ opacity: 0, y: 30 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  animate={{
-                    opacity: isMobile ? (isCentered ? 1 : 0.78) : (isSubtle ? 0.76 : 1),
-                  }}
-                  transition={{
-                    opacity: {
-                      duration: shouldReduceMotion ? 0.01 : 0.38,
-                      ease: 'easeOut',
-                    },
-                  }}
-                  onMouseEnter={() => handleDoctorMouseEnter(idx)}
-                  onMouseLeave={handleDoctorMouseLeave}
                   onClick={() => handleDoctorClick(idx)}
-                  tabIndex={0}
-                  role="button"
-                  aria-expanded={isActive}
-                  aria-label={`Specialist ${doc.name}, ${doc.specialty}`}
+                  onMouseEnter={() => handleMouseEnter(idx)}
+                  onMouseLeave={handleMouseLeave}
                   style={{
-                    flex: `0 0 ${baseSlotWidth}px`,
-                    width: `${baseSlotWidth}px`,
+                    flex: `0 0 ${isMobile ? mobileSlotWidth : desktopSlotWidth}px`,
+                    width: `${isMobile ? mobileSlotWidth : desktopSlotWidth}px`,
                     display: 'flex',
                     flexDirection: 'column',
                     alignItems: 'center',
                     textAlign: 'center',
-                    position: 'relative',
                     cursor: 'pointer',
-                    outline: 'none',
-                    zIndex: isActive ? 50 : isHovered ? 40 : isCentered ? 30 : 10,
-                    willChange: 'transform, opacity',
+                    position: 'relative',
+                    zIndex: isCardOpened ? 60 : 20,
                   }}
                 >
-                  {/* Circular Avatar Container with Scaling & Ambient Aura */}
-                  <motion.div
-                    animate={{
-                      scale: isMobile
-                        ? isActive
-                          ? shouldReduceMotion ? 1 : 1.28
-                          : isCentered ? 1.14 : isSubtle ? 0.94 : 1
-                        : isHovered ? 1.08 : 1,
-                    }}
-                    transition={{
-                      scale: {
-                        duration: transitionDuration,
-                        ease: easingCurve,
-                      },
-                    }}
+                  {/* Default Circular Avatar + Name + Specialty (Always displayed unless detailed card is open on top) */}
+                  <div
                     style={{
-                      position: 'relative',
-                      zIndex: 70,
-                      transformOrigin: 'center center',
-                      willChange: 'transform',
+                      display: 'flex',
+                      flexDirection: 'column',
+                      alignItems: 'center',
+                      textAlign: 'center',
+                      width: '100%',
+                      opacity: isCardOpened ? 0 : 1,
+                      visibility: isCardOpened ? 'hidden' : 'visible',
+                      transition: 'opacity 0.22s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.22s',
+                      pointerEvents: isCardOpened ? 'none' : 'auto',
                     }}
                   >
+                    {/* Avatar Circle with distinct color, subtle border & shadow */}
                     <div
                       style={{
-                        width: isMobile ? 'clamp(135px, 35vw, 155px)' : 'clamp(172px, 12.5vw, 202px)',
-                        height: isMobile ? 'clamp(135px, 35vw, 155px)' : 'clamp(172px, 12.5vw, 202px)',
+                        width: isMobile ? '135px' : '162px',
+                        height: isMobile ? '135px' : '162px',
                         borderRadius: '50%',
-                        overflow: 'hidden',
                         backgroundColor: doc.bg,
-                        boxShadow: isMobile
-                          ? isActive
-                            ? `0 16px 36px rgba(0,0,0,0.22), 0 0 45px ${doc.bg}cc`
-                            : isCentered
-                            ? `0 12px 28px rgba(0,0,0,0.18), 0 0 25px ${doc.bg}88`
-                            : '0 10px 24px rgba(0,0,0,0.12)'
-                          : isHovered
-                          ? `0 20px 45px rgba(0,0,0,0.28), 0 0 38px ${doc.bg}cc`
-                          : '0 10px 28px rgba(0,0,0,0.16)',
+                        overflow: 'hidden',
                         display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'center',
-                        border: isMobile
-                          ? isActive
-                            ? '4.5px solid #FFFFFF'
-                            : isCentered
-                            ? '3.5px solid rgba(255, 255, 255, 0.95)'
-                            : '3px solid transparent'
-                          : isHovered
-                          ? '4.5px solid #FFFFFF'
-                          : '4px solid rgba(255, 255, 255, 0.82)',
-                        transition: 'border 0.35s ease, box-shadow 0.45s ease',
+                        border: '3.5px solid rgba(255, 255, 255, 0.85)',
+                        boxShadow: '0 8px 22px rgba(0, 0, 0, 0.12)',
+                        transition: 'all 0.3s cubic-bezier(0.16, 1, 0.3, 1)',
                       }}
                     >
                       <img
@@ -827,415 +629,497 @@ export const SpecialistsSection: React.FC<SpecialistsSectionProps> = ({ onOpenBo
                         }}
                       />
                     </div>
-                  </motion.div>
 
-                  {/* Desktop Hover Floating Badge: Clean minimal pill */}
-                  {!isMobile && (
-                    <motion.div
-                      initial={false}
-                      animate={{
-                        opacity: isHovered ? 1 : 0,
-                        y: isHovered ? 0 : 8,
-                        scale: isHovered ? 1 : 0.95,
-                      }}
-                      transition={{ duration: 0.22, ease: 'easeOut' }}
+                    {/* Doctor Name */}
+                    <h3
                       style={{
-                        position: 'absolute',
-                        top: 'calc(100% + 12px)',
-                        left: '50%',
-                        transform: 'translateX(-50%)',
-                        backgroundColor: 'rgba(28, 16, 12, 0.92)',
-                        backdropFilter: 'blur(10px)',
-                        WebkitBackdropFilter: 'blur(10px)',
+                        fontFamily: 'var(--font-display)',
+                        fontSize: isMobile ? '1.05rem' : '1.2rem',
+                        fontWeight: 700,
                         color: '#FFFFFF',
-                        padding: '0.45rem 0.95rem',
-                        borderRadius: 'var(--radius-pill)',
-                        border: '1px solid rgba(255, 255, 255, 0.2)',
-                        boxShadow: '0 8px 24px rgba(0,0,0,0.3)',
-                        pointerEvents: 'none',
+                        marginTop: '0.9rem',
+                        marginBottom: '0.2rem',
+                        letterSpacing: '-0.01em',
+                        lineHeight: 1.2,
                         whiteSpace: 'nowrap',
-                        zIndex: 80,
-                        display: 'flex',
-                        flexDirection: 'column',
-                        alignItems: 'center',
                       }}
                     >
-                      <span
-                        style={{
-                          fontFamily: 'var(--font-display)',
-                          fontSize: '0.9rem',
-                          fontWeight: 700,
-                          color: '#FFFFFF',
-                          lineHeight: 1.2,
-                        }}
-                      >
-                        {doc.name}
-                      </span>
-                      <span
-                        style={{
-                          fontFamily: 'var(--font-main)',
-                          fontSize: '0.72rem',
-                          color: 'var(--color-lime)',
-                          fontWeight: 600,
-                          letterSpacing: '0.04em',
-                        }}
-                      >
-                        {doc.specialty}
-                      </span>
-                    </motion.div>
-                  )}
+                      {doc.name}
+                    </h3>
 
-                  {/* Active Expanded State: ONLY on Mobile */}
-                  {isMobile && (
-                    <div
+                    {/* Doctor Specialty */}
+                    <p
                       style={{
-                        position: 'absolute',
-                        top: 'clamp(92px, 9.2vw, 108px)',
-                        left: '50%',
-                        transform: 'translateX(-50%)',
-                        width: `${cardWidth}px`,
-                        zIndex: 60,
-                        pointerEvents: isActive ? 'auto' : 'none',
+                        fontFamily: 'var(--font-main)',
+                        fontSize: isMobile ? '0.75rem' : '0.82rem',
+                        fontWeight: 500,
+                        color: 'rgba(255, 255, 255, 0.82)',
+                        margin: 0,
+                        lineHeight: 1.25,
+                        whiteSpace: 'nowrap',
                       }}
                     >
+                      {doc.specialty}
+                    </p>
+                  </div>
+
+                  {/* Detailed Card: ONLY opens when cursor is placed on this doctor (hover) */}
+                  <AnimatePresence>
+                    {isCardOpened && (
                       <motion.div
-                        initial={false}
-                        animate={{
-                          opacity: isActive ? 1 : 0,
-                          y: isActive ? 0 : 14,
-                          scale: isActive ? 1 : 0.94,
+                        initial={{ opacity: 0, scale: 0.92 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        exit={{
+                          opacity: 0,
+                          scale: 0.92,
+                          transition: { duration: 0.18, ease: 'easeOut' },
                         }}
                         transition={{
-                          opacity: {
-                            duration: shouldReduceMotion ? 0.01 : 0.35,
-                            ease: 'easeOut',
-                          },
-                          y: {
-                            duration: transitionDuration,
-                            ease: easingCurve,
-                          },
-                          scale: {
-                            duration: transitionDuration,
-                            ease: easingCurve,
-                          },
+                          type: 'spring',
+                          stiffness: 350,
+                          damping: 30,
+                          mass: 0.8,
                         }}
                         style={{
-                          width: '100%',
-                          backgroundColor: 'var(--color-white)',
+                          position: 'absolute',
+                          top: isMobile ? '70px' : '82px',
+                          left: isMobile ? 'calc(50% - 155px)' : 'calc(50% - 165px)',
+                          width: isMobile ? '310px' : '330px',
+                          transformOrigin: '50% 0px',
+                          backgroundColor: '#FFFFFF',
                           borderRadius: '28px',
-                          padding: 'clamp(4.2rem, 4.6vw, 4.8rem) 1.5rem 1.6rem 1.5rem',
-                          boxShadow: '0 24px 55px rgba(45, 18, 10, 0.28)',
+                          padding: 'clamp(5rem, 5.4vw, 5.6rem) 1.4rem 1.5rem 1.4rem',
+                          boxShadow:
+                            '0 24px 50px rgba(28, 12, 8, 0.24), 0 6px 18px rgba(0,0,0,0.08)',
                           textAlign: 'center',
-                          transformOrigin: 'top center',
-                          willChange: 'transform, opacity',
-                          position: 'relative',
+                          zIndex: 70,
+                          /* This margin-bottom creates the exact 1/4 overlap into the brown section */
+                          marginBottom: isMobile ? '0px' : '-95px',
                         }}
                         onClick={(e) => {
+                          const target = e.target as HTMLElement | null;
+                          if (target && typeof target.closest === 'function' && (target.closest('button') || target.closest('a'))) {
+                            return;
+                          }
                           e.stopPropagation();
+                          setHoveredDoctorIndex(null);
                         }}
                       >
-                        {/* Close button on mobile for instant intuitive dismissal */}
-                        <button
-                          type="button"
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            setActiveDoctorIndex(null);
-                          }}
-                          aria-label="Close specialist details"
+                        {/* Top Protruding Avatar (aligns directly over slot circle) */}
+                        <div
                           style={{
                             position: 'absolute',
-                            top: '14px',
-                            right: '14px',
-                            width: '32px',
-                            height: '32px',
+                            top: isMobile ? '-70px' : '-82px',
+                            left: '50%',
+                            transform: 'translateX(-50%)',
+                            width: isMobile ? '145px' : '166px',
+                            height: isMobile ? '145px' : '166px',
                             borderRadius: '50%',
-                            backgroundColor: 'rgba(0, 0, 0, 0.06)',
+                            backgroundColor: doc.bg,
+                            border: '5px solid #FFFFFF',
+                            overflow: 'hidden',
+                            boxShadow: `0 14px 34px rgba(0,0,0,0.2), 0 0 30px ${doc.bg}77`,
                             display: 'flex',
                             alignItems: 'center',
                             justifyContent: 'center',
-                            color: '#6B7280',
-                            cursor: 'pointer',
-                            zIndex: 70,
-                            border: 'none',
+                            zIndex: 75,
                           }}
                         >
-                          <X size={18} strokeWidth={2.2} />
-                        </button>
-
-                        {/* Active Doctor Name */}
-                        <h3
-                          style={{
-                            fontFamily: 'var(--font-display)',
-                            fontSize: 'clamp(1.25rem, 1.4vw, 1.45rem)',
-                            fontWeight: 700,
-                            color: '#18181B',
-                            marginBottom: '0.2rem',
-                            letterSpacing: '-0.02em',
-                          }}
-                        >
-                          {doc.name}
-                        </h3>
-
-                        {/* Active Doctor Specialty */}
-                        <p
-                          style={{
-                            fontFamily: 'var(--font-main)',
-                            fontSize: '0.86rem',
-                            fontWeight: 600,
-                            color: '#7C3AED',
-                            marginBottom: '0.75rem',
-                          }}
-                        >
-                          {doc.specialty}
-                        </p>
-
-                        {/* Doctor Short Bio */}
-                        <p
-                          style={{
-                            fontFamily: 'var(--font-main)',
-                            fontSize: '0.81rem',
-                            lineHeight: 1.45,
-                            color: '#4B5563',
-                            marginBottom: '1.15rem',
-                          }}
-                        >
-                          {doc.bio}
-                        </p>
-
-                        {/* Credentials 3-Column Info Grid */}
-                        <div
-                          style={{
-                            display: 'grid',
-                            gridTemplateColumns: 'repeat(3, 1fr)',
-                            gap: '0.4rem',
-                            paddingTop: '0.85rem',
-                            paddingBottom: '0.85rem',
-                            borderTop: '1px solid rgba(0, 0, 0, 0.07)',
-                            borderBottom: '1px solid rgba(0, 0, 0, 0.07)',
-                            marginBottom: '1.2rem',
-                          }}
-                        >
-                          {/* Qualification / Degree */}
-                          <div
+                          <img
+                            src={doc.image}
+                            alt={doc.name}
+                            draggable={false}
                             style={{
-                              display: 'flex',
-                              flexDirection: 'column',
-                              alignItems: 'center',
-                              textAlign: 'center',
+                              width: '100%',
+                              height: '100%',
+                              objectFit: 'cover',
+                              pointerEvents: 'none',
                             }}
-                          >
-                            <GraduationCap
-                              size={18}
-                              color="#7C3AED"
-                              style={{ marginBottom: '0.3rem' }}
-                            />
-                            <span
-                              style={{
-                                fontFamily: 'var(--font-main)',
-                                fontSize: '0.71rem',
-                                fontWeight: 600,
-                                color: '#374151',
-                                lineHeight: 1.25,
-                                whiteSpace: 'pre-line',
-                              }}
-                            >
-                              {doc.degree}
-                            </span>
-                          </div>
-
-                          {/* Experience */}
-                          <div
-                            style={{
-                              display: 'flex',
-                              flexDirection: 'column',
-                              alignItems: 'center',
-                              textAlign: 'center',
-                              borderLeft: '1px solid rgba(0, 0, 0, 0.07)',
-                              borderRight: '1px solid rgba(0, 0, 0, 0.07)',
-                            }}
-                          >
-                            <Award
-                              size={18}
-                              color="#7C3AED"
-                              style={{ marginBottom: '0.3rem' }}
-                            />
-                            <span
-                              style={{
-                                fontFamily: 'var(--font-main)',
-                                fontSize: '0.71rem',
-                                fontWeight: 600,
-                                color: '#374151',
-                                lineHeight: 1.25,
-                                whiteSpace: 'pre-line',
-                              }}
-                            >
-                              {doc.experience}
-                            </span>
-                          </div>
-
-                          {/* Happy Patients */}
-                          <div
-                            style={{
-                              display: 'flex',
-                              flexDirection: 'column',
-                              alignItems: 'center',
-                              textAlign: 'center',
-                            }}
-                          >
-                            <Users
-                              size={18}
-                              color="#7C3AED"
-                              style={{ marginBottom: '0.3rem' }}
-                            />
-                            <span
-                              style={{
-                                fontFamily: 'var(--font-main)',
-                                fontSize: '0.71rem',
-                                fontWeight: 600,
-                                color: '#374151',
-                                lineHeight: 1.25,
-                                whiteSpace: 'pre-line',
-                              }}
-                            >
-                              {doc.patients}
-                            </span>
-                          </div>
+                          />
                         </div>
 
-                        {/* Lime High-Contrast CTA Button */}
-                        <button
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            if (onOpenBooking) {
-                              onOpenBooking(doc.name);
-                            } else {
-                              const contactSection = document.getElementById('branches');
-                              contactSection?.scrollIntoView({ behavior: 'smooth' });
-                            }
-                          }}
-                          style={{
-                            width: '100%',
-                            display: 'inline-flex',
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                            gap: '0.4rem',
-                            backgroundColor: 'var(--color-lime)',
-                            color: '#18181B',
-                            fontFamily: 'var(--font-main)',
-                            fontSize: '0.85rem',
-                            fontWeight: 700,
-                            padding: '0.7rem 1.2rem',
-                            borderRadius: 'var(--radius-pill)',
-                            boxShadow: '0 6px 18px rgba(215, 248, 70, 0.35)',
-                            cursor: 'pointer',
-                            border: 'none',
-                            transition: 'transform 0.2s ease, box-shadow 0.2s ease',
-                          }}
-                          onMouseEnter={(e) => {
-                            e.currentTarget.style.transform = 'translateY(-2px)';
-                            e.currentTarget.style.boxShadow =
-                              '0 10px 24px rgba(215, 248, 70, 0.5)';
-                          }}
-                          onMouseLeave={(e) => {
-                            e.currentTarget.style.transform = 'translateY(0)';
-                            e.currentTarget.style.boxShadow =
-                              '0 6px 18px rgba(215, 248, 70, 0.35)';
-                          }}
-                        >
-                          <span>View Full Profile</span>
-                          <ArrowRight size={16} strokeWidth={2.2} />
-                        </button>
+                        {/* Card Content */}
+                        <div>
+                          {/* Doctor Name */}
+                          <h3
+                            style={{
+                              fontFamily: 'var(--font-display)',
+                              fontSize: 'clamp(1.35rem, 1.6vw, 1.55rem)',
+                              fontWeight: 700,
+                              color: '#18181B',
+                              marginBottom: '0.25rem',
+                              letterSpacing: '-0.02em',
+                              lineHeight: 1.2,
+                            }}
+                          >
+                            {doc.name}
+                          </h3>
+
+                          {/* Specialty in Purple */}
+                          <p
+                            style={{
+                              fontFamily: 'var(--font-main)',
+                              fontSize: '0.86rem',
+                              fontWeight: 600,
+                              color: '#7C3AED',
+                              marginBottom: '0.75rem',
+                            }}
+                          >
+                            {doc.specialty}
+                          </p>
+
+                          {/* Bio Description */}
+                          <p
+                            style={{
+                              fontFamily: 'var(--font-main)',
+                              fontSize: '0.81rem',
+                              lineHeight: 1.48,
+                              color: '#4B5563',
+                              marginBottom: '1.2rem',
+                            }}
+                          >
+                            {doc.bio}
+                          </p>
+
+                          {/* 3-Column Credentials / Stats */}
+                          <div
+                            style={{
+                              display: 'grid',
+                              gridTemplateColumns: 'repeat(3, 1fr)',
+                              gap: '0.35rem',
+                              paddingTop: '0.8rem',
+                              paddingBottom: '0.8rem',
+                              borderTop: '1px solid rgba(0, 0, 0, 0.08)',
+                              borderBottom: '1px solid rgba(0, 0, 0, 0.08)',
+                              marginBottom: '1.25rem',
+                            }}
+                          >
+                            {/* Qualification */}
+                            <div
+                              style={{
+                                display: 'flex',
+                                flexDirection: 'column',
+                                alignItems: 'center',
+                                textAlign: 'center',
+                              }}
+                            >
+                              <GraduationCap
+                                size={19}
+                                color="#7C3AED"
+                                style={{ marginBottom: '0.3rem' }}
+                              />
+                              <span
+                                style={{
+                                  fontFamily: 'var(--font-main)',
+                                  fontSize: '0.74rem',
+                                  fontWeight: 700,
+                                  color: '#18181B',
+                                  lineHeight: 1.2,
+                                }}
+                              >
+                                {doc.degreeTitle}
+                              </span>
+                              <span
+                                style={{
+                                  fontFamily: 'var(--font-main)',
+                                  fontSize: '0.67rem',
+                                  fontWeight: 500,
+                                  color: '#6B7280',
+                                  lineHeight: 1.2,
+                                  marginTop: '2px',
+                                }}
+                              >
+                                {doc.degreeSub}
+                              </span>
+                            </div>
+
+                            {/* Experience */}
+                            <div
+                              style={{
+                                display: 'flex',
+                                flexDirection: 'column',
+                                alignItems: 'center',
+                                textAlign: 'center',
+                                borderLeft: '1px solid rgba(0, 0, 0, 0.08)',
+                                borderRight: '1px solid rgba(0, 0, 0, 0.08)',
+                              }}
+                            >
+                              <Award
+                                size={19}
+                                color="#7C3AED"
+                                style={{ marginBottom: '0.3rem' }}
+                              />
+                              <span
+                                style={{
+                                  fontFamily: 'var(--font-main)',
+                                  fontSize: '0.74rem',
+                                  fontWeight: 700,
+                                  color: '#18181B',
+                                  lineHeight: 1.2,
+                                }}
+                              >
+                                {doc.experienceTitle}
+                              </span>
+                              <span
+                                style={{
+                                  fontFamily: 'var(--font-main)',
+                                  fontSize: '0.67rem',
+                                  fontWeight: 500,
+                                  color: '#6B7280',
+                                  lineHeight: 1.2,
+                                  marginTop: '2px',
+                                }}
+                              >
+                                {doc.experienceSub}
+                              </span>
+                            </div>
+
+                            {/* Happy Patients */}
+                            <div
+                              style={{
+                                display: 'flex',
+                                flexDirection: 'column',
+                                alignItems: 'center',
+                                textAlign: 'center',
+                              }}
+                            >
+                              <Users
+                                size={19}
+                                color="#7C3AED"
+                                style={{ marginBottom: '0.3rem' }}
+                              />
+                              <span
+                                style={{
+                                  fontFamily: 'var(--font-main)',
+                                  fontSize: '0.74rem',
+                                  fontWeight: 700,
+                                  color: '#18181B',
+                                  lineHeight: 1.2,
+                                }}
+                              >
+                                {doc.patientsTitle}
+                              </span>
+                              <span
+                                style={{
+                                  fontFamily: 'var(--font-main)',
+                                  fontSize: '0.67rem',
+                                  fontWeight: 500,
+                                  color: '#6B7280',
+                                  lineHeight: 1.2,
+                                  marginTop: '2px',
+                                }}
+                              >
+                                {doc.patientsSub}
+                              </span>
+                            </div>
+                          </div>
+
+                          {/* Lime High-Contrast CTA Button */}
+                          <button
+                            type="button"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              if (onOpenBooking) {
+                                onOpenBooking(doc.name);
+                              } else {
+                                const contactSection =
+                                  document.getElementById('branches');
+                                contactSection?.scrollIntoView({
+                                  behavior: 'smooth',
+                                });
+                              }
+                            }}
+                            style={{
+                              width: '100%',
+                              display: 'inline-flex',
+                              alignItems: 'center',
+                              justifyContent: 'center',
+                              gap: '0.45rem',
+                              backgroundColor: 'var(--color-lime)',
+                              color: '#18181B',
+                              fontFamily: 'var(--font-main)',
+                              fontSize: '0.86rem',
+                              fontWeight: 700,
+                              padding: '0.72rem 1.2rem',
+                              borderRadius: 'var(--radius-pill)',
+                              boxShadow: '0 6px 18px rgba(215, 248, 70, 0.4)',
+                              cursor: 'pointer',
+                              border: 'none',
+                              transition:
+                                'transform 0.2s ease, box-shadow 0.2s ease',
+                            }}
+                            onMouseEnter={(e) => {
+                              e.currentTarget.style.transform =
+                                'translateY(-2px)';
+                              e.currentTarget.style.boxShadow =
+                                '0 10px 24px rgba(215, 248, 70, 0.55)';
+                            }}
+                            onMouseLeave={(e) => {
+                              e.currentTarget.style.transform =
+                                'translateY(0)';
+                              e.currentTarget.style.boxShadow =
+                                '0 6px 18px rgba(215, 248, 70, 0.4)';
+                            }}
+                          >
+                            <span>View Full Profile</span>
+                            <ArrowRight size={16} strokeWidth={2.4} />
+                          </button>
+                        </div>
                       </motion.div>
-                    </div>
-                  )}
-                </motion.div>
+                    )}
+                  </AnimatePresence>
+                </div>
               );
             })}
           </motion.div>
-
-          {/* Mobile Pagination Indicator Dots */}
-          {isMobile && (
-            <div
-              style={{
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                gap: '8px',
-                marginTop: activeDoctorIndex !== null ? 'clamp(21rem, 50vh, 22.8rem)' : '1rem',
-                transition: 'margin-top 0.45s cubic-bezier(0.16, 1, 0.3, 1)',
-                position: 'relative',
-                zIndex: 45,
-              }}
-            >
-              {doctors.map((_, idx) => {
-                const isSelected = currentIndex === idx;
-                return (
-                  <button
-                    key={idx}
-                    type="button"
-                    className="specialist-dot"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      navigateToDoctor(idx);
-                    }}
-                    aria-label={`Go to doctor ${doctors[idx].name}`}
-                    style={{
-                      width: isSelected ? '26px' : '8px',
-                      height: '8px',
-                      borderRadius: '4px',
-                      backgroundColor: isSelected
-                        ? 'var(--color-lime)'
-                        : 'rgba(255, 255, 255, 0.42)',
-                      border: 'none',
-                      padding: 0,
-                      cursor: 'pointer',
-                      transition: 'all 0.3s cubic-bezier(0.16, 1, 0.3, 1)',
-                      boxShadow: isSelected ? '0 0 10px rgba(215, 248, 70, 0.6)' : 'none',
-                    }}
-                  />
-                );
-              })}
-            </div>
-          )}
         </div>
       </section>
 
-      {/* Decorative Wavy Line & Tag matching Reference on the right of brown section */}
+      {/* Brown Bottom Bar: Sits behind and underneath the quarter-overlapping card */}
       <div
         style={{
-          position: 'absolute',
-          right: 'max(1.5rem, calc((100vw - 1380px) / 2 + 2.5rem))',
-          bottom: '0.8rem',
-          display: isMobile ? 'none' : 'flex',
-          alignItems: 'center',
-          gap: '0.65rem',
+          backgroundColor: '#5E2614', // continuous brown behind and beneath
+          position: 'relative',
           zIndex: 15,
+          paddingTop: isMobile ? '1.6rem' : '2.2rem',
+          paddingBottom: isMobile ? '2.2rem' : '3.4rem',
         }}
       >
-        <svg width="34" height="14" viewBox="0 0 34 14" fill="none">
-          <path
-            d="M1 9C6 3 11 13 17 7C22 2 28 11 33 7"
-            stroke="rgba(255, 255, 255, 0.65)"
-            strokeWidth="1.5"
-            strokeLinecap="round"
-          />
-        </svg>
-        <span
+        <div
+          className="container"
           style={{
-            fontFamily: 'var(--font-main)',
-            fontSize: '0.66rem',
-            fontWeight: 600,
-            letterSpacing: '0.12em',
-            color: 'rgba(255, 255, 255, 0.72)',
-            lineHeight: 1.3,
-            textAlign: 'left',
-            textTransform: 'uppercase',
+            maxWidth: '1380px',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            flexWrap: 'wrap',
+            gap: '1rem',
           }}
         >
-          HEALTHY SMILES
-          <br />
-          BRIGHTER TOMORROWS
-        </span>
+          {/* Left Controls: Book Appointment Lime Pill & Status Badge */}
+          <div
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: '0.75rem',
+              flexWrap: 'wrap',
+            }}
+          >
+            {/* Lime Book Appointment Button */}
+            <button
+              type="button"
+              onClick={() => {
+                if (onOpenBooking) {
+                  const docName =
+                    hoveredDoctorIndex !== null
+                      ? doctors[hoveredDoctorIndex].name
+                      : undefined;
+                  onOpenBooking(docName);
+                } else {
+                  const branchesEl = document.getElementById('branches');
+                  branchesEl?.scrollIntoView({ behavior: 'smooth' });
+                }
+              }}
+              style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '0.45rem',
+                backgroundColor: 'var(--color-lime)',
+                color: '#18181B',
+                fontFamily: 'var(--font-main)',
+                fontSize: '0.82rem',
+                fontWeight: 700,
+                letterSpacing: '0.04em',
+                textTransform: 'uppercase',
+                padding: '0.62rem 1.15rem',
+                borderRadius: 'var(--radius-pill)',
+                border: 'none',
+                cursor: 'pointer',
+                boxShadow: '0 4px 14px rgba(215, 248, 70, 0.35)',
+                transition: 'transform 0.2s ease, box-shadow 0.2s ease',
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.transform = 'translateY(-1px)';
+                e.currentTarget.style.boxShadow =
+                  '0 8px 20px rgba(215, 248, 70, 0.5)';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.transform = 'translateY(0)';
+                e.currentTarget.style.boxShadow =
+                  '0 4px 14px rgba(215, 248, 70, 0.35)';
+              }}
+            >
+              <Calendar size={16} strokeWidth={2.4} />
+              <span>BOOK APPOINTMENT</span>
+            </button>
+
+            {/* Dark Status Capsule with Glowing Green Dot */}
+            <div
+              style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '0.45rem',
+                backgroundColor: 'rgba(28, 14, 8, 0.72)',
+                backdropFilter: 'blur(8px)',
+                WebkitBackdropFilter: 'blur(8px)',
+                padding: '0.6rem 1.05rem',
+                borderRadius: 'var(--radius-pill)',
+                border: '1px solid rgba(255, 255, 255, 0.1)',
+                color: '#FFFFFF',
+                fontFamily: 'var(--font-main)',
+                fontSize: '0.8rem',
+                fontWeight: 600,
+              }}
+            >
+              {/* Glowing Green Dot */}
+              <span
+                style={{
+                  width: '8px',
+                  height: '8px',
+                  borderRadius: '50%',
+                  backgroundColor: '#22C55E',
+                  display: 'inline-block',
+                  boxShadow: '0 0 10px #22C55E',
+                }}
+              />
+              <span>Opens 10 AM · Valanchery</span>
+            </div>
+          </div>
+
+          {/* Right Reference Branding: Wavy SVG Line & Healthy Smiles Tag */}
+          <div
+            style={{
+              display: isMobile ? 'none' : 'flex',
+              alignItems: 'center',
+              gap: '0.75rem',
+            }}
+          >
+            <svg width="36" height="15" viewBox="0 0 36 15" fill="none">
+              <path
+                d="M1 10C6 3 12 14 18 8C24 2 30 12 35 7"
+                stroke="rgba(255, 255, 255, 0.7)"
+                strokeWidth="1.6"
+                strokeLinecap="round"
+              />
+            </svg>
+            <span
+              style={{
+                fontFamily: 'var(--font-main)',
+                fontSize: '0.67rem',
+                fontWeight: 600,
+                letterSpacing: '0.12em',
+                color: 'rgba(255, 255, 255, 0.78)',
+                lineHeight: 1.35,
+                textAlign: 'left',
+                textTransform: 'uppercase',
+              }}
+            >
+              HEALTHY SMILES
+              <br />
+              BRIGHTER TOMORROWS
+            </span>
+          </div>
+        </div>
       </div>
     </div>
   );

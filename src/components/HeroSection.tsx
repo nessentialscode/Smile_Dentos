@@ -151,8 +151,8 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onOpenBooking }) => {
             }}
             className="hero-right-col"
           >
-            {/* The Signature Neon Lime Badge */}
-            <div className="hero-rotating-badge float-slow">
+            {/* The Smile Dentos Spinning Logo Badge */}
+            <div className="hero-rotating-badge">
               <RotatingBadge size={114} />
             </div>
 

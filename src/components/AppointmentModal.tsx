@@ -16,7 +16,7 @@ export const AppointmentModal: React.FC<AppointmentModalProps> = ({ isOpen, onCl
   const branch = branchOverride ?? defaultBranch;
 
   const [doctorOverride, setDoctorOverride] = useState<string | null>(null);
-  const doctor = doctorOverride ?? (selectedDoctor || 'Dr. Athira S.');
+  const doctor = doctorOverride ?? (selectedDoctor || 'Dr. Sarah Lee');
 
   const [name, setName] = useState('');
   const [phone, setPhone] = useState('');
@@ -386,11 +386,15 @@ export const AppointmentModal: React.FC<AppointmentModalProps> = ({ isOpen, onCl
                         outline: 'none'
                       }}
                     >
-                      <option value="Dental fillings">Dental fillings (Restorative care)</option>
-                      <option value="Teeth whitening">Teeth whitening (Cosmetic)</option>
-                      <option value="Oral Surgery">Oral Surgery (Wisdom teeth / extractions)</option>
-                      <option value="Dental implants">Dental implants (Titanium/Zirconia)</option>
-                      <option value="General Checkup">Comprehensive General Dental Examination</option>
+                      <option value="Digital Imaging">Digital Imaging (3D CBCT & Diagnostics)</option>
+                      <option value="Cosmetic Dentistry">Cosmetic Dentistry (Veneers & Smile Design)</option>
+                      <option value="Pediatric Dentistry">Pediatric Dentistry (Gentle Kids Dental)</option>
+                      <option value="Dental Implants">Dental Implants (Titanium/Zirconia)</option>
+                      <option value="Minor Surgery">Minor Surgery (Wisdom tooth & Extractions)</option>
+                      <option value="Endodontics">Endodontics (Root Canal Therapy)</option>
+                      <option value="Orthodontics">Orthodontics (Clear Aligners & Braces)</option>
+                      <option value="Tooth Whitening">Tooth Whitening (Laser & Cosmetic)</option>
+                      <option value="Comprehensive Examination">Comprehensive Dental Examination</option>
                     </select>
                   </div>
 
@@ -424,13 +428,11 @@ export const AppointmentModal: React.FC<AppointmentModalProps> = ({ isOpen, onCl
                           outline: 'none'
                         }}
                       >
-                        <option value="Dr. Athira S.">Dr. Athira S. — Chief Dental Surgeon</option>
-                        <option value="Dr. Bhagiya R.">Dr. Bhagiya R. — Lady Dental Surgeon</option>
-                        <option value="Dr. Lijeesh Kadambil">Dr. Lijeesh Kadambil — Dental Surgeon</option>
-                        <option value="Dr. Ayisha Nizmiya K.">Dr. Ayisha Nizmiya K. — Consultant Orthodontist</option>
-                        <option value="Dr. Shanahaz">Dr. Shanahaz — Consultant Orthodontist</option>
-                        <option value="Dr. Jabir Kottammal">Dr. Jabir Kottammal — Oral & Maxillofacial Surgeon</option>
-                        <option value="Dr. Muhammad Haris P.M">Dr. Muhammad Haris P.M — Consultant Periodontist</option>
+                        <option value="Dr. Sarah Lee">Dr. Sarah Lee — Periodontics Specialist</option>
+                        <option value="Dr. John Smith">Dr. John Smith — Orthodontics Specialist</option>
+                        <option value="Dr. David Kim">Dr. David Kim — Endodontics Specialist</option>
+                        <option value="Dr. Steven Lee">Dr. Steven Lee — Cosmetic Dentistry</option>
+                        <option value="Dr. Jennifer Kim">Dr. Jennifer Kim — Orthodontics Specialist</option>
                       </select>
                     </div>
 

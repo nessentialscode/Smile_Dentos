@@ -3,9 +3,10 @@ import { motion } from 'framer-motion';
 
 interface FooterSectionProps {
   onOpenBooking: () => void;
+  onOpenAdmin?: () => void;
 }
 
-export const FooterSection: React.FC<FooterSectionProps> = ({ onOpenBooking }) => {
+export const FooterSection: React.FC<FooterSectionProps> = ({ onOpenBooking, onOpenAdmin }) => {
   const [consultationType, setConsultationType] = useState<'Online' | 'In-person'>('Online');
 
   return (
@@ -367,13 +368,36 @@ export const FooterSection: React.FC<FooterSectionProps> = ({ onOpenBooking }) =
           className="footer-bottom-bar"
         >
           <div>© Smile Dentos Family Dental Clinic. All Rights Reserved.</div>
-          <div style={{ display: 'flex', gap: '1.5rem' }}>
-            <a href="https://maps.google.com/maps?vet=10CAAQoqAOahcKEwjQvq_-tO-WAxUAAAAAHQAAAAAQBQ..i&pvq=Cg0vZy8xMXk4NGczOHdfIicKIXNtaWxlIGRlbnRvcyBmYW1pbHkgZGVudGFsIGNsaW5pYxACGAM&lqi=CiFzbWlsZSBkZW50b3MgZmFtaWx5IGRlbnRhbCBjbGluaWNI_8aGx6C9gIAIWjcQABABEAIQAxAEGAAYARgCGAMYBCIhc21pbGUgZGVudG9zIGZhbWlseSBkZW50YWwgY2xpbmljkgEHZGVudGlzdA&fvr=1&cs=1&um=1&ie=UTF-8&fb=1&gl=in&sa=X&ftid=0x3ba7b70c7574ba2b:0x724a06ff017fd89b" target="_blank" rel="noreferrer" style={{ textDecoration: 'none' }}>
+          <div style={{ display: 'flex', gap: '1.5rem', alignItems: 'center' }}>
+            <a href="https://maps.google.com/maps?vet=10CAAQoqAOahcKEwjQvq_-tO-WAxUAAAAAHQAAAAAQBQ..i&pvq=Cg0vZy8xMXk4NGczOHdfIicKIXNtaWxlIGRlbnRvcyBmYW1pbHkgZGVudGFsIGNsaW5pYxACGAM&lqi=CiFzbWlsZSBkZW50b3MgZmFtaWx5IGRlbnRhbCBjbGluaWNI_8aGx6C9gIAIWjcQABABEAIQAxAEGAAYARgCGAMYBCIhc21pbGUgZGVudG9zIGZhbWlseSBkZW50YWwgY2xpbmljkgEHZGVudGlzdA&fvr=1&cs=1&um=1&ie=UTF-8&fb=1&gl=in&sa=X&ftid=0x3ba7b70c7574ba2b:0x724a06ff017fd89b" target="_blank" rel="noreferrer" style={{ textDecoration: 'none', color: '#4A1D11' }}>
               Valanchery, Malappuram, Kerala
             </a>
-            <a href="#footer" style={{ textDecoration: 'none' }}>
+            <a href="#footer" style={{ textDecoration: 'none', color: '#4A1D11' }}>
               Terms & Care Policies
             </a>
+            <button
+              type="button"
+              onClick={onOpenAdmin}
+              style={{
+                background: 'none',
+                border: 'none',
+                padding: 0,
+                color: '#4A1D11',
+                fontFamily: 'var(--font-main)',
+                fontSize: '0.85rem',
+                fontWeight: 700,
+                cursor: 'pointer',
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '0.35rem',
+                opacity: 0.9,
+                transition: 'opacity 0.2s',
+              }}
+              onMouseEnter={(e) => (e.currentTarget.style.opacity = '1')}
+              onMouseLeave={(e) => (e.currentTarget.style.opacity = '0.9')}
+            >
+              🔒 Admin Portal
+            </button>
           </div>
         </div>
       </div>
