@@ -125,6 +125,12 @@ a {
   .container {
     padding: 0 1rem;
   }
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 }
 
 /* Rotating Stamp Animation */

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { motion } from 'framer-motion';
 
 interface FooterSectionProps {
@@ -7,7 +7,6 @@ interface FooterSectionProps {
 }
 
 export const FooterSection: React.FC<FooterSectionProps> = ({ onOpenBooking, onOpenAdmin }) => {
-  const [consultationType, setConsultationType] = useState<'Online' | 'In-person'>('Online');
 
   return (
     <footer
@@ -268,7 +267,7 @@ export const FooterSection: React.FC<FooterSectionProps> = ({ onOpenBooking, onO
               </a>
             </div>
 
-            {/* Free Consultation Interactive Selector */}
+            {/* Consultation Mode: In-person Clinic Only */}
             <div>
               <h5
                 style={{
@@ -279,32 +278,25 @@ export const FooterSection: React.FC<FooterSectionProps> = ({ onOpenBooking, onO
                   marginBottom: '0.6rem'
                 }}
               >
-                Free Consultation Mode
+                Consultation Mode
               </h5>
-              <div style={{ display: 'flex', gap: '0.5rem' }}>
-                {(['In-person', 'Online'] as const).map((type) => {
-                  const isSelected = consultationType === type;
-                  return (
-                    <button
-                      key={type}
-                      onClick={() => setConsultationType(type)}
-                      style={{
-                        padding: '0.4rem 1.1rem',
-                        borderRadius: 'var(--radius-pill)',
-                        border: '1.5px solid #4A1D11',
-                        backgroundColor: isSelected ? '#4A1D11' : 'transparent',
-                        color: isSelected ? 'var(--color-lime)' : '#4A1D11',
-                        fontFamily: 'var(--font-main)',
-                        fontSize: '0.82rem',
-                        fontWeight: 600,
-                        cursor: 'pointer',
-                        transition: 'all 0.2s ease'
-                      }}
-                    >
-                      {type}
-                    </button>
-                  );
-                })}
+              <div
+                style={{
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '6px',
+                  padding: '0.42rem 1rem',
+                  borderRadius: 'var(--radius-pill)',
+                  border: '1.5px solid #4A1D11',
+                  backgroundColor: '#4A1D11',
+                  color: 'var(--color-lime)',
+                  fontFamily: 'var(--font-main)',
+                  fontSize: '0.82rem',
+                  fontWeight: 700
+                }}
+              >
+                <span>🏥</span>
+                <span>In-person Clinic Consultation Only</span>
               </div>
             </div>
           </div>
@@ -375,29 +367,31 @@ export const FooterSection: React.FC<FooterSectionProps> = ({ onOpenBooking, onO
             <a href="#footer" style={{ textDecoration: 'none', color: '#4A1D11' }}>
               Terms & Care Policies
             </a>
-            <button
-              type="button"
-              onClick={onOpenAdmin}
-              style={{
-                background: 'none',
-                border: 'none',
-                padding: 0,
-                color: '#4A1D11',
-                fontFamily: 'var(--font-main)',
-                fontSize: '0.85rem',
-                fontWeight: 700,
-                cursor: 'pointer',
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: '0.35rem',
-                opacity: 0.9,
-                transition: 'opacity 0.2s',
-              }}
-              onMouseEnter={(e) => (e.currentTarget.style.opacity = '1')}
-              onMouseLeave={(e) => (e.currentTarget.style.opacity = '0.9')}
-            >
-              🔒 Admin Portal
-            </button>
+            {onOpenAdmin && (
+              <button
+                type="button"
+                onClick={onOpenAdmin}
+                style={{
+                  background: 'none',
+                  border: 'none',
+                  padding: 0,
+                  color: '#4A1D11',
+                  fontFamily: 'var(--font-main, sans-serif)',
+                  fontSize: '0.85rem',
+                  fontWeight: 700,
+                  cursor: 'pointer',
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '0.35rem',
+                  opacity: 0.9,
+                  transition: 'opacity 0.2s',
+                }}
+                onMouseEnter={(e) => (e.currentTarget.style.opacity = '1')}
+                onMouseLeave={(e) => (e.currentTarget.style.opacity = '0.9')}
+              >
+                🔒 Admin Portal
+              </button>
+            )}
           </div>
         </div>
       </div>

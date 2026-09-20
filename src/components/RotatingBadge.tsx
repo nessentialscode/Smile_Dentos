@@ -1,4 +1,5 @@
 import React from 'react';
+import { motion } from 'framer-motion';
 
 interface RotatingBadgeProps {
   size?: number;
@@ -17,38 +18,31 @@ export const RotatingBadge: React.FC<RotatingBadgeProps> = ({ size = 114, classN
         alignItems: 'center',
         justifyContent: 'center',
         flexShrink: 0,
+        perspective: '1000px',
+        background: 'transparent',
       }}
     >
-      {/* Crisp Circular Base Disc for Perfect Contrast & Fixed Baseline */}
-      <div 
+      {/* Background-free Smile Dentos Emblem Spinning Like a Coin in 3D Slowly */}
+      <motion.div
+        animate={{ rotateY: 360 }}
+        transition={{
+          repeat: Infinity,
+          duration: 9,
+          ease: 'linear',
+        }}
         style={{
-          position: 'absolute',
-          inset: 0,
-          borderRadius: '50%',
-          backgroundColor: '#FFFFFF',
-          boxShadow: '0 8px 26px rgba(0, 0, 0, 0.25), 0 0 16px rgba(215, 248, 70, 0.25)',
-          border: '2.5px solid rgba(255, 255, 255, 0.95)',
-          zIndex: 1,
-        }} 
-      />
-
-      {/* Slowly Spinning High-Resolution Smile Dentos Logo */}
-      <div
-        className="spin-slow"
-        style={{
-          position: 'relative',
-          zIndex: 2,
-          width: '78%',
-          height: '78%',
+          width: '100%',
+          height: '100%',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
-          transformOrigin: 'center center',
+          transformStyle: 'preserve-3d',
+          filter: 'drop-shadow(0 6px 18px rgba(0, 0, 0, 0.45)) drop-shadow(0 0 16px rgba(2, 132, 199, 0.35))',
         }}
       >
         <img
           src="/images/smile_dentos_emblem.png"
-          alt="Smile Dentos Logo"
+          alt="Smile Dentos Emblem"
           draggable={false}
           style={{
             width: '100%',
@@ -58,7 +52,7 @@ export const RotatingBadge: React.FC<RotatingBadgeProps> = ({ size = 114, classN
             pointerEvents: 'none',
           }}
         />
-      </div>
+      </motion.div>
     </div>
   );
 };

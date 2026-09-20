@@ -147,20 +147,20 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenBooking, onOpenAdmin }) =>
                     alignItems: 'center',
                     gap: '0.35rem',
                     padding: '0.45rem 0.85rem',
-                    borderRadius: 'var(--radius-pill)',
+                    borderRadius: 'var(--radius-pill, 999px)',
                     backgroundColor: 'rgba(255, 255, 255, 0.12)',
                     border: '1px solid rgba(255, 255, 255, 0.28)',
                     color: '#FFFFFF',
-                    fontFamily: 'var(--font-main)',
+                    fontFamily: 'var(--font-main, sans-serif)',
                     fontSize: '0.78rem',
                     fontWeight: 600,
                     cursor: 'pointer',
                     transition: 'all 0.2s ease',
                   }}
                   onMouseEnter={(e) => {
-                    e.currentTarget.style.backgroundColor = 'var(--color-lime)';
+                    e.currentTarget.style.backgroundColor = 'var(--color-lime, #D7F846)';
                     e.currentTarget.style.color = '#3B180D';
-                    e.currentTarget.style.borderColor = 'var(--color-lime)';
+                    e.currentTarget.style.borderColor = 'var(--color-lime, #D7F846)';
                   }}
                   onMouseLeave={(e) => {
                     e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.12)';

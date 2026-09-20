@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, CheckCircle2 } from 'lucide-react';
+import { X, CheckCircle2, AlertTriangle, AlertCircle } from 'lucide-react';
 import confetti from 'canvas-confetti';
 
 interface AppointmentModalProps {
@@ -10,32 +10,155 @@ interface AppointmentModalProps {
   selectedDoctor?: string;
 }
 
-export const AppointmentModal: React.FC<AppointmentModalProps> = ({ isOpen, onClose, selectedBranch, selectedDoctor }) => {
+interface DoctorOption {
+  name: string;
+  specialty: string;
+  defaultPresent: boolean;
+}
+
+const DOCTOR_OPTIONS: DoctorOption[] = [
+  { name: 'Dr. ATHIRA.S', specialty: 'Chief Dental Surgeon', defaultPresent: true },
+  { name: 'Dr. LIJEESH KADAMBIL', specialty: 'Dental Surgeon', defaultPresent: true },
+  { name: 'Dr. BHAGYA.R', specialty: 'Lady Dental Surgeon', defaultPresent: true },
+  { name: 'Dr. AYISHA NIZMIYA.K', specialty: 'Consultant Orthodontist', defaultPresent: true },
+  { name: 'Dr. SHANAHAS', specialty: 'Consultant Orthodontist', defaultPresent: false },
+  { name: 'Dr. JABIR KOTTAMMAL', specialty: 'Oral & Maxillofacial Surgeon', defaultPresent: true },
+  { name: 'Dr. MUHAMMAD HARIS', specialty: 'Consultant Periodontist', defaultPresent: false },
+];
+
+export const getTodayDateString = (): string => {
+  const today = new Date();
+  const yyyy = today.getFullYear();
+  const mm = String(today.getMonth() + 1).padStart(2, '0');
+  const dd = String(today.getDate()).padStart(2, '0');
+  return `${yyyy}-${mm}-${dd}`;
+};
+
+export const checkIsSunday = (dateStr: string): boolean => {
+  if (!dateStr) return false;
+  const d = new Date(dateStr + 'T00:00:00');
+  return d.getDay() === 0; // 0 is Sunday
+};
+
+export const checkDoctorIsPresent = (doctorName: string): boolean => {
+  if (typeof window !== 'undefined') {
+    const saved = localStorage.getItem('smile_dentos_admin_doctors');
+    if (saved) {
+      try {
+        const parsed = JSON.parse(saved);
+        const found = parsed.find((d: any) =>
+          d.name === doctorName || doctorName.includes(d.name) || (d.name && d.name.includes(doctorName))
+        );
+        if (found && typeof found.is_present === 'boolean') {
+          return found.is_present;
+        }
+      } catch {
+        // fallback
+      }
+    }
+  }
+  const match = DOCTOR_OPTIONS.find((d) => d.name === doctorName);
+  return match ? match.defaultPresent : true;
+};
+
+export const AppointmentModal: React.FC<AppointmentModalProps> = ({
+  isOpen,
+  onClose,
+  selectedBranch,
+  selectedDoctor,
+}) => {
   const [branchOverride, setBranchOverride] = useState<string | null>(null);
-  const defaultBranch = selectedBranch && selectedBranch.includes('Edayoor') ? 'Edayoor Branch' : 'Valanchery Main Clinic';
+  const defaultBranch =
+    selectedBranch && selectedBranch.includes('Edayoor')
+      ? 'Edayoor Branch'
+      : 'Valanchery Main Clinic';
   const branch = branchOverride ?? defaultBranch;
 
   const [doctorOverride, setDoctorOverride] = useState<string | null>(null);
-  const doctor = doctorOverride ?? (selectedDoctor || 'Dr. Sarah Lee');
+  const doctor = doctorOverride ?? (selectedDoctor || 'Dr. ATHIRA.S');
 
   const [name, setName] = useState('');
   const [phone, setPhone] = useState('');
   const [service, setService] = useState('Teeth whitening');
-  const [type, setType] = useState<'Online' | 'In-person'>('In-person');
-  const [date, setDate] = useState('2026-09-15');
+  const [date, setDate] = useState(getTodayDateString);
   const [submitted, setSubmitted] = useState(false);
+  const [bookingAlert, setBookingAlert] = useState<{ type: 'error' | 'warning'; message: string } | null>(null);
+
+  // Sync state whenever modal opens or external doctor/branch changes
+  useEffect(() => {
+    if (isOpen) {
+      setDate(getTodayDateString());
+      setDoctorOverride(selectedDoctor || 'Dr. ATHIRA.S');
+      setBranchOverride(
+        selectedBranch && selectedBranch.includes('Edayoor')
+          ? 'Edayoor Branch'
+          : 'Valanchery Main Clinic'
+      );
+      setSubmitted(false);
+      setBookingAlert(null);
+    }
+  }, [isOpen, selectedDoctor, selectedBranch]);
+
+  const isSunday = checkIsSunday(date);
+  const isDoctorPresent = checkDoctorIsPresent(doctor);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+
+    // 1. Enforce Clinic Working Days: Monday to Saturday. Sunday closed.
+    if (checkIsSunday(date)) {
+      setBookingAlert({
+        type: 'error',
+        message: 'Sunday Clinic closed. Working days are Monday to Saturday.',
+      });
+      alert('Sunday Clinic closed. Smile Dentos clinic operates Monday to Saturday. Please choose another date.');
+      return;
+    }
+
+    // 2. Enforce Doctor Presence: Cannot book absent doctor
+    if (!checkDoctorIsPresent(doctor)) {
+      setBookingAlert({
+        type: 'error',
+        message: `${doctor} is currently marked ABSENT. Appointments cannot be booked on their absent day.`,
+      });
+      alert(`Doctor Unavailable: ${doctor} is currently ABSENT. Appointments cannot be booked on their absent day. Please select an available doctor.`);
+      return;
+    }
+
+    // Store in localStorage for live Admin Portal sync
+    if (typeof window !== 'undefined') {
+      try {
+        const saved = localStorage.getItem('smile_dentos_admin_appointments');
+        const list = saved ? JSON.parse(saved) : [];
+        const newApt = {
+          id: `APT-${Date.now().toString().slice(-4)}`,
+          full_name: name.trim() || 'Valued Patient',
+          phone: phone.trim() || '094959 64737',
+          doctor,
+          service,
+          branch,
+          preferred_date: date,
+          preferred_time: '10:00 AM',
+          status: 'pending',
+          notes: 'Direct website booking (In-person Clinic Consultation)',
+          created_at: new Date().toISOString(),
+        };
+        localStorage.setItem('smile_dentos_admin_appointments', JSON.stringify([newApt, ...list]));
+      } catch {
+        // ignore
+      }
+    }
+
     setSubmitted(true);
+    setBookingAlert(null);
     confetti({
       particleCount: 80,
       spread: 70,
       origin: { y: 0.6 },
-      colors: ['#D7F846', '#8F4225', '#FAF4E8', '#B2A4EC']
+      colors: ['#D7F846', '#8F4225', '#FAF4E8', '#B2A4EC'],
     });
+
     setTimeout(() => {
-      // Reset after 3.5s
       setTimeout(() => {
         setSubmitted(false);
         onClose();
@@ -54,7 +177,7 @@ export const AppointmentModal: React.FC<AppointmentModalProps> = ({ isOpen, onCl
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            padding: '1.25rem'
+            padding: '1.25rem',
           }}
         >
           {/* Backdrop */}
@@ -67,7 +190,7 @@ export const AppointmentModal: React.FC<AppointmentModalProps> = ({ isOpen, onCl
               position: 'absolute',
               inset: 0,
               backgroundColor: 'rgba(14, 10, 8, 0.75)',
-              backdropFilter: 'blur(12px)'
+              backdropFilter: 'blur(12px)',
             }}
           />
 
@@ -89,7 +212,7 @@ export const AppointmentModal: React.FC<AppointmentModalProps> = ({ isOpen, onCl
               borderRadius: '28px',
               boxShadow: '0 25px 60px rgba(0,0,0,0.45)',
               border: '1px solid rgba(142, 66, 37, 0.15)',
-              overflow: 'hidden'
+              overflow: 'hidden',
             }}
           >
             {/* Header with Title & Close Button */}
@@ -112,7 +235,7 @@ export const AppointmentModal: React.FC<AppointmentModalProps> = ({ isOpen, onCl
                     fontSize: 'clamp(1.35rem, 2.5vw, 1.65rem)',
                     fontWeight: 700,
                     letterSpacing: '-0.02em',
-                    lineHeight: 1.2
+                    lineHeight: 1.2,
                   }}
                 >
                   Book Your Appointment
@@ -123,10 +246,10 @@ export const AppointmentModal: React.FC<AppointmentModalProps> = ({ isOpen, onCl
                     fontSize: '0.84rem',
                     color: 'var(--color-lime)',
                     fontWeight: 600,
-                    marginTop: '0.2rem'
+                    marginTop: '0.2rem',
                   }}
                 >
-                  Smile Dentos Family Dental Clinic · Valanchery
+                  Smile Dentos Family Dental Clinic · Valanchery & Edayoor
                 </div>
               </div>
 
@@ -145,6 +268,8 @@ export const AppointmentModal: React.FC<AppointmentModalProps> = ({ isOpen, onCl
                   transition: 'background-color 0.2s',
                   flexShrink: 0,
                   marginLeft: '0.75rem',
+                  border: 'none',
+                  cursor: 'pointer',
                 }}
                 onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.3)')}
                 onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.15)')}
@@ -167,7 +292,7 @@ export const AppointmentModal: React.FC<AppointmentModalProps> = ({ isOpen, onCl
                       display: 'inline-flex',
                       alignItems: 'center',
                       justifyContent: 'center',
-                      marginBottom: '1.25rem'
+                      marginBottom: '1.25rem',
                     }}
                   >
                     <CheckCircle2 size={40} />
@@ -178,7 +303,7 @@ export const AppointmentModal: React.FC<AppointmentModalProps> = ({ isOpen, onCl
                       fontSize: '1.8rem',
                       color: 'var(--color-rust-dark)',
                       fontWeight: 700,
-                      marginBottom: '0.5rem'
+                      marginBottom: '0.5rem',
                     }}
                   >
                     Appointment Confirmed!
@@ -190,10 +315,10 @@ export const AppointmentModal: React.FC<AppointmentModalProps> = ({ isOpen, onCl
                       fontSize: '0.95rem',
                       lineHeight: 1.5,
                       maxWidth: '380px',
-                      margin: '0 auto 1.25rem'
+                      margin: '0 auto 1.25rem',
                     }}
                   >
-                    Thank you, {name || 'valued patient'}! Smile Dentos team at {branch} will confirm your booking shortly at {phone || '094959 64737'}.
+                    Thank you, {name || 'valued patient'}! Smile Dentos team at {branch} will confirm your in-person clinic booking shortly at {phone || '094959 64737'}.
                   </p>
                   <a
                     href="tel:09495964737"
@@ -216,7 +341,29 @@ export const AppointmentModal: React.FC<AppointmentModalProps> = ({ isOpen, onCl
                 </div>
               ) : (
                 <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
-                  {/* Consultation Type Selector */}
+                  {/* Alert banner if error or validation warning triggered */}
+                  {bookingAlert && (
+                    <div
+                      style={{
+                        padding: '0.75rem 1rem',
+                        borderRadius: '12px',
+                        backgroundColor: '#FEE2E2',
+                        border: '1.5px solid #EF4444',
+                        color: '#991B1B',
+                        fontFamily: 'var(--font-main)',
+                        fontSize: '0.86rem',
+                        fontWeight: 600,
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '0.5rem',
+                      }}
+                    >
+                      <AlertCircle size={18} style={{ flexShrink: 0 }} />
+                      <span>{bookingAlert.message}</span>
+                    </div>
+                  )}
+
+                  {/* Consultation Mode: In-person Only */}
                   <div>
                     <label
                       style={{
@@ -225,33 +372,44 @@ export const AppointmentModal: React.FC<AppointmentModalProps> = ({ isOpen, onCl
                         fontSize: '0.85rem',
                         fontWeight: 600,
                         color: 'var(--color-rust-dark)',
-                        marginBottom: '0.4rem'
+                        marginBottom: '0.4rem',
                       }}
                     >
                       Consultation Mode
                     </label>
-                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.75rem' }}>
-                      {(['In-person', 'Online'] as const).map((mode) => (
-                        <button
-                          key={mode}
-                          type="button"
-                          onClick={() => setType(mode)}
-                          style={{
-                            padding: '0.65rem 1rem',
-                            borderRadius: 'var(--radius-pill)',
-                            border: `1.5px solid ${type === mode ? 'var(--color-rust)' : 'rgba(94, 38, 20, 0.2)'}`,
-                            backgroundColor: type === mode ? 'var(--color-rust)' : 'transparent',
-                            color: type === mode ? 'var(--color-white)' : 'var(--color-rust-dark)',
-                            fontFamily: 'var(--font-main)',
-                            fontSize: '0.9rem',
-                            fontWeight: 600,
-                            cursor: 'pointer',
-                            transition: 'all 0.2s'
-                          }}
-                        >
-                          {mode === 'In-person' ? '🏥 In-person Clinic' : '💻 Online Consultation'}
-                        </button>
-                      ))}
+                    <div
+                      style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'space-between',
+                        padding: '0.65rem 1.1rem',
+                        borderRadius: 'var(--radius-pill)',
+                        border: '1.5px solid var(--color-rust)',
+                        backgroundColor: 'var(--color-rust)',
+                        color: 'var(--color-white)',
+                        fontFamily: 'var(--font-main)',
+                        fontSize: '0.9rem',
+                        fontWeight: 600,
+                        boxShadow: '0 2px 8px rgba(94, 38, 20, 0.15)',
+                      }}
+                    >
+                      <span style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                        <span>🏥</span>
+                        <span>In-person Clinic Consultation</span>
+                      </span>
+                      <span
+                        style={{
+                          fontSize: '0.74rem',
+                          backgroundColor: 'rgba(255, 255, 255, 0.2)',
+                          color: 'var(--color-lime)',
+                          padding: '0.2rem 0.65rem',
+                          borderRadius: 'var(--radius-pill)',
+                          letterSpacing: '0.04em',
+                          fontWeight: 700,
+                        }}
+                      >
+                        CLINIC ONLY
+                      </span>
                     </div>
                   </div>
 
@@ -264,7 +422,7 @@ export const AppointmentModal: React.FC<AppointmentModalProps> = ({ isOpen, onCl
                         fontSize: '0.85rem',
                         fontWeight: 600,
                         color: 'var(--color-rust-dark)',
-                        marginBottom: '0.35rem'
+                        marginBottom: '0.35rem',
                       }}
                     >
                       Preferred Clinic Branch
@@ -281,7 +439,7 @@ export const AppointmentModal: React.FC<AppointmentModalProps> = ({ isOpen, onCl
                         fontFamily: 'var(--font-main)',
                         fontSize: '0.9rem',
                         color: 'var(--color-rust-dark)',
-                        outline: 'none'
+                        outline: 'none',
                       }}
                     >
                       <option value="Valanchery Main Clinic">Valanchery Main Clinic (Perinthalmanna Rd, Kolamangalam)</option>
@@ -299,7 +457,7 @@ export const AppointmentModal: React.FC<AppointmentModalProps> = ({ isOpen, onCl
                           fontSize: '0.85rem',
                           fontWeight: 600,
                           color: 'var(--color-rust-dark)',
-                          marginBottom: '0.35rem'
+                          marginBottom: '0.35rem',
                         }}
                       >
                         Patient Name
@@ -319,7 +477,7 @@ export const AppointmentModal: React.FC<AppointmentModalProps> = ({ isOpen, onCl
                           fontFamily: 'var(--font-main)',
                           fontSize: '0.9rem',
                           color: 'var(--color-rust-dark)',
-                          outline: 'none'
+                          outline: 'none',
                         }}
                       />
                     </div>
@@ -331,7 +489,7 @@ export const AppointmentModal: React.FC<AppointmentModalProps> = ({ isOpen, onCl
                           fontSize: '0.85rem',
                           fontWeight: 600,
                           color: 'var(--color-rust-dark)',
-                          marginBottom: '0.35rem'
+                          marginBottom: '0.35rem',
                         }}
                       >
                         Phone Number
@@ -351,7 +509,7 @@ export const AppointmentModal: React.FC<AppointmentModalProps> = ({ isOpen, onCl
                           fontFamily: 'var(--font-main)',
                           fontSize: '0.9rem',
                           color: 'var(--color-rust-dark)',
-                          outline: 'none'
+                          outline: 'none',
                         }}
                       />
                     </div>
@@ -366,7 +524,7 @@ export const AppointmentModal: React.FC<AppointmentModalProps> = ({ isOpen, onCl
                         fontSize: '0.85rem',
                         fontWeight: 600,
                         color: 'var(--color-rust-dark)',
-                        marginBottom: '0.35rem'
+                        marginBottom: '0.35rem',
                       }}
                     >
                       Desired Dental Service
@@ -383,7 +541,7 @@ export const AppointmentModal: React.FC<AppointmentModalProps> = ({ isOpen, onCl
                         fontFamily: 'var(--font-main)',
                         fontSize: '0.9rem',
                         color: 'var(--color-rust-dark)',
-                        outline: 'none'
+                        outline: 'none',
                       }}
                     >
                       <option value="Digital Imaging">Digital Imaging (3D CBCT & Diagnostics)</option>
@@ -408,32 +566,60 @@ export const AppointmentModal: React.FC<AppointmentModalProps> = ({ isOpen, onCl
                           fontSize: '0.85rem',
                           fontWeight: 600,
                           color: 'var(--color-rust-dark)',
-                          marginBottom: '0.35rem'
+                          marginBottom: '0.35rem',
                         }}
                       >
                         Select Specialist Doctor
                       </label>
                       <select
                         value={doctor}
-                        onChange={(e) => setDoctorOverride(e.target.value)}
+                        onChange={(e) => {
+                          setDoctorOverride(e.target.value);
+                          setBookingAlert(null);
+                        }}
                         style={{
                           width: '100%',
                           padding: '0.65rem 0.9rem',
                           borderRadius: '12px',
-                          border: '1.5px solid rgba(94, 38, 20, 0.2)',
+                          border: `1.5px solid ${!isDoctorPresent ? '#EF4444' : 'rgba(94, 38, 20, 0.2)'}`,
                           backgroundColor: '#FFFFFF',
                           fontFamily: 'var(--font-main)',
                           fontSize: '0.9rem',
                           color: 'var(--color-rust-dark)',
-                          outline: 'none'
+                          outline: 'none',
                         }}
                       >
-                        <option value="Dr. Sarah Lee">Dr. Sarah Lee — Periodontics Specialist</option>
-                        <option value="Dr. John Smith">Dr. John Smith — Orthodontics Specialist</option>
-                        <option value="Dr. David Kim">Dr. David Kim — Endodontics Specialist</option>
-                        <option value="Dr. Steven Lee">Dr. Steven Lee — Cosmetic Dentistry</option>
-                        <option value="Dr. Jennifer Kim">Dr. Jennifer Kim — Orthodontics Specialist</option>
+                        {DOCTOR_OPTIONS.map((doc) => {
+                          const present = checkDoctorIsPresent(doc.name);
+                          return (
+                            <option key={doc.name} value={doc.name}>
+                              {doc.name} — {doc.specialty} {present ? '(Present)' : '• ABSENT'}
+                            </option>
+                          );
+                        })}
                       </select>
+
+                      {/* Absent doctor warning */}
+                      {!isDoctorPresent && (
+                        <div
+                          style={{
+                            marginTop: '0.4rem',
+                            padding: '0.45rem 0.65rem',
+                            borderRadius: '8px',
+                            backgroundColor: '#FEE2E2',
+                            border: '1px solid #FCA5A5',
+                            color: '#991B1B',
+                            fontSize: '0.78rem',
+                            fontWeight: 600,
+                            display: 'flex',
+                            alignItems: 'center',
+                            gap: '4px',
+                          }}
+                        >
+                          <AlertTriangle size={14} style={{ flexShrink: 0 }} />
+                          <span>{doctor} is ABSENT today. Cannot be booked.</span>
+                        </div>
+                      )}
                     </div>
 
                     <div>
@@ -444,27 +630,53 @@ export const AppointmentModal: React.FC<AppointmentModalProps> = ({ isOpen, onCl
                           fontSize: '0.85rem',
                           fontWeight: 600,
                           color: 'var(--color-rust-dark)',
-                          marginBottom: '0.35rem'
+                          marginBottom: '0.35rem',
                         }}
                       >
-                        Preferred Date
+                        Preferred Date (Mon–Sat)
                       </label>
                       <input
                         type="date"
                         value={date}
-                        onChange={(e) => setDate(e.target.value)}
+                        min={getTodayDateString()}
+                        onChange={(e) => {
+                          setDate(e.target.value);
+                          setBookingAlert(null);
+                        }}
                         style={{
                           width: '100%',
                           padding: '0.65rem 0.9rem',
                           borderRadius: '12px',
-                          border: '1.5px solid rgba(94, 38, 20, 0.2)',
+                          border: `1.5px solid ${isSunday ? '#EF4444' : 'rgba(94, 38, 20, 0.2)'}`,
                           backgroundColor: '#FFFFFF',
                           fontFamily: 'var(--font-main)',
                           fontSize: '0.9rem',
                           color: 'var(--color-rust-dark)',
-                          outline: 'none'
+                          outline: 'none',
                         }}
                       />
+
+                      {/* Sunday clinic closed warning */}
+                      {isSunday && (
+                        <div
+                          style={{
+                            marginTop: '0.4rem',
+                            padding: '0.45rem 0.65rem',
+                            borderRadius: '8px',
+                            backgroundColor: '#FEE2E2',
+                            border: '1px solid #FCA5A5',
+                            color: '#991B1B',
+                            fontSize: '0.78rem',
+                            fontWeight: 600,
+                            display: 'flex',
+                            alignItems: 'center',
+                            gap: '4px',
+                          }}
+                        >
+                          <AlertTriangle size={14} style={{ flexShrink: 0 }} />
+                          <span>Sunday Clinic closed (Open Mon–Sat).</span>
+                        </div>
+                      )}
                     </div>
                   </div>
 
@@ -483,7 +695,8 @@ export const AppointmentModal: React.FC<AppointmentModalProps> = ({ isOpen, onCl
                       fontWeight: 700,
                       boxShadow: '0 8px 24px rgba(215, 248, 70, 0.35)',
                       transition: 'all 0.2s',
-                      cursor: 'pointer'
+                      cursor: 'pointer',
+                      border: 'none',
                     }}
                     onMouseEnter={(e) => (e.currentTarget.style.transform = 'translateY(-2px)')}
                     onMouseLeave={(e) => (e.currentTarget.style.transform = 'translateY(0)')}

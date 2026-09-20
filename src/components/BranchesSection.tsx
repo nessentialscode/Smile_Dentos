@@ -20,6 +20,7 @@ interface Branch {
   phoneDisplay: string;
   googleMapsUrl: string;
   image: string;
+  status: 'Opened' | 'Closed';
 }
 
 const branches: Branch[] = [
@@ -28,13 +29,14 @@ const branches: Branch[] = [
     name: 'Valanchery Main Clinic',
     shortName: 'Valanchery',
     badge: 'Multi-Specialty Center',
+    status: 'Opened',
     address: 'Perinthalmanna Road, opposite Hamad Lab & OBG Clinic',
     city: 'Valanchery, Malappuram, Kerala',
     pincode: '676552',
     hours: '10:00 AM – 6:30 PM',
     openDays: 'Monday – Saturday (Sunday Closed)',
-    phone: '09495964737',
-    phoneDisplay: '094959 64737',
+    phone: '09633964787',
+    phoneDisplay: '09633 964 787',
     googleMapsUrl:
       'https://maps.google.com/maps?vet=10CAAQoqAOahcKEwjQvq_-tO-WAxUAAAAAHQAAAAAQBQ..i&pvq=Cg0vZy8xMXk4NGczOHdfIicKIXNtaWxlIGRlbnRvcyBmYW1pbHkgZGVudGFsIGNsaW5pYxACGAM&lqi=CiFzbWlsZSBkZW50b3MgZmFtaWx5IGRlbnRhbCBjbGluaWNI_8aGx6C9gIAIWjcQABABEAIQAxAEGAAYARgCGAMYBCIhc21pbGUgZGVudG9zIGZhbWlseSBkZW50YWwgY2xpbmljkgEHZGVudGlzdA&fvr=1&cs=1&um=1&ie=UTF-8&fb=1&gl=in&sa=X&ftid=0x3ba7b70c7574ba2b:0x724a06ff017fd89b',
     image: '/images/branch_valanchery.jpg',
@@ -43,14 +45,15 @@ const branches: Branch[] = [
     id: 'edayoor',
     name: 'Edayoor / Mavandiyoor Branch',
     shortName: 'Edayoor',
-    badge: 'Family & Pediatric Suite',
+    badge: 'Multi-Speciality Suite',
+    status: 'Closed',
     address: 'Madathil Complex, opposite Kerala Gramin Bank',
     city: 'Edayur, Malappuram, Kerala',
     pincode: '676552',
     hours: '9:30 AM – 6:00 PM',
     openDays: 'Monday – Saturday (Sunday Closed)',
-    phone: '09778464737',
-    phoneDisplay: '097784 64737',
+    phone: '07514044867',
+    phoneDisplay: '07514 044 867',
     googleMapsUrl:
       'https://www.google.com/maps/search/?api=1&query=Smile+Dentos+Dental+Clinic+Madathil+Complex+Edayur+Kerala+676552',
     image: '/images/branch_edayoor.jpg',
@@ -157,7 +160,43 @@ export const BranchesSection: React.FC<BranchesSectionProps> = ({ onOpenBooking 
                     if (!isActive) e.currentTarget.style.color = 'rgba(255, 255, 255, 0.65)';
                   }}
                 >
-                  <span>{branch.shortName}</span>
+                  <span style={{ display: 'inline-flex', alignItems: 'center', gap: '0.55rem' }}>
+                    <span>{branch.shortName}</span>
+                    <span
+                      style={{
+                        display: 'inline-flex',
+                        alignItems: 'center',
+                        gap: '4px',
+                        padding: '2px 7px',
+                        borderRadius: '9999px',
+                        fontSize: '0.62rem',
+                        fontWeight: 700,
+                        letterSpacing: '0.04em',
+                        textTransform: 'uppercase',
+                        backgroundColor:
+                          branch.status === 'Opened'
+                            ? 'rgba(34, 197, 94, 0.2)'
+                            : 'rgba(239, 68, 68, 0.2)',
+                        border:
+                          branch.status === 'Opened'
+                            ? '1px solid rgba(74, 222, 128, 0.45)'
+                            : '1px solid rgba(248, 113, 113, 0.45)',
+                        color: branch.status === 'Opened' ? '#86EFAC' : '#FCA5A5',
+                        lineHeight: 1.2,
+                      }}
+                    >
+                      <span
+                        style={{
+                          width: '5px',
+                          height: '5px',
+                          borderRadius: '50%',
+                          backgroundColor: branch.status === 'Opened' ? '#22C55E' : '#EF4444',
+                          boxShadow: branch.status === 'Opened' ? '0 0 6px #22C55E' : '0 0 6px #EF4444',
+                        }}
+                      />
+                      {branch.status}
+                    </span>
+                  </span>
                   {isActive && (
                     <motion.div
                       layoutId="activeBranchIndicator"
@@ -195,25 +234,26 @@ export const BranchesSection: React.FC<BranchesSectionProps> = ({ onOpenBooking 
               position: 'relative',
               borderRadius: '28px',
               overflow: 'hidden',
-              aspectRatio: '16 / 10.5',
-              boxShadow: '0 24px 60px -15px rgba(0, 0, 0, 0.45)',
-              backgroundColor: 'rgba(0, 0, 0, 0.2)',
+              aspectRatio: '16 / 10',
+              boxShadow: '0 24px 60px -15px rgba(0, 0, 0, 0.55)',
+              backgroundColor: 'rgba(0, 0, 0, 0.25)',
+              border: '1.5px solid rgba(255, 255, 255, 0.18)',
             }}
           >
             <AnimatePresence mode="wait">
               <motion.img
                 key={activeBranch.id}
-                src={activeBranch.image}
+                src={`${activeBranch.image}?v=3`}
                 alt={activeBranch.name}
-                initial={{ opacity: 0, scale: 1.03 }}
+                initial={{ opacity: 0, scale: 1.02 }}
                 animate={{ opacity: 1, scale: 1 }}
                 exit={{ opacity: 0, scale: 0.98 }}
-                transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+                transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
                 style={{
                   width: '100%',
                   height: '100%',
                   objectFit: 'cover',
-                  objectPosition: 'center',
+                  objectPosition: activeBranch.id === 'valanchery' ? 'center 42%' : 'center 48%',
                   display: 'block',
                 }}
               />
@@ -268,20 +308,63 @@ export const BranchesSection: React.FC<BranchesSectionProps> = ({ onOpenBooking 
                 flexDirection: 'column',
               }}
             >
-              {/* Branch Name */}
-              <h3
+              {/* Branch Name & Status Small Bar */}
+              <div
                 style={{
-                  fontFamily: 'var(--font-display)',
-                  fontSize: 'clamp(1.9rem, 2.8vw, 2.75rem)',
-                  fontWeight: 700,
-                  letterSpacing: '-0.025em',
-                  lineHeight: 1.2,
-                  color: 'var(--color-white)',
-                  margin: '0 0 1.75rem 0',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '0.85rem',
+                  marginBottom: '1.75rem',
+                  flexWrap: 'wrap',
                 }}
               >
-                {activeBranch.name}
-              </h3>
+                <h3
+                  style={{
+                    fontFamily: 'var(--font-display)',
+                    fontSize: 'clamp(1.9rem, 2.8vw, 2.75rem)',
+                    fontWeight: 700,
+                    letterSpacing: '-0.025em',
+                    lineHeight: 1.2,
+                    color: 'var(--color-white)',
+                    margin: 0,
+                  }}
+                >
+                  {activeBranch.name}
+                </h3>
+                <span
+                  style={{
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: '5px',
+                    padding: '3px 10px',
+                    borderRadius: '9999px',
+                    fontSize: '0.72rem',
+                    fontWeight: 700,
+                    letterSpacing: '0.04em',
+                    textTransform: 'uppercase',
+                    backgroundColor:
+                      activeBranch.status === 'Opened'
+                        ? 'rgba(34, 197, 94, 0.18)'
+                        : 'rgba(239, 68, 68, 0.18)',
+                    border:
+                      activeBranch.status === 'Opened'
+                        ? '1px solid rgba(74, 222, 128, 0.5)'
+                        : '1px solid rgba(248, 113, 113, 0.5)',
+                    color: activeBranch.status === 'Opened' ? '#86EFAC' : '#FCA5A5',
+                  }}
+                >
+                  <span
+                    style={{
+                      width: '6px',
+                      height: '6px',
+                      borderRadius: '50%',
+                      backgroundColor: activeBranch.status === 'Opened' ? '#22C55E' : '#EF4444',
+                      boxShadow: activeBranch.status === 'Opened' ? '0 0 8px #22C55E' : '0 0 8px #EF4444',
+                    }}
+                  />
+                  {activeBranch.status}
+                </span>
+              </div>
 
               {/* Minimal Line Information Block */}
               <div

@@ -6,7 +6,6 @@ import {
   GraduationCap,
   Award,
   Users,
-  Calendar,
   ChevronLeft,
   ChevronRight,
 } from 'lucide-react';
@@ -16,8 +15,10 @@ export interface Doctor {
   name: string;
   specialty: string;
   image: string;
+  imagePosition?: string;
   bg: string;
   bio: string;
+  status: 'Present' | 'Absent';
   degreeTitle: string;
   degreeSub: string;
   experienceTitle: string;
@@ -28,73 +29,110 @@ export interface Doctor {
 
 const doctors: Doctor[] = [
   {
-    id: 'john-smith',
-    name: 'Dr. John Smith',
-    specialty: 'Orthodontics Specialist',
+    id: 'athira-s',
+    name: 'Dr. ATHIRA.S',
+    specialty: 'Chief Dental Surgeon',
     image: '/images/doctor_john_smith.jpg',
-    bg: '#EE9564', // Warm Peach / Orange from image
-    bio: 'Pioneering digital smile design, Invisalign, and modern orthodontic alignment for patients of all ages.',
+    bg: '#EE9564', // Warm Peach / Orange
+    bio: 'Chief Dental Surgeon specializing in advanced smile rehabilitation, comprehensive dental care, and modern clinical dentistry.',
+    status: 'Present',
+    degreeTitle: 'BDS',
+    degreeSub: '(Chief Surgeon)',
+    experienceTitle: '10+ Years',
+    experienceSub: 'Experience',
+    patientsTitle: '3,500+',
+    patientsSub: 'Happy Patients',
+  },
+  {
+    id: 'lijeesh-kadambil',
+    name: 'Dr. LIJEESH KADAMBIL',
+    specialty: 'Dental Surgeon',
+    image: '/images/doctor_lijeesh_kadambil.jpg',
+    imagePosition: 'center',
+    bg: '#C5AEE3', // Soft Lilac / Purple
+    bio: 'Expert dental surgeon dedicated to gentle root canal therapies, microscopic endodontics, and tooth preservation.',
+    status: 'Present',
+    degreeTitle: 'BDS',
+    degreeSub: '(Dental Surgery)',
+    experienceTitle: '8+ Years',
+    experienceSub: 'Experience',
+    patientsTitle: '2,800+',
+    patientsSub: 'Happy Patients',
+  },
+  {
+    id: 'bhagya-r',
+    name: 'Dr. BHAGYA.R',
+    specialty: 'Lady Dental Surgeon',
+    image: '/images/doctor_sarah_lee.jpg',
+    bg: '#F6C844', // Golden Yellow
+    bio: 'Specializing in compassionate family dentistry, gentle periodontal therapy, preventive gum care, and personalized smile restoration.',
+    status: 'Present',
+    degreeTitle: 'BDS',
+    degreeSub: '(Lady Dental Surgeon)',
+    experienceTitle: '6+ Years',
+    experienceSub: 'Experience',
+    patientsTitle: '2,100+',
+    patientsSub: 'Happy Patients',
+  },
+  {
+    id: 'ayisha-nizmiya',
+    name: 'Dr. AYISHA NIZMIYA.K',
+    specialty: 'Consultant Orthodontist',
+    image: '/images/doctor_steven_lee.jpg',
+    bg: '#82B3EB', // Ocean Sky Blue
+    bio: 'Consultant orthodontist crafting aesthetic smile makeovers, clear aligner solutions, and digital teeth alignment.',
+    status: 'Present',
     degreeTitle: 'BDS, MDS',
     degreeSub: '(Orthodontics)',
-    experienceTitle: '10+ Years',
+    experienceTitle: '7+ Years',
+    experienceSub: 'Experience',
+    patientsTitle: '1,900+',
+    patientsSub: 'Happy Patients',
+  },
+  {
+    id: 'shanahas',
+    name: 'Dr. SHANAHAS',
+    specialty: 'Consultant Orthodontist',
+    image: '/images/doctor_jennifer_kim.jpg',
+    bg: '#7CBF6B', // Fresh Sage Green
+    bio: 'Dedicated consultant orthodontist providing personalized aligner therapies, invisible braces, and adolescent correction.',
+    status: 'Absent',
+    degreeTitle: 'BDS, MDS',
+    degreeSub: '(Orthodontics)',
+    experienceTitle: '9+ Years',
     experienceSub: 'Experience',
     patientsTitle: '2,400+',
     patientsSub: 'Happy Patients',
   },
   {
-    id: 'david-kim',
-    name: 'Dr. David Kim',
-    specialty: 'Endodontics Specialist',
-    image: '/images/doctor_david_kim.jpg',
-    bg: '#C5AEE3', // Soft Lilac / Purple from image
-    bio: 'Specializing in single-visit root canals, microscopic endodontics, and gentle tooth preservation.',
-    degreeTitle: 'DDS, MS',
-    degreeSub: '(Endodontics)',
+    id: 'jabir-kottammal',
+    name: 'Dr. JABIR KOTTAMMAL',
+    specialty: 'Oral & Maxillofacial Surgeon',
+    image: '/images/doctor_bradley_parker.jpg',
+    bg: '#E879A8', // Warm Rose / Terracotta
+    bio: 'Senior maxillofacial surgeon specializing in complex wisdom tooth impactions, surgical extractions, and bone grafting.',
+    status: 'Present',
+    degreeTitle: 'BDS, MDS',
+    degreeSub: '(Oral Surgery)',
+    experienceTitle: '11+ Years',
+    experienceSub: 'Experience',
+    patientsTitle: '3,100+',
+    patientsSub: 'Happy Patients',
+  },
+  {
+    id: 'muhammad-haris',
+    name: 'Dr. MOHAMMED HARIS',
+    specialty: 'Consultant Periodontist',
+    image: '/images/doctor_muhammad_haris.jpg',
+    imagePosition: 'center',
+    bg: '#38BDF8', // Crisp Cyan Blue
+    bio: 'Consultant periodontist focused on advanced gum treatments, regenerative periodontal therapies, and dental implant care.',
+    status: 'Absent',
+    degreeTitle: 'BDS, MDS',
+    degreeSub: '(Periodontology)',
     experienceTitle: '8+ Years',
     experienceSub: 'Experience',
     patientsTitle: '1,800+',
-    patientsSub: 'Happy Patients',
-  },
-  {
-    id: 'sarah-lee',
-    name: 'Dr. Sarah Lee',
-    specialty: 'Periodontics Specialist',
-    image: '/images/doctor_sarah_lee.jpg',
-    bg: '#F6C844', // Golden Yellow from image
-    bio: 'Specializes in gum care, dental implants, and advanced periodontal treatments. Dedicated to helping you achieve a healthier smile.',
-    degreeTitle: 'BDS, MDS',
-    degreeSub: '(Periodontology)',
-    experienceTitle: '5+ Years',
-    experienceSub: 'Experience',
-    patientsTitle: '1,000+',
-    patientsSub: 'Happy Patients',
-  },
-  {
-    id: 'steven-lee',
-    name: 'Dr. Steven Lee',
-    specialty: 'Cosmetic Dentistry',
-    image: '/images/doctor_steven_lee.jpg',
-    bg: '#82B3EB', // Ocean Sky Blue from image
-    bio: 'Crafting bespoke porcelain veneers, laser teeth whitening, and complete aesthetic smile makeovers.',
-    degreeTitle: 'DDS, FICOI',
-    degreeSub: '(Cosmetic)',
-    experienceTitle: '7+ Years',
-    experienceSub: 'Experience',
-    patientsTitle: '1,500+',
-    patientsSub: 'Happy Patients',
-  },
-  {
-    id: 'jennifer-kim',
-    name: 'Dr. Jennifer Kim',
-    specialty: 'Orthodontics Specialist',
-    image: '/images/doctor_jennifer_kim.jpg',
-    bg: '#7CBF6B', // Fresh Sage Green from image
-    bio: 'Dedicated to gentle, personalized orthodontic treatments, invisible aligners, and adolescent smile corrections.',
-    degreeTitle: 'BDS, MS',
-    degreeSub: '(Orthodontics)',
-    experienceTitle: '6+ Years',
-    experienceSub: 'Experience',
-    patientsTitle: '1,200+',
     patientsSub: 'Happy Patients',
   },
 ];
@@ -114,6 +152,13 @@ export const SpecialistsSection: React.FC<SpecialistsSectionProps> = ({
   const [hoveredDoctorIndex, setHoveredDoctorIndex] = useState<number | null>(null);
   const [isMobile, setIsMobile] = useState(false);
 
+  // Desktop horizontal scroll offset (0 shows the first 5 doctors, scrolls right to show doctors 6 and 7)
+  const [desktopOffset, setDesktopOffset] = useState(0);
+  const [isMouseDown, setIsMouseDown] = useState(false);
+  const [dragStartX, setDragStartX] = useState(0);
+  const [initialDesktopOffset, setInitialDesktopOffset] = useState(0);
+  const [hasDragged, setHasDragged] = useState(false);
+
   // Drag and touch swipe state for mobile
   const [dragOffset, setDragOffset] = useState(0);
   const [isDragging, setIsDragging] = useState(false);
@@ -127,7 +172,7 @@ export const SpecialistsSection: React.FC<SpecialistsSectionProps> = ({
 
   useEffect(() => {
     const handleResize = () => {
-      setIsMobile(window.innerWidth < 1024);
+      setIsMobile(window.innerWidth < 1180);
     };
     handleResize();
     window.addEventListener('resize', handleResize);
@@ -160,14 +205,65 @@ export const SpecialistsSection: React.FC<SpecialistsSectionProps> = ({
     setHoveredDoctorIndex((prev) => (prev === index ? null : index));
   };
 
-  // Arrow navigation: cycles through doctors and opens their detailed card
+  // Arrow navigation: on mobile, cycles active card; on desktop, slides by doctor slot distance
   const handleArrowNav = (direction: 'left' | 'right') => {
-    setHoveredDoctorIndex((prev) => {
-      const current = prev !== null ? prev : 2;
-      return direction === 'right'
-        ? (current + 1) % doctors.length
-        : (current - 1 + doctors.length) % doctors.length;
+    if (isMobile) {
+      setHoveredDoctorIndex((prev) => {
+        const current = prev !== null ? prev : 2;
+        return direction === 'right'
+          ? (current + 1) % doctors.length
+          : (current - 1 + doctors.length) % doctors.length;
+      });
+    } else {
+      // Step by one slot + gap (~260px). With 7 doctors and 5 visible, max scroll is -520px
+      const step = 260;
+      const maxOffset = -520;
+      setDesktopOffset((prev) => {
+        if (direction === 'right') {
+          return Math.max(prev - step, maxOffset);
+        } else {
+          return Math.min(prev + step, 0);
+        }
+      });
+    }
+  };
+
+  // Mouse drag handlers for desktop smooth swipe
+  const handleMouseDown = (e: React.MouseEvent) => {
+    if (isMobile) return;
+    setIsMouseDown(true);
+    setHasDragged(false);
+    setDragStartX(e.clientX);
+    setInitialDesktopOffset(desktopOffset);
+  };
+
+  const handleMouseMove = (e: React.MouseEvent) => {
+    if (!isMouseDown || isMobile) return;
+    const diff = e.clientX - dragStartX;
+    if (Math.abs(diff) > 5) {
+      setHasDragged(true);
+      setHoveredDoctorIndex(null);
+    }
+    setDesktopOffset(Math.max(-535, Math.min(15, initialDesktopOffset + diff)));
+  };
+
+  const handleMouseUp = () => {
+    if (!isMouseDown) return;
+    setIsMouseDown(false);
+    // Snap to nearest slot
+    setDesktopOffset((prev) => {
+      if (prev > -130) return 0;
+      if (prev > -390) return -260;
+      return -520;
     });
+    setTimeout(() => setHasDragged(false), 60);
+  };
+
+  const handleWheel = (e: React.WheelEvent) => {
+    if (isMobile) return;
+    if (Math.abs(e.deltaX) > 4) {
+      setDesktopOffset((prev) => Math.max(-520, Math.min(0, prev - e.deltaX * 1.1)));
+    }
   };
 
   // Touch handlers for mobile
@@ -222,7 +318,7 @@ export const SpecialistsSection: React.FC<SpecialistsSectionProps> = ({
     }, 60);
   };
 
-  // Increased distance between doctors so detailed card never hides neighboring names
+  // Exact original distance and slot sizing from five circular profile grid format
   const desktopSlotWidth = 185;
   const desktopSlotGap = 'clamp(56px, 4.8vw, 78px)';
   const mobileSlotWidth = 160;
@@ -254,7 +350,7 @@ export const SpecialistsSection: React.FC<SpecialistsSectionProps> = ({
           paddingTop: 0,
           paddingBottom: isMobile
             ? (hoveredDoctorIndex !== null ? '430px' : '1.4rem')
-            : '1.4rem',
+            : (hoveredDoctorIndex !== null ? '2.8rem' : '1.4rem'),
           minHeight: isMobile
             ? (hoveredDoctorIndex !== null ? '620px' : undefined)
             : '500px',
@@ -294,10 +390,10 @@ export const SpecialistsSection: React.FC<SpecialistsSectionProps> = ({
           <div
             style={{
               position: 'absolute',
-              bottom: 0,
+              top: '70.3%',
               left: '50%',
-              transform: 'translate(-50%, 50%)',
-              zIndex: 20,
+              transform: 'translate(-50%, -50%)',
+              zIndex: 30,
             }}
           >
             <button
@@ -344,7 +440,9 @@ export const SpecialistsSection: React.FC<SpecialistsSectionProps> = ({
           style={{
             marginTop: 'clamp(1.8rem, 3.2vw, 3.2rem)',
             marginBottom: 'clamp(2rem, 3.5vw, 3.2rem)',
-            maxWidth: '1380px',
+            maxWidth: 'calc(5 * 185px + 4 * clamp(56px, 4.8vw, 78px) + 180px)',
+            paddingLeft: isMobile ? '1rem' : '90px',
+            paddingRight: isMobile ? '1rem' : '90px',
           }}
         >
           <div
@@ -471,21 +569,30 @@ export const SpecialistsSection: React.FC<SpecialistsSectionProps> = ({
           </div>
         </div>
 
-        {/* Doctors Row Wrapper */}
+        {/* Doctors Row Wrapper: Stretched edge with 90px padding so centered cards are never cut or overlapped */}
         <div
           className="container"
           style={{
             position: 'relative',
-            maxWidth: '1440px',
-            overflow: 'visible',
+            maxWidth: 'calc(5 * 185px + 4 * clamp(56px, 4.8vw, 78px) + 180px)',
+            paddingLeft: isMobile ? '1rem' : '90px',
+            paddingRight: isMobile ? '1rem' : '90px',
+            margin: '0 auto',
+            overflowX: 'clip',
+            overflowY: 'visible',
             touchAction: isMobile ? 'pan-y' : 'auto',
             userSelect: 'none',
             WebkitUserSelect: 'none',
-            cursor: isDragging ? 'grabbing' : isMobile ? 'grab' : 'default',
+            cursor: isMouseDown ? 'grabbing' : isDragging ? 'grabbing' : isMobile ? 'grab' : 'grab',
           }}
           onTouchStart={handleTouchStart}
           onTouchMove={handleTouchMove}
           onTouchEnd={handleTouchEnd}
+          onMouseDown={handleMouseDown}
+          onMouseMove={handleMouseMove}
+          onMouseUp={handleMouseUp}
+          onMouseLeave={handleMouseUp}
+          onWheel={handleWheel}
         >
           {/* Mobile Quick Side Chevrons */}
           {isMobile && (
@@ -546,7 +653,7 @@ export const SpecialistsSection: React.FC<SpecialistsSectionProps> = ({
           {/* Smooth Carousel / Desktop Row Track */}
           <motion.div
             animate={{
-              x: isMobile ? mobileTranslateX : 0,
+              x: isMobile ? mobileTranslateX : desktopOffset,
             }}
             transition={{
               type: 'spring',
@@ -557,7 +664,7 @@ export const SpecialistsSection: React.FC<SpecialistsSectionProps> = ({
             style={{
               display: 'flex',
               alignItems: 'flex-start',
-              justifyContent: 'center',
+              justifyContent: isMobile ? 'center' : 'flex-start',
               gap: isMobile ? `${mobileSlotGap}px` : desktopSlotGap,
               overflow: 'visible',
               paddingTop: '0.5rem',
@@ -568,12 +675,20 @@ export const SpecialistsSection: React.FC<SpecialistsSectionProps> = ({
             {doctors.map((doc, idx) => {
               const isCardOpened = hoveredDoctorIndex === idx;
 
+              const isOffscreenInFirstView = !isMobile && desktopOffset === 0 && idx >= 5;
+
               return (
                 <div
                   key={doc.id}
                   className="doctor-slot"
-                  onClick={() => handleDoctorClick(idx)}
-                  onMouseEnter={() => handleMouseEnter(idx)}
+                  onClick={() => {
+                    if (hasDragged || isOffscreenInFirstView) return;
+                    handleDoctorClick(idx);
+                  }}
+                  onMouseEnter={() => {
+                    if (isOffscreenInFirstView) return;
+                    handleMouseEnter(idx);
+                  }}
                   onMouseLeave={handleMouseLeave}
                   style={{
                     flex: `0 0 ${isMobile ? mobileSlotWidth : desktopSlotWidth}px`,
@@ -582,9 +697,13 @@ export const SpecialistsSection: React.FC<SpecialistsSectionProps> = ({
                     flexDirection: 'column',
                     alignItems: 'center',
                     textAlign: 'center',
-                    cursor: 'pointer',
+                    cursor: isOffscreenInFirstView ? 'default' : 'pointer',
                     position: 'relative',
                     zIndex: isCardOpened ? 60 : 20,
+                    opacity: isOffscreenInFirstView ? 0 : 1,
+                    visibility: isOffscreenInFirstView ? 'hidden' : 'visible',
+                    pointerEvents: isOffscreenInFirstView ? 'none' : 'auto',
+                    transition: 'opacity 0.22s ease, visibility 0.22s ease',
                   }}
                 >
                   {/* Default Circular Avatar + Name + Specialty (Always displayed unless detailed card is open on top) */}
@@ -625,24 +744,77 @@ export const SpecialistsSection: React.FC<SpecialistsSectionProps> = ({
                           width: '100%',
                           height: '100%',
                           objectFit: 'cover',
+                          objectPosition: doc.imagePosition || 'center',
                           pointerEvents: 'none',
                         }}
                       />
                     </div>
 
-                    {/* Doctor Name */}
+                    {/* Present / Absent Small Bar */}
+                    <div
+                      style={{
+                        display: 'inline-flex',
+                        alignItems: 'center',
+                        gap: '6px',
+                        padding: '3px 10px',
+                        borderRadius: '9999px',
+                        backgroundColor:
+                          doc.status === 'Present'
+                            ? 'rgba(34, 197, 94, 0.22)'
+                            : 'rgba(239, 68, 68, 0.22)',
+                        border:
+                          doc.status === 'Present'
+                            ? '1px solid rgba(74, 222, 128, 0.55)'
+                            : '1px solid rgba(248, 113, 113, 0.55)',
+                        backdropFilter: 'blur(8px)',
+                        WebkitBackdropFilter: 'blur(8px)',
+                        marginTop: '0.65rem',
+                        marginBottom: '0.15rem',
+                        boxShadow: '0 2px 8px rgba(0, 0, 0, 0.15)',
+                      }}
+                    >
+                      <span
+                        style={{
+                          width: '6px',
+                          height: '6px',
+                          borderRadius: '50%',
+                          backgroundColor: doc.status === 'Present' ? '#22C55E' : '#EF4444',
+                          boxShadow: doc.status === 'Present' ? '0 0 8px #22C55E' : '0 0 8px #EF4444',
+                          display: 'inline-block',
+                        }}
+                      />
+                      <span
+                        style={{
+                          fontFamily: 'var(--font-main)',
+                          fontSize: '0.68rem',
+                          fontWeight: 700,
+                          letterSpacing: '0.04em',
+                          textTransform: 'uppercase',
+                          color: doc.status === 'Present' ? '#86EFAC' : '#FCA5A5',
+                        }}
+                      >
+                        {doc.status}
+                      </span>
+                    </div>
+
+                    {/* Doctor Name: Uniform size matching Dr. LIJEESH KADAMBIL */}
                     <h3
                       style={{
                         fontFamily: 'var(--font-display)',
-                        fontSize: isMobile ? '1.05rem' : '1.2rem',
+                        fontSize: isMobile ? '0.84rem' : '0.9rem',
                         fontWeight: 700,
                         color: '#FFFFFF',
-                        marginTop: '0.9rem',
-                        marginBottom: '0.2rem',
-                        letterSpacing: '-0.01em',
-                        lineHeight: 1.2,
+                        marginTop: '0.35rem',
+                        marginBottom: '0.15rem',
+                        letterSpacing: '-0.02em',
+                        lineHeight: 1.25,
+                        textAlign: 'center',
+                        maxWidth: isMobile ? '135px' : '170px',
                         whiteSpace: 'nowrap',
+                        overflow: 'hidden',
+                        textOverflow: 'ellipsis',
                       }}
+                      title={doc.name}
                     >
                       {doc.name}
                     </h3>
@@ -651,13 +823,22 @@ export const SpecialistsSection: React.FC<SpecialistsSectionProps> = ({
                     <p
                       style={{
                         fontFamily: 'var(--font-main)',
-                        fontSize: isMobile ? '0.75rem' : '0.82rem',
-                        fontWeight: 500,
-                        color: 'rgba(255, 255, 255, 0.82)',
+                        fontSize: isMobile
+                          ? '0.68rem'
+                          : doc.specialty.length > 22
+                          ? '0.71rem'
+                          : '0.77rem',
+                        fontWeight: 600,
+                        color: 'rgba(255, 255, 255, 0.85)',
                         margin: 0,
                         lineHeight: 1.25,
+                        textAlign: 'center',
+                        maxWidth: isMobile ? '135px' : '175px',
                         whiteSpace: 'nowrap',
+                        overflow: 'hidden',
+                        textOverflow: 'ellipsis',
                       }}
+                      title={doc.specialty}
                     >
                       {doc.specialty}
                     </p>
@@ -682,19 +863,18 @@ export const SpecialistsSection: React.FC<SpecialistsSectionProps> = ({
                         }}
                         style={{
                           position: 'absolute',
-                          top: isMobile ? '70px' : '82px',
-                          left: isMobile ? 'calc(50% - 155px)' : 'calc(50% - 165px)',
-                          width: isMobile ? '310px' : '330px',
+                          top: isMobile ? '64px' : '68px',
+                          left: isMobile ? 'calc(50% - 147px)' : 'calc(50% - 157px)',
+                          width: isMobile ? '295px' : '315px',
                           transformOrigin: '50% 0px',
                           backgroundColor: '#FFFFFF',
                           borderRadius: '28px',
-                          padding: 'clamp(5rem, 5.4vw, 5.6rem) 1.4rem 1.5rem 1.4rem',
+                          padding: 'clamp(4.8rem, 5.2vw, 5.3rem) 1.2rem 1.05rem 1.2rem',
                           boxShadow:
-                            '0 24px 50px rgba(28, 12, 8, 0.24), 0 6px 18px rgba(0,0,0,0.08)',
+                            '0 20px 45px rgba(28, 12, 8, 0.22), 0 4px 14px rgba(0,0,0,0.06)',
                           textAlign: 'center',
                           zIndex: 70,
-                          /* This margin-bottom creates the exact 1/4 overlap into the brown section */
-                          marginBottom: isMobile ? '0px' : '-95px',
+                          marginBottom: '0px',
                         }}
                         onClick={(e) => {
                           const target = e.target as HTMLElement | null;
@@ -705,20 +885,55 @@ export const SpecialistsSection: React.FC<SpecialistsSectionProps> = ({
                           setHoveredDoctorIndex(null);
                         }}
                       >
+                        {/* Status Dot in the End of the Card (Top Right Corner: Green if Present, Red if Absent) */}
+                        <div
+                          style={{
+                            position: 'absolute',
+                            top: '16px',
+                            right: '16px',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            width: '24px',
+                            height: '24px',
+                            borderRadius: '50%',
+                            backgroundColor:
+                              doc.status === 'Present'
+                                ? 'rgba(34, 197, 94, 0.14)'
+                                : 'rgba(239, 68, 68, 0.14)',
+                            zIndex: 85,
+                          }}
+                          title={doc.status === 'Present' ? 'Doctor Present' : 'Doctor Absent'}
+                        >
+                          <span
+                            style={{
+                              width: '10px',
+                              height: '10px',
+                              borderRadius: '50%',
+                              backgroundColor: doc.status === 'Present' ? '#22C55E' : '#EF4444',
+                              boxShadow:
+                                doc.status === 'Present'
+                                  ? '0 0 10px #22C55E, 0 0 4px #22C55E'
+                                  : '0 0 10px #EF4444, 0 0 4px #EF4444',
+                              display: 'inline-block',
+                            }}
+                          />
+                        </div>
+
                         {/* Top Protruding Avatar (aligns directly over slot circle) */}
                         <div
                           style={{
                             position: 'absolute',
-                            top: isMobile ? '-70px' : '-82px',
+                            top: isMobile ? '-66px' : '-74px',
                             left: '50%',
                             transform: 'translateX(-50%)',
-                            width: isMobile ? '145px' : '166px',
-                            height: isMobile ? '145px' : '166px',
+                            width: isMobile ? '132px' : '144px',
+                            height: isMobile ? '132px' : '144px',
                             borderRadius: '50%',
                             backgroundColor: doc.bg,
-                            border: '5px solid #FFFFFF',
+                            border: '4px solid #FFFFFF',
                             overflow: 'hidden',
-                            boxShadow: `0 14px 34px rgba(0,0,0,0.2), 0 0 30px ${doc.bg}77`,
+                            boxShadow: `0 12px 28px rgba(0,0,0,0.18), 0 0 25px ${doc.bg}66`,
                             display: 'flex',
                             alignItems: 'center',
                             justifyContent: 'center',
@@ -733,6 +948,7 @@ export const SpecialistsSection: React.FC<SpecialistsSectionProps> = ({
                               width: '100%',
                               height: '100%',
                               objectFit: 'cover',
+                              objectPosition: doc.imagePosition || 'center',
                               pointerEvents: 'none',
                             }}
                           />
@@ -740,29 +956,32 @@ export const SpecialistsSection: React.FC<SpecialistsSectionProps> = ({
 
                         {/* Card Content */}
                         <div>
-                          {/* Doctor Name */}
+                          {/* First line: Name of the Doctor in centre (shifted down to avoid avatar overlap) */}
                           <h3
                             style={{
                               fontFamily: 'var(--font-display)',
-                              fontSize: 'clamp(1.35rem, 1.6vw, 1.55rem)',
+                              fontSize: 'clamp(1.16rem, 1.38vw, 1.32rem)',
                               fontWeight: 700,
                               color: '#18181B',
-                              marginBottom: '0.25rem',
+                              margin: '0.45rem 0 0 0',
+                              textAlign: 'center',
                               letterSpacing: '-0.02em',
-                              lineHeight: 1.2,
+                              lineHeight: 1.22,
                             }}
                           >
                             {doc.name}
                           </h3>
 
-                          {/* Specialty in Purple */}
+                          {/* Second line: Doctor Title in the centre */}
                           <p
                             style={{
                               fontFamily: 'var(--font-main)',
-                              fontSize: '0.86rem',
+                              fontSize: '0.82rem',
                               fontWeight: 600,
                               color: '#7C3AED',
-                              marginBottom: '0.75rem',
+                              marginTop: '0.2rem',
+                              marginBottom: '0.55rem',
+                              textAlign: 'center',
                             }}
                           >
                             {doc.specialty}
@@ -772,10 +991,11 @@ export const SpecialistsSection: React.FC<SpecialistsSectionProps> = ({
                           <p
                             style={{
                               fontFamily: 'var(--font-main)',
-                              fontSize: '0.81rem',
-                              lineHeight: 1.48,
+                              fontSize: '0.78rem',
+                              lineHeight: 1.38,
                               color: '#4B5563',
-                              marginBottom: '1.2rem',
+                              marginBottom: '0.65rem',
+                              textAlign: 'center',
                             }}
                           >
                             {doc.bio}
@@ -786,12 +1006,12 @@ export const SpecialistsSection: React.FC<SpecialistsSectionProps> = ({
                             style={{
                               display: 'grid',
                               gridTemplateColumns: 'repeat(3, 1fr)',
-                              gap: '0.35rem',
-                              paddingTop: '0.8rem',
-                              paddingBottom: '0.8rem',
+                              gap: '0.25rem',
+                              paddingTop: '0.5rem',
+                              paddingBottom: '0.5rem',
                               borderTop: '1px solid rgba(0, 0, 0, 0.08)',
                               borderBottom: '1px solid rgba(0, 0, 0, 0.08)',
-                              marginBottom: '1.25rem',
+                              marginBottom: '0.8rem',
                             }}
                           >
                             {/* Qualification */}
@@ -938,11 +1158,11 @@ export const SpecialistsSection: React.FC<SpecialistsSectionProps> = ({
                               backgroundColor: 'var(--color-lime)',
                               color: '#18181B',
                               fontFamily: 'var(--font-main)',
-                              fontSize: '0.86rem',
+                              fontSize: '0.82rem',
                               fontWeight: 700,
-                              padding: '0.72rem 1.2rem',
+                              padding: '0.6rem 1.1rem',
                               borderRadius: 'var(--radius-pill)',
-                              boxShadow: '0 6px 18px rgba(215, 248, 70, 0.4)',
+                              boxShadow: '0 5px 16px rgba(215, 248, 70, 0.35)',
                               cursor: 'pointer',
                               border: 'none',
                               transition:
@@ -975,114 +1195,138 @@ export const SpecialistsSection: React.FC<SpecialistsSectionProps> = ({
         </div>
       </section>
 
-      {/* Brown Bottom Bar: Sits behind and underneath the quarter-overlapping card */}
+      {/* Brown Bottom Bar: Sits behind and underneath, compact to house the open/close bar */}
       <div
         style={{
           backgroundColor: '#5E2614', // continuous brown behind and beneath
           position: 'relative',
           zIndex: 15,
-          paddingTop: isMobile ? '1.6rem' : '2.2rem',
-          paddingBottom: isMobile ? '2.2rem' : '3.4rem',
+          paddingTop: '0.7rem',
+          paddingBottom: '0.7rem',
         }}
       >
         <div
           className="container"
           style={{
-            maxWidth: '1380px',
+            marginTop: 0,
+            paddingLeft: isMobile ? '1.25rem' : '90px',
+            paddingRight: isMobile ? '1.25rem' : '90px',
             display: 'flex',
             alignItems: 'center',
-            justifyContent: 'space-between',
-            flexWrap: 'wrap',
-            gap: '1rem',
+            justifyContent: 'center',
+            position: 'relative',
+            minHeight: '42px',
           }}
         >
-          {/* Left Controls: Book Appointment Lime Pill & Status Badge */}
+          {/* Centered Locations Status Bar */}
           <div
             style={{
               display: 'flex',
               alignItems: 'center',
-              gap: '0.75rem',
-              flexWrap: 'wrap',
+              justifyContent: 'center',
             }}
           >
-            {/* Lime Book Appointment Button */}
-            <button
-              type="button"
-              onClick={() => {
-                if (onOpenBooking) {
-                  const docName =
-                    hoveredDoctorIndex !== null
-                      ? doctors[hoveredDoctorIndex].name
-                      : undefined;
-                  onOpenBooking(docName);
-                } else {
-                  const branchesEl = document.getElementById('branches');
-                  branchesEl?.scrollIntoView({ behavior: 'smooth' });
-                }
-              }}
-              style={{
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: '0.45rem',
-                backgroundColor: 'var(--color-lime)',
-                color: '#18181B',
-                fontFamily: 'var(--font-main)',
-                fontSize: '0.82rem',
-                fontWeight: 700,
-                letterSpacing: '0.04em',
-                textTransform: 'uppercase',
-                padding: '0.62rem 1.15rem',
-                borderRadius: 'var(--radius-pill)',
-                border: 'none',
-                cursor: 'pointer',
-                boxShadow: '0 4px 14px rgba(215, 248, 70, 0.35)',
-                transition: 'transform 0.2s ease, box-shadow 0.2s ease',
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.transform = 'translateY(-1px)';
-                e.currentTarget.style.boxShadow =
-                  '0 8px 20px rgba(215, 248, 70, 0.5)';
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.transform = 'translateY(0)';
-                e.currentTarget.style.boxShadow =
-                  '0 4px 14px rgba(215, 248, 70, 0.35)';
-              }}
-            >
-              <Calendar size={16} strokeWidth={2.4} />
-              <span>BOOK APPOINTMENT</span>
-            </button>
-
-            {/* Dark Status Capsule with Glowing Green Dot */}
+            {/* Clinic Locations Small Bar: Opened & Closed */}
             <div
               style={{
                 display: 'inline-flex',
                 alignItems: 'center',
-                gap: '0.45rem',
-                backgroundColor: 'rgba(28, 14, 8, 0.72)',
-                backdropFilter: 'blur(8px)',
-                WebkitBackdropFilter: 'blur(8px)',
-                padding: '0.6rem 1.05rem',
+                gap: '0.55rem',
+                backgroundColor: 'rgba(28, 14, 8, 0.75)',
+                backdropFilter: 'blur(10px)',
+                WebkitBackdropFilter: 'blur(10px)',
+                padding: '0.42rem 0.75rem 0.42rem 0.95rem',
                 borderRadius: 'var(--radius-pill)',
-                border: '1px solid rgba(255, 255, 255, 0.1)',
-                color: '#FFFFFF',
-                fontFamily: 'var(--font-main)',
-                fontSize: '0.8rem',
-                fontWeight: 600,
+                border: '1px solid rgba(255, 255, 255, 0.14)',
+                boxShadow: '0 4px 16px rgba(0, 0, 0, 0.22)',
               }}
             >
-              {/* Glowing Green Dot */}
               <span
                 style={{
-                  width: '8px',
-                  height: '8px',
-                  borderRadius: '50%',
-                  backgroundColor: '#22C55E',
-                  display: 'inline-block',
-                  boxShadow: '0 0 10px #22C55E',
+                  fontFamily: 'var(--font-main)',
+                  fontSize: '0.72rem',
+                  fontWeight: 600,
+                  color: 'rgba(255, 255, 255, 0.7)',
+                  textTransform: 'uppercase',
+                  letterSpacing: '0.06em',
                 }}
-              />
-              <span>Opens 10 AM · Valanchery</span>
+              >
+                Locations:
+              </span>
+
+              {/* Valanchery Clinic: Opened */}
+              <div
+                style={{
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '5px',
+                  backgroundColor: 'rgba(34, 197, 94, 0.16)',
+                  border: '1px solid rgba(74, 222, 128, 0.45)',
+                  borderRadius: 'var(--radius-pill)',
+                  padding: '0.24rem 0.65rem',
+                  fontSize: '0.74rem',
+                  fontFamily: 'var(--font-main)',
+                }}
+              >
+                <span
+                  style={{
+                    width: '6px',
+                    height: '6px',
+                    borderRadius: '50%',
+                    backgroundColor: '#22C55E',
+                    boxShadow: '0 0 8px #22C55E',
+                  }}
+                />
+                <span style={{ color: '#FFFFFF', fontWeight: 600 }}>Valanchery</span>
+                <span
+                  style={{
+                    color: '#86EFAC',
+                    fontWeight: 700,
+                    textTransform: 'uppercase',
+                    fontSize: '0.64rem',
+                    letterSpacing: '0.04em',
+                  }}
+                >
+                  Opened
+                </span>
+              </div>
+
+              {/* Edayoor Clinic: Closed */}
+              <div
+                style={{
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '5px',
+                  backgroundColor: 'rgba(239, 68, 68, 0.16)',
+                  border: '1px solid rgba(248, 113, 113, 0.45)',
+                  borderRadius: 'var(--radius-pill)',
+                  padding: '0.24rem 0.65rem',
+                  fontSize: '0.74rem',
+                  fontFamily: 'var(--font-main)',
+                }}
+              >
+                <span
+                  style={{
+                    width: '6px',
+                    height: '6px',
+                    borderRadius: '50%',
+                    backgroundColor: '#EF4444',
+                    boxShadow: '0 0 8px #EF4444',
+                  }}
+                />
+                <span style={{ color: '#FFFFFF', fontWeight: 600 }}>Edayoor</span>
+                <span
+                  style={{
+                    color: '#FCA5A5',
+                    fontWeight: 700,
+                    textTransform: 'uppercase',
+                    fontSize: '0.64rem',
+                    letterSpacing: '0.04em',
+                  }}
+                >
+                  Closed
+                </span>
+              </div>
             </div>
           </div>
 
@@ -1092,6 +1336,8 @@ export const SpecialistsSection: React.FC<SpecialistsSectionProps> = ({
               display: isMobile ? 'none' : 'flex',
               alignItems: 'center',
               gap: '0.75rem',
+              position: 'absolute',
+              right: isMobile ? '1.25rem' : '90px',
             }}
           >
             <svg width="36" height="15" viewBox="0 0 36 15" fill="none">

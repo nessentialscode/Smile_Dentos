@@ -1,4 +1,6 @@
 import { useState, useEffect } from 'react';
+import { motion } from 'framer-motion';
+import { Calendar } from 'lucide-react';
 import { Navbar } from './components/Navbar';
 import { HeroSection } from './components/HeroSection';
 import { TransformSection } from './components/TransformSection';
@@ -9,16 +11,19 @@ import { WhoWeHelpSection } from './components/WhoWeHelpSection';
 import { ReviewsSection } from './components/ReviewsSection';
 import { FooterSection } from './components/FooterSection';
 import { AppointmentModal } from './components/AppointmentModal';
+import { AdminLoginPage } from './components/AdminLoginPage';
 import { AdminPortal } from './components/AdminPortal';
+import { getAdminSession, signOutAdmin, type AdminSession } from './services/authService';
 
 export function App() {
   const [bookingOpen, setBookingOpen] = useState(false);
   const [selectedBranch, setSelectedBranch] = useState<string>('Valanchery Main Clinic');
-  const [selectedDoctor, setSelectedDoctor] = useState<string>('Dr. Sarah Lee');
+  const [selectedDoctor, setSelectedDoctor] = useState<string>('Dr. ATHIRA.S');
   const [showAllServices, setShowAllServices] = useState(false);
 
-  // Admin routing state
-  const [isAdminOpen, setIsAdminOpen] = useState<boolean>(() => {
+  // Admin authentication and routing states
+  const [adminSession, setAdminSession] = useState<AdminSession | null>(() => getAdminSession());
+  const [isAdminRoute, setIsAdminRoute] = useState<boolean>(() => {
     if (typeof window !== 'undefined') {
       return window.location.pathname.startsWith('/admin') || window.location.hash === '#admin';
     }
@@ -29,7 +34,8 @@ export function App() {
     const handleLocationChange = () => {
       const isNowAdmin =
         window.location.pathname.startsWith('/admin') || window.location.hash === '#admin';
-      setIsAdminOpen(isNowAdmin);
+      setIsAdminRoute(isNowAdmin);
+      setAdminSession(getAdminSession());
     };
 
     window.addEventListener('popstate', handleLocationChange);
@@ -41,15 +47,21 @@ export function App() {
   }, []);
 
   const handleNavigateToAdmin = () => {
-    window.history.pushState({}, '', '#admin');
-    setIsAdminOpen(true);
+    window.history.pushState({}, '', '/admin');
+    setIsAdminRoute(true);
+    setAdminSession(getAdminSession());
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   const handleBackToSite = () => {
-    window.history.pushState({}, '', window.location.pathname.startsWith('/admin') ? '/' : ' ');
-    setIsAdminOpen(false);
+    window.history.pushState({}, '', '/');
+    setIsAdminRoute(false);
     window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  const handleLogout = async () => {
+    await signOutAdmin();
+    setAdminSession(null);
   };
 
   const handleOpenBooking = (branchName?: string, doctorName?: string) => {
@@ -62,8 +74,26 @@ export function App() {
     setBookingOpen(true);
   };
 
-  if (isAdminOpen) {
-    return <AdminPortal onBackToSite={handleBackToSite} />;
+  // ADMIN ROUTING: If route is /admin or #admin
+  if (isAdminRoute) {
+    // Unauthenticated: Render Admin Login Screen
+    if (!adminSession || !adminSession.user) {
+      return (
+        <AdminLoginPage
+          onSuccess={() => setAdminSession(getAdminSession())}
+          onNavigateHome={handleBackToSite}
+        />
+      );
+    }
+
+    // Authenticated: Render Admin Operations Portal
+    return (
+      <AdminPortal
+        adminEmail={adminSession.user.email}
+        onLogout={handleLogout}
+        onBackToSite={handleBackToSite}
+      />
+    );
   }
 
   return (
@@ -104,6 +134,58 @@ export function App() {
 
       {/* Frame 18: High Impact Chartreuse Footer & CTA */}
       <FooterSection onOpenBooking={() => handleOpenBooking()} onOpenAdmin={handleNavigateToAdmin} />
+
+      {/* Floating "Book Appointment" CTA that moves with scrolling from the start */}
+      <motion.div
+        initial={{ opacity: 0, scale: 0.9 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ duration: 0.35 }}
+        style={{
+          position: 'fixed',
+          bottom: 'clamp(1.25rem, 2.8vw, 2.25rem)',
+          left: 'clamp(1.25rem, 3vw, 2.5rem)',
+          zIndex: 90,
+        }}
+      >
+        <motion.button
+          type="button"
+          onClick={() => handleOpenBooking()}
+          whileHover={{ scale: 1.06, y: -2 }}
+          whileTap={{ scale: 0.95 }}
+          aria-label="Book Appointment"
+          style={{
+            display: 'inline-flex',
+            alignItems: 'center',
+            gap: '0.55rem',
+            backgroundColor: 'var(--color-lime)',
+            color: '#18181B',
+            fontFamily: 'var(--font-main)',
+            fontSize: 'clamp(0.78rem, 0.95vw, 0.84rem)',
+            fontWeight: 800,
+            letterSpacing: '0.04em',
+            textTransform: 'uppercase',
+            padding: '0.72rem 1.35rem',
+            borderRadius: 'var(--radius-pill)',
+            border: '2px solid rgba(255, 255, 255, 0.55)',
+            cursor: 'pointer',
+            boxShadow: '0 8px 24px rgba(0, 0, 0, 0.3), 0 2px 12px rgba(215, 248, 70, 0.5)',
+            backdropFilter: 'blur(10px)',
+            WebkitBackdropFilter: 'blur(10px)',
+            transition: 'box-shadow 0.2s ease',
+          }}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.boxShadow =
+              '0 12px 30px rgba(0, 0, 0, 0.35), 0 4px 18px rgba(215, 248, 70, 0.7)';
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.boxShadow =
+              '0 8px 24px rgba(0, 0, 0, 0.3), 0 2px 12px rgba(215, 248, 70, 0.5)';
+          }}
+        >
+          <Calendar size={17} strokeWidth={2.4} />
+          <span>BOOK APPOINTMENT</span>
+        </motion.button>
+      </motion.div>
 
       {/* Interactive Booking Modal */}
       <AppointmentModal
