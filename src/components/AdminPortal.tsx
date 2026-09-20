@@ -72,7 +72,7 @@ const defaultDoctors: DoctorRecord[] = [
   { id: 'doc-4', name: 'Dr. AYISHA NIZMIYA.K', specialty: 'Consultant Orthodontist', is_present: true },
   { id: 'doc-5', name: 'Dr. SHANAHAS', specialty: 'Consultant Orthodontist', is_present: false },
   { id: 'doc-6', name: 'Dr. JABIR KOTTAMMAL', specialty: 'Oral & Maxillofacial Surgeon', is_present: true },
-  { id: 'doc-7', name: 'Dr. MUHAMMAD HARIS', specialty: 'Consultant Periodontist', is_present: false },
+  { id: 'doc-7', name: 'Dr. MOHAMMED HARIS', specialty: 'Consultant Periodontist', is_present: false },
 ];
 
 const defaultAppointments: Appointment[] = [
@@ -575,62 +575,65 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
           style={{
             maxWidth: '1280px',
             margin: '0 auto',
-            padding: '0 1.25rem',
+            padding: '0 clamp(0.45rem, 2vw, 1.25rem)',
             height: '64px',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'space-between',
-            gap: '1rem',
+            gap: '0.4rem',
           }}
         >
           {/* BRAND */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: '0.55rem' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.45rem', flexShrink: 0 }}>
             <img
               src="/images/smile_dentos_brand_logo.png"
               alt="Smile Dentos Family Dental Care"
               style={{
-                height: '36px',
+                height: '34px',
                 width: 'auto',
                 objectFit: 'contain',
                 display: 'block',
               }}
             />
-            <span
+            <div
               style={{
-                fontSize: '0.66rem',
+                display: 'inline-flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                justifyContent: 'center',
+                fontSize: '0.54rem',
                 textTransform: 'uppercase',
                 fontWeight: 800,
-                letterSpacing: '0.05em',
-                padding: '0.22rem 0.55rem',
-                borderRadius: '999px',
+                letterSpacing: '0.04em',
+                lineHeight: 1.1,
+                padding: '0.2rem 0.42rem',
+                borderRadius: '6px',
                 backgroundColor: '#E0F2FE',
                 color: '#0369A1',
                 border: '1px solid #BAE6FD',
-                lineHeight: 1.2,
-                display: 'inline-flex',
-                alignItems: 'center',
-                whiteSpace: 'nowrap',
-                marginTop: '4px',
+                textAlign: 'center',
+                flexShrink: 0,
               }}
             >
-              Staff Admin
-            </span>
+              <span>STAFF</span>
+              <span>ADMIN</span>
+            </div>
           </div>
 
           {/* RIGHT ACTIONS */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: '0.45rem' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.35rem', flexShrink: 0 }}>
             {adminEmail && (
               <span
                 style={{
-                  fontSize: 'clamp(0.58rem, 2vw, 0.72rem)',
+                  fontSize: 'clamp(0.52rem, 1.75vw, 0.68rem)',
                   fontWeight: 600,
                   color: '#475569',
                   backgroundColor: '#F1F5F9',
-                  padding: '0.22rem 0.45rem',
+                  padding: '0.2rem 0.38rem',
                   borderRadius: '6px',
                   border: '1px solid #E2E8F0',
                   whiteSpace: 'nowrap',
-                  letterSpacing: '-0.01em',
+                  letterSpacing: '-0.02em',
                 }}
                 title={adminEmail}
               >
