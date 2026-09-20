@@ -584,55 +584,55 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
           }}
         >
           {/* BRAND */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: '0.85rem' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.55rem' }}>
             <img
               src="/images/smile_dentos_brand_logo.png"
               alt="Smile Dentos Family Dental Care"
               style={{
-                height: '38px',
+                height: '36px',
                 width: 'auto',
                 objectFit: 'contain',
                 display: 'block',
               }}
             />
-            <div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
-                <span
-                  style={{
-                    fontSize: '0.65rem',
-                    textTransform: 'uppercase',
-                    fontWeight: 800,
-                    letterSpacing: '0.05em',
-                    padding: '0.15rem 0.5rem',
-                    borderRadius: '999px',
-                    backgroundColor: '#E0F2FE',
-                    color: '#0369A1',
-                    border: '1px solid #BAE6FD',
-                    lineHeight: 1.2,
-                  }}
-                >
-                  Staff Admin
-                </span>
-              </div>
-              <span style={{ fontSize: '0.68rem', color: '#64748B', display: 'block', marginTop: '2px' }}>
-                Appointment Management System
-              </span>
-            </div>
+            <span
+              style={{
+                fontSize: '0.66rem',
+                textTransform: 'uppercase',
+                fontWeight: 800,
+                letterSpacing: '0.05em',
+                padding: '0.22rem 0.55rem',
+                borderRadius: '999px',
+                backgroundColor: '#E0F2FE',
+                color: '#0369A1',
+                border: '1px solid #BAE6FD',
+                lineHeight: 1.2,
+                display: 'inline-flex',
+                alignItems: 'center',
+                whiteSpace: 'nowrap',
+                marginTop: '4px',
+              }}
+            >
+              Staff Admin
+            </span>
           </div>
 
           {/* RIGHT ACTIONS */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.45rem' }}>
             {adminEmail && (
               <span
                 style={{
-                  fontSize: '0.75rem',
+                  fontSize: 'clamp(0.58rem, 2vw, 0.72rem)',
                   fontWeight: 600,
                   color: '#475569',
                   backgroundColor: '#F1F5F9',
-                  padding: '0.35rem 0.75rem',
-                  borderRadius: '8px',
+                  padding: '0.22rem 0.45rem',
+                  borderRadius: '6px',
                   border: '1px solid #E2E8F0',
+                  whiteSpace: 'nowrap',
+                  letterSpacing: '-0.01em',
                 }}
+                title={adminEmail}
               >
                 {adminEmail}
               </span>
