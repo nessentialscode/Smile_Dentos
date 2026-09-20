@@ -10,7 +10,7 @@ export interface ServiceItem {
 }
 
 // 5 services shown in first view
-export const initialServices: ServiceItem[] = [
+const initialServices: ServiceItem[] = [
   {
     id: 'digital-imaging',
     title: 'Digital Imaging',
@@ -54,7 +54,7 @@ export const initialServices: ServiceItem[] = [
 ];
 
 // 3 services revealed when clicking 'See All'
-export const seeAllServices: ServiceItem[] = [
+const seeAllServices: ServiceItem[] = [
   {
     id: 'endodontics',
     title: 'Endodontics',

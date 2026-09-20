@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, CheckCircle2, AlertTriangle, AlertCircle } from 'lucide-react';
 import confetti from 'canvas-confetti';
@@ -23,10 +23,10 @@ const DOCTOR_OPTIONS: DoctorOption[] = [
   { name: 'Dr. AYISHA NIZMIYA.K', specialty: 'Consultant Orthodontist', defaultPresent: true },
   { name: 'Dr. SHANAHAS', specialty: 'Consultant Orthodontist', defaultPresent: false },
   { name: 'Dr. JABIR KOTTAMMAL', specialty: 'Oral & Maxillofacial Surgeon', defaultPresent: true },
-  { name: 'Dr. MUHAMMAD HARIS', specialty: 'Consultant Periodontist', defaultPresent: false },
+  { name: 'Dr. MOHAMMED HARIS', specialty: 'Consultant Periodontist', defaultPresent: false },
 ];
 
-export const getTodayDateString = (): string => {
+const getTodayDateString = (): string => {
   const today = new Date();
   const yyyy = today.getFullYear();
   const mm = String(today.getMonth() + 1).padStart(2, '0');
@@ -34,13 +34,13 @@ export const getTodayDateString = (): string => {
   return `${yyyy}-${mm}-${dd}`;
 };
 
-export const checkIsSunday = (dateStr: string): boolean => {
+const checkIsSunday = (dateStr: string): boolean => {
   if (!dateStr) return false;
   const d = new Date(dateStr + 'T00:00:00');
   return d.getDay() === 0; // 0 is Sunday
 };
 
-export const checkDoctorIsPresent = (doctorName: string): boolean => {
+const checkDoctorIsPresent = (doctorName: string): boolean => {
   if (typeof window !== 'undefined') {
     const saved = localStorage.getItem('smile_dentos_admin_doctors');
     if (saved) {
@@ -83,10 +83,11 @@ export const AppointmentModal: React.FC<AppointmentModalProps> = ({
   const [date, setDate] = useState(getTodayDateString);
   const [submitted, setSubmitted] = useState(false);
   const [bookingAlert, setBookingAlert] = useState<{ type: 'error' | 'warning'; message: string } | null>(null);
+  const prevIsOpenRef = useRef(false);
 
   // Sync state whenever modal opens or external doctor/branch changes
   useEffect(() => {
-    if (isOpen) {
+    if (isOpen && !prevIsOpenRef.current) {
       setDate(getTodayDateString());
       setDoctorOverride(selectedDoctor || 'Dr. ATHIRA.S');
       setBranchOverride(
@@ -97,6 +98,7 @@ export const AppointmentModal: React.FC<AppointmentModalProps> = ({
       setSubmitted(false);
       setBookingAlert(null);
     }
+    prevIsOpenRef.current = isOpen;
   }, [isOpen, selectedDoctor, selectedBranch]);
 
   const isSunday = checkIsSunday(date);

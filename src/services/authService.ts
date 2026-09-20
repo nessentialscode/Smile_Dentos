@@ -13,9 +13,6 @@ export interface AdminSession {
 
 const STORAGE_KEY = 'smile_dentos_admin_session';
 
-export const isAuthorizedAdmin = (user: AdminUser | null | undefined): boolean => {
-  return Boolean(user && user.role === 'admin');
-};
 
 /**
  * Authenticates the administrator.
