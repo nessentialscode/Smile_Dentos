@@ -151,6 +151,9 @@ export const SpecialistsSection: React.FC<SpecialistsSectionProps> = ({
   // Detailed card only opens when cursor is placed on it (hover). Default is null.
   const [hoveredDoctorIndex, setHoveredDoctorIndex] = useState<number | null>(null);
   const [isMobile, setIsMobile] = useState(false);
+  const [windowWidth, setWindowWidth] = useState(
+    typeof window !== 'undefined' ? window.innerWidth : 1200
+  );
 
   // Desktop horizontal scroll offset (0 shows the first 5 doctors, scrolls right to show doctors 6 and 7)
   const [desktopOffset, setDesktopOffset] = useState(0);
@@ -172,7 +175,9 @@ export const SpecialistsSection: React.FC<SpecialistsSectionProps> = ({
 
   useEffect(() => {
     const handleResize = () => {
-      setIsMobile(window.innerWidth < 1180);
+      const w = window.innerWidth;
+      setWindowWidth(w);
+      setIsMobile(w < 1180);
     };
     handleResize();
     window.addEventListener('resize', handleResize);
@@ -209,7 +214,7 @@ export const SpecialistsSection: React.FC<SpecialistsSectionProps> = ({
   const handleArrowNav = (direction: 'left' | 'right') => {
     if (isMobile) {
       setHoveredDoctorIndex((prev) => {
-        const current = prev !== null ? prev : 2;
+        const current = prev !== null ? prev : 0;
         return direction === 'right'
           ? (current + 1) % doctors.length
           : (current - 1 + doctors.length) % doctors.length;
@@ -324,11 +329,16 @@ export const SpecialistsSection: React.FC<SpecialistsSectionProps> = ({
   const mobileSlotWidth = 160;
   const mobileSlotGap = 20;
 
-  // On mobile only, slide carousel if a doctor is selected
-  const mobileTranslateX =
-    hoveredDoctorIndex !== null
-      ? (2 - hoveredDoctorIndex) * (mobileSlotWidth + mobileSlotGap) + dragOffset
-      : dragOffset;
+  // On mobile only, slide carousel so active doctor slot is perfectly centered in viewport
+  const mobileTranslateX = (() => {
+    if (!isMobile) return 0;
+    if (hoveredDoctorIndex !== null) {
+      const slotCenter =
+        hoveredDoctorIndex * (mobileSlotWidth + mobileSlotGap) + mobileSlotWidth / 2;
+      return windowWidth / 2 - slotCenter + dragOffset;
+    }
+    return Math.max(16, (windowWidth - (mobileSlotWidth * 2 + mobileSlotGap)) / 2) + dragOffset;
+  })();
 
   return (
     <div
@@ -349,10 +359,10 @@ export const SpecialistsSection: React.FC<SpecialistsSectionProps> = ({
           position: 'relative',
           paddingTop: 0,
           paddingBottom: isMobile
-            ? (hoveredDoctorIndex !== null ? '430px' : '1.4rem')
+            ? (hoveredDoctorIndex !== null ? '170px' : '1.4rem')
             : (hoveredDoctorIndex !== null ? '2.8rem' : '1.4rem'),
           minHeight: isMobile
-            ? (hoveredDoctorIndex !== null ? '620px' : undefined)
+            ? undefined
             : '500px',
           transition: 'padding-bottom 0.4s cubic-bezier(0.16, 1, 0.3, 1), min-height 0.4s cubic-bezier(0.16, 1, 0.3, 1)',
           overflow: 'visible',
@@ -575,8 +585,8 @@ export const SpecialistsSection: React.FC<SpecialistsSectionProps> = ({
           style={{
             position: 'relative',
             maxWidth: 'calc(5 * 185px + 4 * clamp(56px, 4.8vw, 78px) + 180px)',
-            paddingLeft: isMobile ? '1rem' : '90px',
-            paddingRight: isMobile ? '1rem' : '90px',
+            paddingLeft: isMobile ? '0px' : '90px',
+            paddingRight: isMobile ? '0px' : '90px',
             margin: '0 auto',
             overflowX: 'clip',
             overflowY: 'visible',
@@ -664,7 +674,7 @@ export const SpecialistsSection: React.FC<SpecialistsSectionProps> = ({
             style={{
               display: 'flex',
               alignItems: 'flex-start',
-              justifyContent: isMobile ? 'center' : 'flex-start',
+              justifyContent: 'flex-start',
               gap: isMobile ? `${mobileSlotGap}px` : desktopSlotGap,
               overflow: 'visible',
               paddingTop: '0.5rem',
@@ -848,11 +858,12 @@ export const SpecialistsSection: React.FC<SpecialistsSectionProps> = ({
                   <AnimatePresence>
                     {isCardOpened && (
                       <motion.div
-                        initial={{ opacity: 0, scale: 0.92 }}
-                        animate={{ opacity: 1, scale: 1 }}
+                        initial={{ opacity: 0, scale: 0.92, x: isMobile ? '-50%' : 0 }}
+                        animate={{ opacity: 1, scale: 1, x: isMobile ? '-50%' : 0 }}
                         exit={{
                           opacity: 0,
                           scale: 0.92,
+                          x: isMobile ? '-50%' : 0,
                           transition: { duration: 0.18, ease: 'easeOut' },
                         }}
                         transition={{
@@ -863,8 +874,8 @@ export const SpecialistsSection: React.FC<SpecialistsSectionProps> = ({
                         }}
                         style={{
                           position: 'absolute',
-                          top: isMobile ? '64px' : '68px',
-                          left: isMobile ? 'calc(50% - 147px)' : 'calc(50% - 157px)',
+                          top: isMobile ? '58px' : '68px',
+                          left: isMobile ? '50%' : 'calc(50% - 157px)',
                           width: isMobile ? '295px' : '315px',
                           transformOrigin: '50% 0px',
                           backgroundColor: '#FFFFFF',
@@ -1201,8 +1212,13 @@ export const SpecialistsSection: React.FC<SpecialistsSectionProps> = ({
           backgroundColor: '#5E2614', // continuous brown behind and beneath
           position: 'relative',
           zIndex: 15,
-          paddingTop: '0.7rem',
-          paddingBottom: '0.7rem',
+          paddingTop: isMobile
+            ? (hoveredDoctorIndex !== null ? '2.8rem' : '0.7rem')
+            : '0.7rem',
+          paddingBottom: isMobile
+            ? (hoveredDoctorIndex !== null ? '1rem' : '0.7rem')
+            : '0.7rem',
+          transition: 'padding-top 0.3s cubic-bezier(0.16, 1, 0.3, 1)',
         }}
       >
         <div
