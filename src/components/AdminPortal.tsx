@@ -319,6 +319,19 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
     action: AppointmentStatus;
   } | null>(null);
 
+  const [isMobile, setIsMobile] = useState(() => {
+    return typeof window !== 'undefined' ? window.innerWidth < 768 : false;
+  });
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    handleResize();
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
   // Persistence
   useEffect(() => {
     try {
@@ -649,57 +662,36 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
               }}
               title="Refresh dataset"
               style={{
-                padding: '0.45rem',
+                padding: '0.35rem',
                 color: '#475569',
                 backgroundColor: 'transparent',
                 border: 'none',
-                borderRadius: '8px',
+                borderRadius: '6px',
                 cursor: 'pointer',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
               }}
             >
-              <RefreshCw size={16} className={loading ? 'animate-spin' : ''} />
+              <RefreshCw size={15} className={loading ? 'animate-spin' : ''} />
             </button>
 
-            <button
-              type="button"
-              onClick={onBackToSite}
-              style={{
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: '0.35rem',
-                fontSize: '0.75rem',
-                fontWeight: 700,
-                color: '#334155',
-                backgroundColor: '#F1F5F9',
-                padding: '0.45rem 0.75rem',
-                borderRadius: '8px',
-                border: '1px solid #E2E8F0',
-                cursor: 'pointer',
-                transition: 'background-color 0.15s',
-              }}
-              onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = '#E2E8F0')}
-              onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = '#F1F5F9')}
-            >
-              <ExternalLink size={13} color="#2563EB" />
-              <span>Public Website</span>
-            </button>
-
+            {/* Logout Button */}
             <button
               type="button"
               onClick={onLogout}
+              title="Sign Out"
               style={{
                 display: 'inline-flex',
                 alignItems: 'center',
+                justifyContent: 'center',
                 gap: '0.35rem',
                 fontSize: '0.75rem',
                 fontWeight: 700,
                 color: '#DC2626',
                 backgroundColor: '#FEF2F2',
-                padding: '0.45rem 0.75rem',
-                borderRadius: '8px',
+                padding: isMobile ? '0.35rem' : '0.42rem 0.75rem',
+                borderRadius: '6px',
                 border: '1px solid #FECACA',
                 cursor: 'pointer',
                 transition: 'background-color 0.15s',
@@ -708,7 +700,34 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
               onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = '#FEF2F2')}
             >
               <LogOut size={13} />
-              <span>Sign Out</span>
+              {!isMobile && <span>Sign Out</span>}
+            </button>
+
+            {/* Public Link Button: At the very end of the navbar. In mobile mode, ONLY the symbol is shown without text. */}
+            <button
+              type="button"
+              onClick={onBackToSite}
+              title="Public Website"
+              style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                gap: '0.35rem',
+                fontSize: '0.75rem',
+                fontWeight: 700,
+                color: '#1E40AF',
+                backgroundColor: '#EFF6FF',
+                padding: isMobile ? '0.35rem' : '0.42rem 0.75rem',
+                borderRadius: '6px',
+                border: '1px solid #BFDBFE',
+                cursor: 'pointer',
+                transition: 'all 0.15s ease',
+              }}
+              onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = '#DBEAFE')}
+              onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = '#EFF6FF')}
+            >
+              <ExternalLink size={14} color="#2563EB" />
+              {!isMobile && <span>Public Website</span>}
             </button>
           </div>
         </div>
