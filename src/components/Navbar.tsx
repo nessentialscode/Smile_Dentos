@@ -275,6 +275,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenBooking, onOpenAdmin }) =>
       <AnimatePresence>
         {mobileMenuOpen && (
           <motion.div
+            data-lenis-prevent="true"
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}

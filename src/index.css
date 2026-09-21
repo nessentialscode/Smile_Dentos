@@ -1,3 +1,5 @@
+@import 'lenis/dist/lenis.css';
+
 /* ==========================================================================
    SMILE DENTOS FAMILY DENTAL CLINIC — GLOBAL DESIGN SYSTEM & TOKENS
    ========================================================================== */
@@ -48,19 +50,37 @@ html {
   font-family: var(--font-main);
   background-color: var(--color-rust);
   color: var(--color-white);
-  scroll-behavior: smooth;
+  scroll-behavior: auto !important;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  overflow-x: hidden;
+  overflow-x: clip;
 }
 
 body {
   margin: 0;
   padding: 0;
-  overflow-x: hidden;
+  overflow-x: clip;
   line-height: 1.5;
   color: var(--color-white);
   background: var(--color-rust);
+}
+
+/* Lenis Smooth Scroll Configuration */
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+
+.lenis.lenis-stopped {
+  overflow: clip;
 }
 
 /* Accessibility */
@@ -126,6 +146,8 @@ a {
   .container {
     padding: 0 1rem;
   }
+}
+
 .no-scrollbar::-webkit-scrollbar {
   display: none;
 }

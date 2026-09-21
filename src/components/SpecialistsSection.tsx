@@ -387,7 +387,10 @@ export const SpecialistsSection: React.FC<SpecialistsSectionProps> = ({
           minHeight: isMobile
             ? undefined
             : '500px',
-          transition: 'padding-bottom 0.4s cubic-bezier(0.16, 1, 0.3, 1), min-height 0.4s cubic-bezier(0.16, 1, 0.3, 1)',
+          transition: isMobile
+            ? 'padding-bottom 0.32s cubic-bezier(0.16, 1, 0.3, 1)'
+            : 'padding-bottom 0.35s cubic-bezier(0.16, 1, 0.3, 1), min-height 0.35s cubic-bezier(0.16, 1, 0.3, 1)',
+          willChange: 'padding-bottom',
           overflow: 'visible',
           zIndex: 20,
           boxShadow: '0 15px 35px rgba(0, 0, 0, 0.14)',
@@ -693,7 +696,7 @@ export const SpecialistsSection: React.FC<SpecialistsSectionProps> = ({
             }}
             transition={
               isMobile
-                ? { duration: 0.24, ease: [0.22, 1, 0.36, 1] }
+                ? { duration: 0.32, ease: [0.16, 1, 0.3, 1] }
                 : {
                     type: 'spring',
                     stiffness: 280,
@@ -756,7 +759,7 @@ export const SpecialistsSection: React.FC<SpecialistsSectionProps> = ({
                       width: '100%',
                       opacity: isCardOpened ? 0 : 1,
                       visibility: isCardOpened ? 'hidden' : 'visible',
-                      transition: 'opacity 0.22s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.22s',
+                      transition: 'opacity 0.25s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.25s',
                       pointerEvents: isCardOpened ? 'none' : 'auto',
                     }}
                   >
@@ -1244,18 +1247,18 @@ export const SpecialistsSection: React.FC<SpecialistsSectionProps> = ({
                 return (
                   <motion.div
                     key="mobile-detail-card"
-                    initial={{ opacity: 0, y: 8, scale: 0.98, x: '-50%' }}
+                    initial={{ opacity: 0, y: 16, scale: 0.95, x: '-50%' }}
                     animate={{ opacity: 1, y: 0, scale: 1, x: '-50%' }}
                     exit={{
                       opacity: 0,
-                      y: 6,
-                      scale: 0.98,
+                      y: 10,
+                      scale: 0.95,
                       x: '-50%',
-                      transition: { duration: 0.18, ease: [0.22, 1, 0.36, 1] },
+                      transition: { duration: 0.22, ease: [0.16, 1, 0.3, 1] },
                     }}
                     transition={{
-                      duration: 0.22,
-                      ease: [0.22, 1, 0.36, 1],
+                      duration: 0.32,
+                      ease: [0.16, 1, 0.3, 1],
                     }}
                     style={{
                       position: 'absolute',
@@ -1272,6 +1275,7 @@ export const SpecialistsSection: React.FC<SpecialistsSectionProps> = ({
                       zIndex: 70,
                       marginBottom: '0px',
                       WebkitTapHighlightColor: 'transparent',
+                      willChange: 'transform, opacity',
                     }}
                     onClick={(e) => {
                       const target = e.target as HTMLElement | null;
@@ -1349,9 +1353,9 @@ export const SpecialistsSection: React.FC<SpecialistsSectionProps> = ({
                         src={doc.image}
                         alt={doc.name}
                         draggable={false}
-                        initial={{ opacity: 0.7 }}
-                        animate={{ opacity: 1 }}
-                        transition={{ duration: 0.2, ease: 'easeOut' }}
+                        initial={{ opacity: 0.4, scale: 0.94 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        transition={{ duration: 0.26, ease: [0.16, 1, 0.3, 1] }}
                         style={{
                           width: '100%',
                           height: '100%',
@@ -1365,9 +1369,9 @@ export const SpecialistsSection: React.FC<SpecialistsSectionProps> = ({
                     {/* Card Content with Fast Subtle Crossfade */}
                     <motion.div
                       key={doc.id}
-                      initial={{ opacity: 0.6 }}
-                      animate={{ opacity: 1 }}
-                      transition={{ duration: 0.2, ease: 'easeOut' }}
+                      initial={{ opacity: 0.4, y: 6 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.26, ease: [0.16, 1, 0.3, 1] }}
                     >
                       {/* Doctor Name */}
                       <h3
@@ -1602,12 +1606,13 @@ export const SpecialistsSection: React.FC<SpecialistsSectionProps> = ({
           position: 'relative',
           zIndex: 15,
           paddingTop: isMobile
-            ? (hoveredDoctorIndex !== null ? '2.8rem' : '0.7rem')
+            ? (hoveredDoctorIndex !== null ? '2.4rem' : '0.7rem')
             : '0.7rem',
           paddingBottom: isMobile
             ? (hoveredDoctorIndex !== null ? '1rem' : '0.7rem')
             : '0.7rem',
-          transition: 'padding-top 0.3s cubic-bezier(0.16, 1, 0.3, 1)',
+          transition: 'padding-top 0.32s cubic-bezier(0.16, 1, 0.3, 1), padding-bottom 0.32s cubic-bezier(0.16, 1, 0.3, 1)',
+          willChange: 'padding-top',
         }}
       >
         <div

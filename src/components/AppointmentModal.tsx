@@ -199,6 +199,7 @@ export const AppointmentModal: React.FC<AppointmentModalProps> = ({
 
           {/* Modal Container */}
           <motion.div
+            data-lenis-prevent="true"
             initial={{ opacity: 0, scale: 0.92, y: 20 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.92, y: 20 }}
@@ -282,7 +283,7 @@ export const AppointmentModal: React.FC<AppointmentModalProps> = ({
             </div>
 
             {/* Content Area */}
-            <div style={{ padding: 'clamp(1.25rem, 3vw, 2rem)', overflowY: 'auto' }}>
+            <div data-lenis-prevent="true" style={{ padding: 'clamp(1.25rem, 3vw, 2rem)', overflowY: 'auto' }}>
               {submitted ? (
                 <div style={{ textAlign: 'center', padding: '2rem 1rem' }}>
                   <div

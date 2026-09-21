@@ -15,6 +15,12 @@ import { AppointmentModal } from './components/AppointmentModal';
 import { AdminLoginPage } from './components/AdminLoginPage';
 import { AdminPortal } from './components/AdminPortal';
 import { getAdminSession, signOutAdmin, type AdminSession } from './services/authService';
+import {
+  initSmoothScroll,
+  smoothScrollTo,
+  pauseSmoothScroll,
+  resumeSmoothScroll,
+} from './utils/smoothScroll';
 
 export function App() {
   const [bookingOpen, setBookingOpen] = useState(false);
@@ -38,17 +44,31 @@ export function App() {
   );
 
   useEffect(() => {
-    const handleScroll = () => setScrollY(window.scrollY);
+    const lenis = initSmoothScroll();
+
     const handleResize = () => setIsMobile(window.innerWidth <= 768);
-    handleScroll();
     handleResize();
-    window.addEventListener('scroll', handleScroll, { passive: true });
+
+    const onScroll = (e: { scroll: number }) => {
+      setScrollY(e.scroll);
+    };
+    lenis.on('scroll', onScroll);
+
     window.addEventListener('resize', handleResize);
     return () => {
-      window.removeEventListener('scroll', handleScroll);
+      lenis.off('scroll', onScroll);
       window.removeEventListener('resize', handleResize);
     };
   }, []);
+
+  // Pause Lenis background scrolling when the booking modal is open
+  useEffect(() => {
+    if (bookingOpen) {
+      pauseSmoothScroll();
+    } else {
+      resumeSmoothScroll();
+    }
+  }, [bookingOpen]);
 
   // Moving book appointment button: on desktop always visible. On mobile, starts after landing page first view (~380px)
   const showMovingBookingButton = !isMobile || scrollY > 380;
@@ -73,13 +93,13 @@ export function App() {
     window.history.pushState({}, '', '/admin');
     setIsAdminRoute(true);
     setAdminSession(getAdminSession());
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    smoothScrollTo(0, { duration: 1.0 });
   };
 
   const handleBackToSite = () => {
     window.history.pushState({}, '', '/');
     setIsAdminRoute(false);
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    smoothScrollTo(0, { duration: 1.0 });
   };
 
   const handleLogout = async () => {
