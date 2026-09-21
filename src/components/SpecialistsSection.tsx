@@ -616,6 +616,7 @@ export const SpecialistsSection: React.FC<SpecialistsSectionProps> = ({
             touchAction: isMobile ? 'pan-y' : 'auto',
             userSelect: 'none',
             WebkitUserSelect: 'none',
+            WebkitTapHighlightColor: 'transparent',
             cursor: isMouseDown ? 'grabbing' : isDragging ? 'grabbing' : isMobile ? 'grab' : 'grab',
           }}
           onTouchStart={handleTouchStart}
@@ -651,6 +652,7 @@ export const SpecialistsSection: React.FC<SpecialistsSectionProps> = ({
                   color: '#FFFFFF',
                   zIndex: 80,
                   cursor: 'pointer',
+                  WebkitTapHighlightColor: 'transparent',
                 }}
               >
                 <ChevronLeft size={22} />
@@ -676,6 +678,7 @@ export const SpecialistsSection: React.FC<SpecialistsSectionProps> = ({
                   color: '#FFFFFF',
                   zIndex: 80,
                   cursor: 'pointer',
+                  WebkitTapHighlightColor: 'transparent',
                 }}
               >
                 <ChevronRight size={22} />
@@ -688,12 +691,16 @@ export const SpecialistsSection: React.FC<SpecialistsSectionProps> = ({
             animate={{
               x: isMobile ? mobileTranslateX : desktopOffset,
             }}
-            transition={{
-              type: 'spring',
-              stiffness: 280,
-              damping: 32,
-              mass: 0.9,
-            }}
+            transition={
+              isMobile
+                ? { duration: 0.24, ease: [0.22, 1, 0.36, 1] }
+                : {
+                    type: 'spring',
+                    stiffness: 280,
+                    damping: 32,
+                    mass: 0.9,
+                  }
+            }
             style={{
               display: 'flex',
               alignItems: 'flex-start',
@@ -877,355 +884,714 @@ export const SpecialistsSection: React.FC<SpecialistsSectionProps> = ({
                     </p>
                   </div>
 
-                  {/* Detailed Card: ONLY opens when cursor is placed on this doctor (hover) */}
-                  <AnimatePresence>
-                    {isCardOpened && (
-                      <motion.div
-                        initial={{ opacity: 0, scale: 0.92, x: isMobile ? '-50%' : 0 }}
-                        animate={{ opacity: 1, scale: 1, x: isMobile ? '-50%' : 0 }}
-                        exit={{
-                          opacity: 0,
-                          scale: 0.92,
-                          x: isMobile ? '-50%' : 0,
-                          transition: { duration: 0.18, ease: 'easeOut' },
-                        }}
-                        transition={{
-                          type: 'spring',
-                          stiffness: 350,
-                          damping: 30,
-                          mass: 0.8,
-                        }}
-                        style={{
-                          position: 'absolute',
-                          top: isMobile ? '58px' : '68px',
-                          left: isMobile ? '50%' : 'calc(50% - 157px)',
-                          width: isMobile ? '295px' : '315px',
-                          transformOrigin: '50% 0px',
-                          backgroundColor: '#FFFFFF',
-                          borderRadius: '28px',
-                          padding: 'clamp(4.8rem, 5.2vw, 5.3rem) 1.2rem 1.05rem 1.2rem',
-                          boxShadow:
-                            '0 20px 45px rgba(28, 12, 8, 0.22), 0 4px 14px rgba(0,0,0,0.06)',
-                          textAlign: 'center',
-                          zIndex: 70,
-                          marginBottom: '0px',
-                        }}
-                        onClick={(e) => {
-                          const target = e.target as HTMLElement | null;
-                          if (target && typeof target.closest === 'function' && (target.closest('button') || target.closest('a'))) {
-                            return;
-                          }
-                          e.stopPropagation();
-                          setHoveredDoctorIndex(null);
-                        }}
-                      >
-                        {/* Status Dot in the End of the Card (Top Right Corner: Green if Present, Red if Absent) */}
-                        <div
+                  {/* Detailed Card: Desktop local popup on hover/click */}
+                  {!isMobile && (
+                    <AnimatePresence>
+                      {isCardOpened && (
+                        <motion.div
+                          initial={{ opacity: 0, scale: 0.92, x: 0 }}
+                          animate={{ opacity: 1, scale: 1, x: 0 }}
+                          exit={{
+                            opacity: 0,
+                            scale: 0.92,
+                            x: 0,
+                            transition: { duration: 0.18, ease: 'easeOut' },
+                          }}
+                          transition={{
+                            type: 'spring',
+                            stiffness: 350,
+                            damping: 30,
+                            mass: 0.8,
+                          }}
                           style={{
                             position: 'absolute',
-                            top: '16px',
-                            right: '16px',
-                            display: 'flex',
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                            width: '24px',
-                            height: '24px',
-                            borderRadius: '50%',
-                            backgroundColor:
-                              doc.status === 'Present'
-                                ? 'rgba(34, 197, 94, 0.14)'
-                                : 'rgba(239, 68, 68, 0.14)',
-                            zIndex: 85,
+                            top: '68px',
+                            left: 'calc(50% - 157px)',
+                            width: '315px',
+                            transformOrigin: '50% 0px',
+                            backgroundColor: '#FFFFFF',
+                            borderRadius: '28px',
+                            padding: 'clamp(4.8rem, 5.2vw, 5.3rem) 1.2rem 1.05rem 1.2rem',
+                            boxShadow:
+                              '0 20px 45px rgba(28, 12, 8, 0.22), 0 4px 14px rgba(0,0,0,0.06)',
+                            textAlign: 'center',
+                            zIndex: 70,
+                            marginBottom: '0px',
                           }}
-                          title={doc.status === 'Present' ? 'Doctor Present' : 'Doctor Absent'}
-                        >
-                          <span
-                            style={{
-                              width: '10px',
-                              height: '10px',
-                              borderRadius: '50%',
-                              backgroundColor: doc.status === 'Present' ? '#22C55E' : '#EF4444',
-                              boxShadow:
-                                doc.status === 'Present'
-                                  ? '0 0 10px #22C55E, 0 0 4px #22C55E'
-                                  : '0 0 10px #EF4444, 0 0 4px #EF4444',
-                              display: 'inline-block',
-                            }}
-                          />
-                        </div>
-
-                        {/* Top Protruding Avatar (aligns directly over slot circle) */}
-                        <div
-                          style={{
-                            position: 'absolute',
-                            top: isMobile ? '-66px' : '-74px',
-                            left: '50%',
-                            transform: 'translateX(-50%)',
-                            width: isMobile ? '132px' : '144px',
-                            height: isMobile ? '132px' : '144px',
-                            borderRadius: '50%',
-                            backgroundColor: doc.bg,
-                            border: '4px solid #FFFFFF',
-                            overflow: 'hidden',
-                            boxShadow: `0 12px 28px rgba(0,0,0,0.18), 0 0 25px ${doc.bg}66`,
-                            display: 'flex',
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                            zIndex: 75,
+                          onClick={(e) => {
+                            const target = e.target as HTMLElement | null;
+                            if (target && typeof target.closest === 'function' && (target.closest('button') || target.closest('a'))) {
+                              return;
+                            }
+                            e.stopPropagation();
+                            setHoveredDoctorIndex(null);
                           }}
                         >
-                          <img
-                            src={doc.image}
-                            alt={doc.name}
-                            draggable={false}
-                            style={{
-                              width: '100%',
-                              height: '100%',
-                              objectFit: 'cover',
-                              objectPosition: doc.imagePosition || 'center',
-                              pointerEvents: 'none',
-                            }}
-                          />
-                        </div>
-
-                        {/* Card Content */}
-                        <div>
-                          {/* First line: Name of the Doctor in centre (shifted down to avoid avatar overlap) */}
-                          <h3
-                            style={{
-                              fontFamily: 'var(--font-display)',
-                              fontSize: 'clamp(1.16rem, 1.38vw, 1.32rem)',
-                              fontWeight: 700,
-                              color: '#18181B',
-                              margin: '0.45rem 0 0 0',
-                              textAlign: 'center',
-                              letterSpacing: '-0.02em',
-                              lineHeight: 1.22,
-                            }}
-                          >
-                            {doc.name}
-                          </h3>
-
-                          {/* Second line: Doctor Title in the centre */}
-                          <p
-                            style={{
-                              fontFamily: 'var(--font-main)',
-                              fontSize: '0.82rem',
-                              fontWeight: 600,
-                              color: '#7C3AED',
-                              marginTop: '0.2rem',
-                              marginBottom: '0.55rem',
-                              textAlign: 'center',
-                            }}
-                          >
-                            {doc.specialty}
-                          </p>
-
-                          {/* Bio Description */}
-                          <p
-                            style={{
-                              fontFamily: 'var(--font-main)',
-                              fontSize: '0.78rem',
-                              lineHeight: 1.38,
-                              color: '#4B5563',
-                              marginBottom: '0.65rem',
-                              textAlign: 'center',
-                            }}
-                          >
-                            {doc.bio}
-                          </p>
-
-                          {/* 3-Column Credentials / Stats */}
+                          {/* Status Dot in the End of the Card (Top Right Corner: Green if Present, Red if Absent) */}
                           <div
                             style={{
-                              display: 'grid',
-                              gridTemplateColumns: 'repeat(3, 1fr)',
-                              gap: '0.25rem',
-                              paddingTop: '0.5rem',
-                              paddingBottom: '0.5rem',
-                              borderTop: '1px solid rgba(0, 0, 0, 0.08)',
-                              borderBottom: '1px solid rgba(0, 0, 0, 0.08)',
-                              marginBottom: '0.8rem',
-                            }}
-                          >
-                            {/* Qualification */}
-                            <div
-                              style={{
-                                display: 'flex',
-                                flexDirection: 'column',
-                                alignItems: 'center',
-                                textAlign: 'center',
-                              }}
-                            >
-                              <GraduationCap
-                                size={19}
-                                color="#7C3AED"
-                                style={{ marginBottom: '0.3rem' }}
-                              />
-                              <span
-                                style={{
-                                  fontFamily: 'var(--font-main)',
-                                  fontSize: '0.74rem',
-                                  fontWeight: 700,
-                                  color: '#18181B',
-                                  lineHeight: 1.2,
-                                }}
-                              >
-                                {doc.degreeTitle}
-                              </span>
-                              <span
-                                style={{
-                                  fontFamily: 'var(--font-main)',
-                                  fontSize: '0.67rem',
-                                  fontWeight: 500,
-                                  color: '#6B7280',
-                                  lineHeight: 1.2,
-                                  marginTop: '2px',
-                                }}
-                              >
-                                {doc.degreeSub}
-                              </span>
-                            </div>
-
-                            {/* Experience */}
-                            <div
-                              style={{
-                                display: 'flex',
-                                flexDirection: 'column',
-                                alignItems: 'center',
-                                textAlign: 'center',
-                                borderLeft: '1px solid rgba(0, 0, 0, 0.08)',
-                                borderRight: '1px solid rgba(0, 0, 0, 0.08)',
-                              }}
-                            >
-                              <Award
-                                size={19}
-                                color="#7C3AED"
-                                style={{ marginBottom: '0.3rem' }}
-                              />
-                              <span
-                                style={{
-                                  fontFamily: 'var(--font-main)',
-                                  fontSize: '0.74rem',
-                                  fontWeight: 700,
-                                  color: '#18181B',
-                                  lineHeight: 1.2,
-                                }}
-                              >
-                                {doc.experienceTitle}
-                              </span>
-                              <span
-                                style={{
-                                  fontFamily: 'var(--font-main)',
-                                  fontSize: '0.67rem',
-                                  fontWeight: 500,
-                                  color: '#6B7280',
-                                  lineHeight: 1.2,
-                                  marginTop: '2px',
-                                }}
-                              >
-                                {doc.experienceSub}
-                              </span>
-                            </div>
-
-                            {/* Happy Patients */}
-                            <div
-                              style={{
-                                display: 'flex',
-                                flexDirection: 'column',
-                                alignItems: 'center',
-                                textAlign: 'center',
-                              }}
-                            >
-                              <Users
-                                size={19}
-                                color="#7C3AED"
-                                style={{ marginBottom: '0.3rem' }}
-                              />
-                              <span
-                                style={{
-                                  fontFamily: 'var(--font-main)',
-                                  fontSize: '0.74rem',
-                                  fontWeight: 700,
-                                  color: '#18181B',
-                                  lineHeight: 1.2,
-                                }}
-                              >
-                                {doc.patientsTitle}
-                              </span>
-                              <span
-                                style={{
-                                  fontFamily: 'var(--font-main)',
-                                  fontSize: '0.67rem',
-                                  fontWeight: 500,
-                                  color: '#6B7280',
-                                  lineHeight: 1.2,
-                                  marginTop: '2px',
-                                }}
-                              >
-                                {doc.patientsSub}
-                              </span>
-                            </div>
-                          </div>
-
-                          {/* Lime High-Contrast CTA Button */}
-                          <button
-                            type="button"
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              if (onOpenBooking) {
-                                onOpenBooking(doc.name);
-                              } else {
-                                const contactSection =
-                                  document.getElementById('branches');
-                                contactSection?.scrollIntoView({
-                                  behavior: 'smooth',
-                                });
-                              }
-                            }}
-                            style={{
-                              width: '100%',
-                              display: 'inline-flex',
+                              position: 'absolute',
+                              top: '16px',
+                              right: '16px',
+                              display: 'flex',
                               alignItems: 'center',
                               justifyContent: 'center',
-                              gap: '0.45rem',
-                              backgroundColor: 'var(--color-lime)',
-                              color: '#18181B',
-                              fontFamily: 'var(--font-main)',
-                              fontSize: '0.82rem',
-                              fontWeight: 700,
-                              padding: '0.6rem 1.1rem',
-                              borderRadius: 'var(--radius-pill)',
-                              boxShadow: '0 5px 16px rgba(215, 248, 70, 0.35)',
-                              cursor: 'pointer',
-                              border: 'none',
-                              transition:
-                                'transform 0.2s ease, box-shadow 0.2s ease',
+                              width: '24px',
+                              height: '24px',
+                              borderRadius: '50%',
+                              backgroundColor:
+                                doc.status === 'Present'
+                                  ? 'rgba(34, 197, 94, 0.14)'
+                                  : 'rgba(239, 68, 68, 0.14)',
+                              zIndex: 85,
                             }}
-                            onMouseEnter={(e) => {
-                              e.currentTarget.style.transform =
-                                'translateY(-2px)';
-                              e.currentTarget.style.boxShadow =
-                                '0 10px 24px rgba(215, 248, 70, 0.55)';
-                            }}
-                            onMouseLeave={(e) => {
-                              e.currentTarget.style.transform =
-                                'translateY(0)';
-                              e.currentTarget.style.boxShadow =
-                                '0 6px 18px rgba(215, 248, 70, 0.4)';
+                            title={doc.status === 'Present' ? 'Doctor Present' : 'Doctor Absent'}
+                          >
+                            <span
+                              style={{
+                                width: '10px',
+                                height: '10px',
+                                borderRadius: '50%',
+                                backgroundColor: doc.status === 'Present' ? '#22C55E' : '#EF4444',
+                                boxShadow:
+                                  doc.status === 'Present'
+                                    ? '0 0 10px #22C55E, 0 0 4px #22C55E'
+                                    : '0 0 10px #EF4444, 0 0 4px #EF4444',
+                                display: 'inline-block',
+                              }}
+                            />
+                          </div>
+
+                          {/* Top Protruding Avatar (aligns directly over slot circle) */}
+                          <div
+                            style={{
+                              position: 'absolute',
+                              top: '-74px',
+                              left: '50%',
+                              transform: 'translateX(-50%)',
+                              width: '144px',
+                              height: '144px',
+                              borderRadius: '50%',
+                              backgroundColor: doc.bg,
+                              border: '4px solid #FFFFFF',
+                              overflow: 'hidden',
+                              boxShadow: `0 12px 28px rgba(0,0,0,0.18), 0 0 25px ${doc.bg}66`,
+                              display: 'flex',
+                              alignItems: 'center',
+                              justifyContent: 'center',
+                              zIndex: 75,
                             }}
                           >
-                            <span>View Full Profile</span>
-                            <ArrowRight size={16} strokeWidth={2.4} />
-                          </button>
-                        </div>
-                      </motion.div>
-                    )}
-                  </AnimatePresence>
+                            <img
+                              src={doc.image}
+                              alt={doc.name}
+                              draggable={false}
+                              style={{
+                                width: '100%',
+                                height: '100%',
+                                objectFit: 'cover',
+                                objectPosition: doc.imagePosition || 'center',
+                                pointerEvents: 'none',
+                              }}
+                            />
+                          </div>
+
+                          {/* Card Content */}
+                          <div>
+                            {/* First line: Name of the Doctor in centre */}
+                            <h3
+                              style={{
+                                fontFamily: 'var(--font-display)',
+                                fontSize: 'clamp(1.16rem, 1.38vw, 1.32rem)',
+                                fontWeight: 700,
+                                color: '#18181B',
+                                margin: '0.45rem 0 0 0',
+                                textAlign: 'center',
+                                letterSpacing: '-0.02em',
+                                lineHeight: 1.22,
+                              }}
+                            >
+                              {doc.name}
+                            </h3>
+
+                            {/* Second line: Doctor Title in the centre */}
+                            <p
+                              style={{
+                                fontFamily: 'var(--font-main)',
+                                fontSize: '0.82rem',
+                                fontWeight: 600,
+                                color: '#7C3AED',
+                                marginTop: '0.2rem',
+                                marginBottom: '0.55rem',
+                                textAlign: 'center',
+                              }}
+                            >
+                              {doc.specialty}
+                            </p>
+
+                            {/* Bio Description */}
+                            <p
+                              style={{
+                                fontFamily: 'var(--font-main)',
+                                fontSize: '0.78rem',
+                                lineHeight: 1.38,
+                                color: '#4B5563',
+                                marginBottom: '0.65rem',
+                                textAlign: 'center',
+                              }}
+                            >
+                              {doc.bio}
+                            </p>
+
+                            {/* 3-Column Credentials / Stats */}
+                            <div
+                              style={{
+                                display: 'grid',
+                                gridTemplateColumns: 'repeat(3, 1fr)',
+                                gap: '0.25rem',
+                                paddingTop: '0.5rem',
+                                paddingBottom: '0.5rem',
+                                borderTop: '1px solid rgba(0, 0, 0, 0.08)',
+                                borderBottom: '1px solid rgba(0, 0, 0, 0.08)',
+                                marginBottom: '0.8rem',
+                              }}
+                            >
+                              {/* Qualification */}
+                              <div
+                                style={{
+                                  display: 'flex',
+                                  flexDirection: 'column',
+                                  alignItems: 'center',
+                                  textAlign: 'center',
+                                }}
+                              >
+                                <GraduationCap
+                                  size={19}
+                                  color="#7C3AED"
+                                  style={{ marginBottom: '0.3rem' }}
+                                />
+                                <span
+                                  style={{
+                                    fontFamily: 'var(--font-main)',
+                                    fontSize: '0.74rem',
+                                    fontWeight: 700,
+                                    color: '#18181B',
+                                    lineHeight: 1.2,
+                                  }}
+                                >
+                                  {doc.degreeTitle}
+                                </span>
+                                <span
+                                  style={{
+                                    fontFamily: 'var(--font-main)',
+                                    fontSize: '0.67rem',
+                                    fontWeight: 500,
+                                    color: '#6B7280',
+                                    lineHeight: 1.2,
+                                    marginTop: '2px',
+                                  }}
+                                >
+                                  {doc.degreeSub}
+                                </span>
+                              </div>
+
+                              {/* Experience */}
+                              <div
+                                style={{
+                                  display: 'flex',
+                                  flexDirection: 'column',
+                                  alignItems: 'center',
+                                  textAlign: 'center',
+                                  borderLeft: '1px solid rgba(0, 0, 0, 0.08)',
+                                  borderRight: '1px solid rgba(0, 0, 0, 0.08)',
+                                }}
+                              >
+                                <Award
+                                  size={19}
+                                  color="#7C3AED"
+                                  style={{ marginBottom: '0.3rem' }}
+                                />
+                                <span
+                                  style={{
+                                    fontFamily: 'var(--font-main)',
+                                    fontSize: '0.74rem',
+                                    fontWeight: 700,
+                                    color: '#18181B',
+                                    lineHeight: 1.2,
+                                  }}
+                                >
+                                  {doc.experienceTitle}
+                                </span>
+                                <span
+                                  style={{
+                                    fontFamily: 'var(--font-main)',
+                                    fontSize: '0.67rem',
+                                    fontWeight: 500,
+                                    color: '#6B7280',
+                                    lineHeight: 1.2,
+                                    marginTop: '2px',
+                                  }}
+                                >
+                                  {doc.experienceSub}
+                                </span>
+                              </div>
+
+                              {/* Happy Patients */}
+                              <div
+                                style={{
+                                  display: 'flex',
+                                  flexDirection: 'column',
+                                  alignItems: 'center',
+                                  textAlign: 'center',
+                                }}
+                              >
+                                <Users
+                                  size={19}
+                                  color="#7C3AED"
+                                  style={{ marginBottom: '0.3rem' }}
+                                />
+                                <span
+                                  style={{
+                                    fontFamily: 'var(--font-main)',
+                                    fontSize: '0.74rem',
+                                    fontWeight: 700,
+                                    color: '#18181B',
+                                    lineHeight: 1.2,
+                                  }}
+                                >
+                                  {doc.patientsTitle}
+                                </span>
+                                <span
+                                  style={{
+                                    fontFamily: 'var(--font-main)',
+                                    fontSize: '0.67rem',
+                                    fontWeight: 500,
+                                    color: '#6B7280',
+                                    lineHeight: 1.2,
+                                    marginTop: '2px',
+                                  }}
+                                >
+                                  {doc.patientsSub}
+                                </span>
+                              </div>
+                            </div>
+
+                            {/* Lime High-Contrast CTA Button */}
+                            <button
+                              type="button"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                if (onOpenBooking) {
+                                  onOpenBooking(doc.name);
+                                } else {
+                                  const contactSection =
+                                    document.getElementById('branches');
+                                  contactSection?.scrollIntoView({
+                                    behavior: 'smooth',
+                                  });
+                                }
+                              }}
+                              style={{
+                                width: '100%',
+                                display: 'inline-flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                gap: '0.45rem',
+                                backgroundColor: 'var(--color-lime)',
+                                color: '#18181B',
+                                fontFamily: 'var(--font-main)',
+                                fontSize: '0.82rem',
+                                fontWeight: 700,
+                                padding: '0.6rem 1.1rem',
+                                borderRadius: 'var(--radius-pill)',
+                                boxShadow: '0 5px 16px rgba(215, 248, 70, 0.35)',
+                                cursor: 'pointer',
+                                border: 'none',
+                                transition:
+                                  'transform 0.2s ease, box-shadow 0.2s ease',
+                              }}
+                              onMouseEnter={(e) => {
+                                e.currentTarget.style.transform =
+                                  'translateY(-2px)';
+                                e.currentTarget.style.boxShadow =
+                                  '0 10px 24px rgba(215, 248, 70, 0.55)';
+                              }}
+                              onMouseLeave={(e) => {
+                                e.currentTarget.style.transform =
+                                  'translateY(0)';
+                                e.currentTarget.style.boxShadow =
+                                  '0 6px 18px rgba(215, 248, 70, 0.4)';
+                              }}
+                            >
+                              <span>View Full Profile</span>
+                              <ArrowRight size={16} strokeWidth={2.4} />
+                            </button>
+                          </div>
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
+                  )}
                 </div>
               );
             })}
           </motion.div>
+
+          {/* Mobile Dedicated Detail Card: Smooth, lightweight, fast, stable card */}
+          {isMobile && (
+            <AnimatePresence>
+              {hoveredDoctorIndex !== null && doctors[hoveredDoctorIndex] && (() => {
+                const doc = doctors[hoveredDoctorIndex];
+                return (
+                  <motion.div
+                    key="mobile-detail-card"
+                    initial={{ opacity: 0, y: 8, scale: 0.98, x: '-50%' }}
+                    animate={{ opacity: 1, y: 0, scale: 1, x: '-50%' }}
+                    exit={{
+                      opacity: 0,
+                      y: 6,
+                      scale: 0.98,
+                      x: '-50%',
+                      transition: { duration: 0.18, ease: [0.22, 1, 0.36, 1] },
+                    }}
+                    transition={{
+                      duration: 0.22,
+                      ease: [0.22, 1, 0.36, 1],
+                    }}
+                    style={{
+                      position: 'absolute',
+                      top: '66px',
+                      left: `calc(50% + ${dragOffset}px)`,
+                      width: '295px',
+                      transformOrigin: '50% 0px',
+                      backgroundColor: '#FFFFFF',
+                      borderRadius: '28px',
+                      padding: 'clamp(4.8rem, 5.2vw, 5.3rem) 1.2rem 1.05rem 1.2rem',
+                      boxShadow:
+                        '0 20px 45px rgba(28, 12, 8, 0.22), 0 4px 14px rgba(0,0,0,0.06)',
+                      textAlign: 'center',
+                      zIndex: 70,
+                      marginBottom: '0px',
+                      WebkitTapHighlightColor: 'transparent',
+                    }}
+                    onClick={(e) => {
+                      const target = e.target as HTMLElement | null;
+                      if (
+                        target &&
+                        typeof target.closest === 'function' &&
+                        (target.closest('button') || target.closest('a'))
+                      ) {
+                        return;
+                      }
+                      e.stopPropagation();
+                      setHoveredDoctorIndex(null);
+                    }}
+                  >
+                    {/* Status Dot in Top Right Corner */}
+                    <div
+                      style={{
+                        position: 'absolute',
+                        top: '16px',
+                        right: '16px',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        width: '24px',
+                        height: '24px',
+                        borderRadius: '50%',
+                        backgroundColor:
+                          doc.status === 'Present'
+                            ? 'rgba(34, 197, 94, 0.14)'
+                            : 'rgba(239, 68, 68, 0.14)',
+                        zIndex: 85,
+                        transition: 'background-color 0.2s ease',
+                      }}
+                      title={doc.status === 'Present' ? 'Doctor Present' : 'Doctor Absent'}
+                    >
+                      <span
+                        style={{
+                          width: '10px',
+                          height: '10px',
+                          borderRadius: '50%',
+                          backgroundColor: doc.status === 'Present' ? '#22C55E' : '#EF4444',
+                          boxShadow:
+                            doc.status === 'Present'
+                              ? '0 0 10px #22C55E, 0 0 4px #22C55E'
+                              : '0 0 10px #EF4444, 0 0 4px #EF4444',
+                          display: 'inline-block',
+                          transition: 'background-color 0.2s ease, box-shadow 0.2s ease',
+                        }}
+                      />
+                    </div>
+
+                    {/* Top Protruding Avatar */}
+                    <div
+                      style={{
+                        position: 'absolute',
+                        top: '-66px',
+                        left: '50%',
+                        transform: 'translateX(-50%)',
+                        width: '132px',
+                        height: '132px',
+                        borderRadius: '50%',
+                        backgroundColor: doc.bg,
+                        border: '4px solid #FFFFFF',
+                        overflow: 'hidden',
+                        boxShadow: `0 12px 28px rgba(0,0,0,0.18), 0 0 25px ${doc.bg}66`,
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        zIndex: 75,
+                        transition: 'background-color 0.2s ease, box-shadow 0.2s ease',
+                      }}
+                    >
+                      <motion.img
+                        key={doc.id}
+                        src={doc.image}
+                        alt={doc.name}
+                        draggable={false}
+                        initial={{ opacity: 0.7 }}
+                        animate={{ opacity: 1 }}
+                        transition={{ duration: 0.2, ease: 'easeOut' }}
+                        style={{
+                          width: '100%',
+                          height: '100%',
+                          objectFit: 'cover',
+                          objectPosition: doc.imagePosition || 'center',
+                          pointerEvents: 'none',
+                        }}
+                      />
+                    </div>
+
+                    {/* Card Content with Fast Subtle Crossfade */}
+                    <motion.div
+                      key={doc.id}
+                      initial={{ opacity: 0.6 }}
+                      animate={{ opacity: 1 }}
+                      transition={{ duration: 0.2, ease: 'easeOut' }}
+                    >
+                      {/* Doctor Name */}
+                      <h3
+                        style={{
+                          fontFamily: 'var(--font-display)',
+                          fontSize: 'clamp(1.16rem, 1.38vw, 1.32rem)',
+                          fontWeight: 700,
+                          color: '#18181B',
+                          margin: '0.45rem 0 0 0',
+                          textAlign: 'center',
+                          letterSpacing: '-0.02em',
+                          lineHeight: 1.22,
+                        }}
+                      >
+                        {doc.name}
+                      </h3>
+
+                      {/* Doctor Title */}
+                      <p
+                        style={{
+                          fontFamily: 'var(--font-main)',
+                          fontSize: '0.82rem',
+                          fontWeight: 600,
+                          color: '#7C3AED',
+                          marginTop: '0.2rem',
+                          marginBottom: '0.55rem',
+                          textAlign: 'center',
+                        }}
+                      >
+                        {doc.specialty}
+                      </p>
+
+                      {/* Bio Description */}
+                      <p
+                        style={{
+                          fontFamily: 'var(--font-main)',
+                          fontSize: '0.78rem',
+                          lineHeight: 1.38,
+                          color: '#4B5563',
+                          marginBottom: '0.65rem',
+                          textAlign: 'center',
+                        }}
+                      >
+                        {doc.bio}
+                      </p>
+
+                      {/* 3-Column Credentials */}
+                      <div
+                        style={{
+                          display: 'grid',
+                          gridTemplateColumns: 'repeat(3, 1fr)',
+                          gap: '0.25rem',
+                          paddingTop: '0.5rem',
+                          paddingBottom: '0.5rem',
+                          borderTop: '1px solid rgba(0, 0, 0, 0.08)',
+                          borderBottom: '1px solid rgba(0, 0, 0, 0.08)',
+                          marginBottom: '0.8rem',
+                        }}
+                      >
+                        {/* Qualification */}
+                        <div
+                          style={{
+                            display: 'flex',
+                            flexDirection: 'column',
+                            alignItems: 'center',
+                            textAlign: 'center',
+                          }}
+                        >
+                          <GraduationCap
+                            size={19}
+                            color="#7C3AED"
+                            style={{ marginBottom: '0.3rem' }}
+                          />
+                          <span
+                            style={{
+                              fontFamily: 'var(--font-main)',
+                              fontSize: '0.74rem',
+                              fontWeight: 700,
+                              color: '#18181B',
+                              lineHeight: 1.2,
+                            }}
+                          >
+                            {doc.degreeTitle}
+                          </span>
+                          <span
+                            style={{
+                              fontFamily: 'var(--font-main)',
+                              fontSize: '0.67rem',
+                              fontWeight: 500,
+                              color: '#6B7280',
+                              lineHeight: 1.2,
+                              marginTop: '2px',
+                            }}
+                          >
+                            {doc.degreeSub}
+                          </span>
+                        </div>
+
+                        {/* Experience */}
+                        <div
+                          style={{
+                            display: 'flex',
+                            flexDirection: 'column',
+                            alignItems: 'center',
+                            textAlign: 'center',
+                            borderLeft: '1px solid rgba(0, 0, 0, 0.08)',
+                            borderRight: '1px solid rgba(0, 0, 0, 0.08)',
+                          }}
+                        >
+                          <Award
+                            size={19}
+                            color="#7C3AED"
+                            style={{ marginBottom: '0.3rem' }}
+                          />
+                          <span
+                            style={{
+                              fontFamily: 'var(--font-main)',
+                              fontSize: '0.74rem',
+                              fontWeight: 700,
+                              color: '#18181B',
+                              lineHeight: 1.2,
+                            }}
+                          >
+                            {doc.experienceTitle}
+                          </span>
+                          <span
+                            style={{
+                              fontFamily: 'var(--font-main)',
+                              fontSize: '0.67rem',
+                              fontWeight: 500,
+                              color: '#6B7280',
+                              lineHeight: 1.2,
+                              marginTop: '2px',
+                            }}
+                          >
+                            {doc.experienceSub}
+                          </span>
+                        </div>
+
+                        {/* Happy Patients */}
+                        <div
+                          style={{
+                            display: 'flex',
+                            flexDirection: 'column',
+                            alignItems: 'center',
+                            textAlign: 'center',
+                          }}
+                        >
+                          <Users
+                            size={19}
+                            color="#7C3AED"
+                            style={{ marginBottom: '0.3rem' }}
+                          />
+                          <span
+                            style={{
+                              fontFamily: 'var(--font-main)',
+                              fontSize: '0.74rem',
+                              fontWeight: 700,
+                              color: '#18181B',
+                              lineHeight: 1.2,
+                            }}
+                          >
+                            {doc.patientsTitle}
+                          </span>
+                          <span
+                            style={{
+                              fontFamily: 'var(--font-main)',
+                              fontSize: '0.67rem',
+                              fontWeight: 500,
+                              color: '#6B7280',
+                              lineHeight: 1.2,
+                              marginTop: '2px',
+                            }}
+                          >
+                            {doc.patientsSub}
+                          </span>
+                        </div>
+                      </div>
+
+                      {/* Lime High-Contrast CTA Button */}
+                      <button
+                        type="button"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          if (onOpenBooking) {
+                            onOpenBooking(doc.name);
+                          } else {
+                            const contactSection =
+                              document.getElementById('branches');
+                            contactSection?.scrollIntoView({
+                              behavior: 'smooth',
+                            });
+                          }
+                        }}
+                        style={{
+                          width: '100%',
+                          display: 'inline-flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          gap: '0.45rem',
+                          backgroundColor: 'var(--color-lime)',
+                          color: '#18181B',
+                          fontFamily: 'var(--font-main)',
+                          fontSize: '0.82rem',
+                          fontWeight: 700,
+                          padding: '0.6rem 1.1rem',
+                          borderRadius: 'var(--radius-pill)',
+                          boxShadow: '0 5px 16px rgba(215, 248, 70, 0.35)',
+                          cursor: 'pointer',
+                          border: 'none',
+                          transition:
+                            'transform 0.2s ease, box-shadow 0.2s ease',
+                          WebkitTapHighlightColor: 'transparent',
+                        }}
+                      >
+                        <span>View Full Profile</span>
+                        <ArrowRight size={16} strokeWidth={2.4} />
+                      </button>
+                    </motion.div>
+                  </motion.div>
+                );
+              })()}
+            </AnimatePresence>
+          )}
         </div>
       </section>
 
