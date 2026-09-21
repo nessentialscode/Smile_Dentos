@@ -69,10 +69,11 @@ const defaultDoctors: DoctorRecord[] = [
   { id: 'doc-1', name: 'Dr. ATHIRA.S', specialty: 'Chief Dental Surgeon', is_present: true },
   { id: 'doc-2', name: 'Dr. LIJEESH KADAMBIL', specialty: 'Dental Surgeon', is_present: true },
   { id: 'doc-3', name: 'Dr. BHAGYA.R', specialty: 'Lady Dental Surgeon', is_present: true },
-  { id: 'doc-4', name: 'Dr. AYISHA NIZMIYA.K', specialty: 'Consultant Orthodontist', is_present: true },
-  { id: 'doc-5', name: 'Dr. SHANAHAS', specialty: 'Consultant Orthodontist', is_present: false },
+  { id: 'doc-4', name: 'Dr. AYISHA NIZMIYA', specialty: 'Orthodontist | Invisalign® Provider', is_present: true },
+  { id: 'doc-5', name: 'Dr. SHANAHAS', specialty: 'Orthodontist | Smile Dentos', is_present: false },
   { id: 'doc-6', name: 'Dr. JABIR KOTTAMMAL', specialty: 'Oral & Maxillofacial Surgeon', is_present: true },
   { id: 'doc-7', name: 'Dr. MOHAMMED HARIS', specialty: 'Consultant Periodontist', is_present: false },
+  { id: 'doc-8', name: 'Dr. VIPIN DAS', specialty: 'Oral & Maxillofacial Surgeon', is_present: true },
 ];
 
 const defaultAppointments: Appointment[] = [
@@ -93,7 +94,7 @@ const defaultAppointments: Appointment[] = [
     id: 'APT-102',
     full_name: 'Rahul Menon',
     phone: '098471 23901',
-    doctor: 'Dr. AYISHA NIZMIYA.K',
+    doctor: 'Dr. AYISHA NIZMIYA',
     service: 'Orthodontics',
     branch: 'Valanchery Main Clinic',
     preferred_date: '2026-09-20',

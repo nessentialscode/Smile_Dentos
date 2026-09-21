@@ -50,11 +50,11 @@ const doctors: Doctor[] = [
     image: '/images/doctor_lijeesh_kadambil.jpg',
     imagePosition: 'center',
     bg: '#C5AEE3', // Soft Lilac / Purple
-    bio: 'Expert dental surgeon dedicated to gentle root canal therapies, microscopic endodontics, and tooth preservation.',
+    bio: 'Highly experienced dental surgeon specializing in aesthetic dentistry, smile correction, root canal treatment, and precision loupes-assisted care.',
     status: 'Present',
     degreeTitle: 'BDS',
     degreeSub: '(Dental Surgery)',
-    experienceTitle: '8+ Years',
+    experienceTitle: '11+ Years',
     experienceSub: 'Experience',
     patientsTitle: '2,800+',
     patientsSub: 'Happy Patients',
@@ -76,14 +76,15 @@ const doctors: Doctor[] = [
   },
   {
     id: 'ayisha-nizmiya',
-    name: 'Dr. AYISHA NIZMIYA.K',
-    specialty: 'Consultant Orthodontist',
-    image: '/images/doctor_steven_lee.jpg',
-    bg: '#82B3EB', // Ocean Sky Blue
-    bio: 'Consultant orthodontist crafting aesthetic smile makeovers, clear aligner solutions, and digital teeth alignment.',
+    name: 'Dr. AYISHA NIZMIYA',
+    specialty: 'Orthodontist | Invisalign® Provider',
+    image: '/images/doctor_ayisha_nizmiya.jpg',
+    imagePosition: 'center',
+    bg: '#9EA8B4', // Studio Grey
+    bio: 'Dedicated Orthodontist and Invisalign® Certified Provider offering personalized clear aligners, modern braces, and comprehensive smile alignment.',
     status: 'Present',
     degreeTitle: 'BDS, MDS',
-    degreeSub: '(Orthodontics)',
+    degreeSub: '(Invisalign® Cert.)',
     experienceTitle: '7+ Years',
     experienceSub: 'Experience',
     patientsTitle: '1,900+',
@@ -92,10 +93,11 @@ const doctors: Doctor[] = [
   {
     id: 'shanahas',
     name: 'Dr. SHANAHAS',
-    specialty: 'Consultant Orthodontist',
-    image: '/images/doctor_jennifer_kim.jpg',
-    bg: '#7CBF6B', // Fresh Sage Green
-    bio: 'Dedicated consultant orthodontist providing personalized aligner therapies, invisible braces, and adolescent correction.',
+    specialty: 'Orthodontist | Smile Dentos',
+    image: '/images/doctor_shanahas.jpg',
+    imagePosition: 'center',
+    bg: '#A5DAA8', // Light Pastel Green
+    bio: 'Dedicated Orthodontist specializing in bite correction, crooked teeth alignment, fixed orthodontics, and aesthetic smile solutions.',
     status: 'Absent',
     degreeTitle: 'BDS, MDS',
     degreeSub: '(Orthodontics)',
@@ -133,6 +135,22 @@ const doctors: Doctor[] = [
     experienceTitle: '8+ Years',
     experienceSub: 'Experience',
     patientsTitle: '1,800+',
+    patientsSub: 'Happy Patients',
+  },
+  {
+    id: 'vipin-das',
+    name: 'Dr. VIPIN DAS',
+    specialty: 'Oral & Maxillofacial Surgeon',
+    image: '/images/doctor_vipin_das.jpg',
+    imagePosition: 'center',
+    bg: '#8EA7E9', // Soft Light Periwinkle
+    bio: 'Experienced Oral & Maxillofacial Surgeon specializing in impacted tooth removal, complex extractions, and advanced mouth & jaw surgery.',
+    status: 'Present',
+    degreeTitle: 'BDS, MDS',
+    degreeSub: '(Maxillofacial)',
+    experienceTitle: '10+ Years',
+    experienceSub: 'Experience',
+    patientsTitle: '2,900+',
     patientsSub: 'Happy Patients',
   },
 ];
@@ -220,9 +238,9 @@ export const SpecialistsSection: React.FC<SpecialistsSectionProps> = ({
           : (current - 1 + doctors.length) % doctors.length;
       });
     } else {
-      // Step by one slot + gap (~260px). With 7 doctors and 5 visible, max scroll is -520px
+      // Step by one slot + gap (~260px). With 5 visible, max scroll is -(doctors.length - 5) * step
       const step = 260;
-      const maxOffset = -520;
+      const maxOffset = -Math.max(0, doctors.length - 5) * step;
       setDesktopOffset((prev) => {
         if (direction === 'right') {
           return Math.max(prev - step, maxOffset);
@@ -249,25 +267,30 @@ export const SpecialistsSection: React.FC<SpecialistsSectionProps> = ({
       setHasDragged(true);
       setHoveredDoctorIndex(null);
     }
-    setDesktopOffset(Math.max(-535, Math.min(15, initialDesktopOffset + diff)));
+    const step = 260;
+    const maxOffset = -Math.max(0, doctors.length - 5) * step;
+    setDesktopOffset(Math.max(maxOffset - 15, Math.min(15, initialDesktopOffset + diff)));
   };
 
   const handleMouseUp = () => {
     if (!isMouseDown) return;
     setIsMouseDown(false);
+    const step = 260;
+    const maxOffset = -Math.max(0, doctors.length - 5) * step;
     // Snap to nearest slot
     setDesktopOffset((prev) => {
-      if (prev > -130) return 0;
-      if (prev > -390) return -260;
-      return -520;
+      const rounded = Math.round(prev / step) * step;
+      return Math.max(maxOffset, Math.min(0, rounded));
     });
     setTimeout(() => setHasDragged(false), 60);
   };
 
   const handleWheel = (e: React.WheelEvent) => {
     if (isMobile) return;
+    const step = 260;
+    const maxOffset = -Math.max(0, doctors.length - 5) * step;
     if (Math.abs(e.deltaX) > 4) {
-      setDesktopOffset((prev) => Math.max(-520, Math.min(0, prev - e.deltaX * 1.1)));
+      setDesktopOffset((prev) => Math.max(maxOffset, Math.min(0, prev - e.deltaX * 1.1)));
     }
   };
 

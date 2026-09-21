@@ -20,10 +20,11 @@ const DOCTOR_OPTIONS: DoctorOption[] = [
   { name: 'Dr. ATHIRA.S', specialty: 'Chief Dental Surgeon', defaultPresent: true },
   { name: 'Dr. LIJEESH KADAMBIL', specialty: 'Dental Surgeon', defaultPresent: true },
   { name: 'Dr. BHAGYA.R', specialty: 'Lady Dental Surgeon', defaultPresent: true },
-  { name: 'Dr. AYISHA NIZMIYA.K', specialty: 'Consultant Orthodontist', defaultPresent: true },
-  { name: 'Dr. SHANAHAS', specialty: 'Consultant Orthodontist', defaultPresent: false },
+  { name: 'Dr. AYISHA NIZMIYA', specialty: 'Orthodontist | Invisalign® Provider', defaultPresent: true },
+  { name: 'Dr. SHANAHAS', specialty: 'Orthodontist | Smile Dentos', defaultPresent: false },
   { name: 'Dr. JABIR KOTTAMMAL', specialty: 'Oral & Maxillofacial Surgeon', defaultPresent: true },
   { name: 'Dr. MOHAMMED HARIS', specialty: 'Consultant Periodontist', defaultPresent: false },
+  { name: 'Dr. VIPIN DAS', specialty: 'Oral & Maxillofacial Surgeon', defaultPresent: true },
 ];
 
 const getTodayDateString = (): string => {
