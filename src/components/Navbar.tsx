@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, Phone, MapPin } from 'lucide-react';
+import { X, Phone, MapPin, Shield } from 'lucide-react';
+import { WhatsAppIcon } from './WhatsAppIcon';
 
 interface NavbarProps {
   onOpenBooking: () => void;
@@ -172,6 +173,39 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenBooking, onOpenAdmin }) =>
                   <span>Admin</span>
                 </button>
               )}
+
+              {/* WhatsApp Contact Button (Desktop mode only) */}
+              <a
+                href="https://wa.me/919495964737?text=Hello%20Smile%20Dentos%2C%20I%20would%20like%20to%20inquire%20about%20an%20appointment."
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Contact through WhatsApp"
+                title="Chat on WhatsApp: 094959 64737"
+                style={{
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  width: '36px',
+                  height: '36px',
+                  borderRadius: '50%',
+                  backgroundColor: '#25D366',
+                  color: '#FFFFFF',
+                  boxShadow: '0 4px 12px rgba(37, 211, 102, 0.35)',
+                  transition: 'all 0.2s ease',
+                  textDecoration: 'none',
+                  flexShrink: 0,
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.transform = 'scale(1.1)';
+                  e.currentTarget.style.boxShadow = '0 6px 18px rgba(37, 211, 102, 0.6)';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.transform = 'scale(1)';
+                  e.currentTarget.style.boxShadow = '0 4px 12px rgba(37, 211, 102, 0.35)';
+                }}
+              >
+                <WhatsAppIcon size={19} />
+              </a>
             </nav>
 
             {/* Mobile Header Right Actions (Phone Icon + Hamburger) */}
@@ -258,6 +292,36 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenBooking, onOpenAdmin }) =>
               boxShadow: '0 20px 50px rgba(0,0,0,0.6)',
             }}
           >
+            {onOpenAdmin && (
+              <button
+                type="button"
+                onClick={() => {
+                  setMobileMenuOpen(false);
+                  onOpenAdmin();
+                }}
+                aria-label="Admin Portal"
+                title="Admin Authentication Panel"
+                style={{
+                  position: 'absolute',
+                  top: '1.5rem',
+                  left: '1.5rem',
+                  color: 'var(--color-white)',
+                  padding: '8px',
+                  cursor: 'pointer',
+                  backgroundColor: 'rgba(255, 255, 255, 0.12)',
+                  border: '1.5px solid rgba(255, 255, 255, 0.28)',
+                  borderRadius: '50%',
+                  width: '42px',
+                  height: '42px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  transition: 'all 0.2s ease',
+                }}
+              >
+                <Shield size={20} />
+              </button>
+            )}
             <button
               onClick={() => setMobileMenuOpen(false)}
               aria-label="Close Navigation"
@@ -361,6 +425,34 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenBooking, onOpenAdmin }) =>
                   <MapPin size={15} />
                   <span>Valanchery, Kerala</span>
                 </a>
+                {onOpenAdmin && (
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setMobileMenuOpen(false);
+                      onOpenAdmin();
+                    }}
+                    style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      gap: '0.5rem',
+                      border: '1px solid rgba(255, 255, 255, 0.25)',
+                      backgroundColor: 'rgba(255, 255, 255, 0.08)',
+                      color: 'rgba(255, 255, 255, 0.9)',
+                      padding: '0.7rem 1.5rem',
+                      borderRadius: 'var(--radius-pill)',
+                      fontWeight: 600,
+                      fontSize: '0.9rem',
+                      cursor: 'pointer',
+                      width: '100%',
+                      transition: 'all 0.2s ease',
+                    }}
+                  >
+                    <Shield size={16} />
+                    <span>Admin Panel</span>
+                  </button>
+                )}
               </div>
             </div>
           </motion.div>

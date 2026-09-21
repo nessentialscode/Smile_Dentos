@@ -1,6 +1,8 @@
 import React from 'react';
 import { motion } from 'framer-motion';
+import { Calendar } from 'lucide-react';
 import { RotatingBadge } from './RotatingBadge';
+import { WhatsAppIcon } from './WhatsAppIcon';
 
 interface HeroSectionProps {
   onOpenBooking?: () => void;
@@ -78,53 +80,12 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onOpenBooking }) => {
             transition={{ duration: 0.85, delay: 0.15, ease: [0.16, 1, 0.3, 1] }}
             style={{ flex: '1 1 420px', maxWidth: '100%' }}
           >
-            {/* 5.0 Google Trust Badge */}
-            <a
-              href="https://maps.google.com/maps?vet=10CAAQoqAOahcKEwjQvq_-tO-WAxUAAAAAHQAAAAAQBQ..i&pvq=Cg0vZy8xMXk4NGczOHdfIicKIXNtaWxlIGRlbnRvcyBmYW1pbHkgZGVudGFsIGNsaW5pYxACGAM&lqi=CiFzbWlsZSBkZW50b3MgZmFtaWx5IGRlbnRhbCBjbGluaWNI_8aGx6C9gIAIWjcQABABEAIQAxAEGAAYARgCGAMYBCIhc21pbGUgZGVudG9zIGZhbWlseSBkZW50YWwgY2xpbmljkgEHZGVudGlzdA&fvr=1&cs=1&um=1&ie=UTF-8&fb=1&gl=in&sa=X&ftid=0x3ba7b70c7574ba2b:0x724a06ff017fd89b"
-              target="_blank"
-              rel="noreferrer"
-              style={{
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: '8px',
-                padding: '5px 13px',
-                borderRadius: 'var(--radius-pill)',
-                backgroundColor: 'rgba(255, 255, 255, 0.14)',
-                backdropFilter: 'blur(10px)',
-                border: '1px solid rgba(255, 255, 255, 0.25)',
-                marginBottom: 'clamp(0.85rem, 2vw, 1.25rem)',
-                textDecoration: 'none',
-                maxWidth: '100%',
-                flexWrap: 'wrap',
-                transition: 'transform 0.2s, background-color 0.2s',
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.transform = 'translateY(-2px)';
-                e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.22)';
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.transform = 'translateY(0)';
-                e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.14)';
-              }}
-            >
-              <div style={{ display: 'flex', gap: '2px', color: '#F8D12D', fontSize: '0.85rem' }}>
-                ★★★★★
-              </div>
-              <span style={{ fontSize: '0.8rem', fontWeight: 700, color: 'var(--color-white)', fontFamily: 'var(--font-main)' }}>
-                5.0 (39 Google Reviews)
-              </span>
-              <span style={{ color: 'var(--color-lime)', fontSize: '0.75rem' }}>•</span>
-              <span style={{ fontSize: '0.78rem', color: 'rgba(255, 255, 255, 0.92)', fontFamily: 'var(--font-main)' }}>
-                Valanchery
-              </span>
-            </a>
-
             <h1
               style={{
                 fontFamily: 'var(--font-display)',
-                fontSize: 'clamp(2.6rem, 7.2vw, 7.8rem)',
+                fontSize: 'clamp(3.3rem, 8.8vw, 8.6rem)',
                 fontWeight: 700,
-                lineHeight: 1.02,
+                lineHeight: 0.98,
                 letterSpacing: '-0.035em',
                 color: 'var(--color-white)',
                 textShadow: '0 4px 20px rgba(0,0,0,0.4)',
@@ -175,45 +136,60 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onOpenBooking }) => {
             {/* Direct Mobile/Tablet Action Buttons */}
             <div className="hero-mobile-cta" style={{ display: 'none', gap: '0.75rem', width: '100%', marginTop: '0.35rem' }}>
               <button
+                type="button"
                 onClick={onOpenBooking}
+                aria-label="Book Appointment"
                 style={{
                   flex: 1.2,
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  gap: '0.45rem',
                   backgroundColor: 'var(--color-lime)',
-                  color: 'var(--color-rust-dark)',
-                  padding: '0.82rem 1.4rem',
+                  color: '#18181B',
+                  padding: '0.82rem 1.2rem',
                   borderRadius: 'var(--radius-pill)',
                   fontWeight: 800,
                   fontSize: '0.88rem',
                   fontFamily: 'var(--font-main)',
                   letterSpacing: '0.04em',
-                  boxShadow: '0 8px 24px rgba(215, 248, 70, 0.4)',
+                  boxShadow: '0 8px 24px rgba(215, 248, 70, 0.35)',
                   cursor: 'pointer',
                   textAlign: 'center',
+                  border: 'none',
                 }}
               >
-                Book Appointment
+                <Calendar size={17} strokeWidth={2.4} />
+                <span>Book Appointment</span>
               </button>
               <a
-                href="tel:09495964737"
+                href="https://wa.me/919495964737?text=Hello%20Smile%20Dentos%2C%20I%20would%20like%20to%20inquire%20about%20an%20appointment."
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Contact on WhatsApp"
                 style={{
                   flex: 0.9,
                   display: 'inline-flex',
                   alignItems: 'center',
                   justifyContent: 'center',
+                  gap: '0.45rem',
+                  backgroundColor: '#25D366',
+                  color: '#FFFFFF',
                   padding: '0.82rem 1.1rem',
                   borderRadius: 'var(--radius-pill)',
-                  border: '1.5px solid rgba(255, 255, 255, 0.35)',
-                  backgroundColor: 'rgba(30, 18, 13, 0.7)',
-                  backdropFilter: 'blur(10px)',
-                  color: 'var(--color-white)',
-                  fontWeight: 700,
+                  fontWeight: 800,
                   fontSize: '0.85rem',
                   fontFamily: 'var(--font-main)',
-                  textDecoration: 'none',
+                  letterSpacing: '0.02em',
+                  boxShadow: '0 8px 24px rgba(37, 211, 102, 0.35)',
+                  cursor: 'pointer',
                   textAlign: 'center',
+                  textDecoration: 'none',
+                  border: 'none',
                 }}
               >
-                Call Clinic
+                <WhatsAppIcon size={17} />
+                <span>WhatsApp</span>
               </a>
             </div>
           </motion.div>
