@@ -366,17 +366,17 @@ export const SpecialistsSection: React.FC<SpecialistsSectionProps> = ({
   return (
     <div
       style={{
-        backgroundColor: '#5E2614', // Rich continuous brown behind and beneath
+        backgroundColor: '#FFFFFF',
         position: 'relative',
         zIndex: 10,
         overflow: 'visible',
       }}
     >
-      {/* Upper Lavender Section */}
+      {/* Upper Specialist Section */}
       <section
         id="specialists"
         style={{
-          backgroundColor: 'var(--color-lavender)',
+          backgroundColor: '#6DDBDE',
           borderBottomLeftRadius: 'clamp(32px, 4vw, 48px)',
           borderBottomRightRadius: 'clamp(32px, 4vw, 48px)',
           position: 'relative',
@@ -393,7 +393,7 @@ export const SpecialistsSection: React.FC<SpecialistsSectionProps> = ({
           willChange: 'padding-bottom',
           overflow: 'visible',
           zIndex: 20,
-          boxShadow: '0 15px 35px rgba(0, 0, 0, 0.14)',
+          boxShadow: '0 15px 35px rgba(0, 0, 0, 0.04)',
         }}
       >
         {/* Top Wave Divider Transition from Cream Services into Lavender (Adjusted smoothly upwards) */}
@@ -418,7 +418,7 @@ export const SpecialistsSection: React.FC<SpecialistsSectionProps> = ({
           >
             <path
               d="M0,0 L1440,0 L1440,15 C1080,145 360,145 0,15 Z"
-              fill="var(--color-cream)"
+              fill="var(--color-neutral-0)"
             />
           </svg>
 
@@ -443,14 +443,14 @@ export const SpecialistsSection: React.FC<SpecialistsSectionProps> = ({
                 width: 'clamp(62px, 7vw, 76px)',
                 height: 'clamp(62px, 7vw, 76px)',
                 borderRadius: '50%',
-                backgroundColor: 'var(--color-lime)',
+                backgroundColor: '#D7F846',
                 color: '#5E2614',
                 fontFamily: 'var(--font-main)',
                 fontSize: 'clamp(0.72rem, 1.05vw, 0.82rem)',
                 fontWeight: 700,
-                boxShadow: '0 6px 20px rgba(0,0,0,0.18)',
-                border: '2.5px solid var(--color-lime)',
-                outline: '2.5px solid rgba(215, 248, 70, 0.55)',
+                boxShadow: '0 6px 20px rgba(215, 248, 70, 0.4)',
+                border: '2.5px solid #D7F846',
+                outline: '2.5px solid rgba(215, 248, 70, 0.65)',
                 outlineOffset: '3px',
                 cursor: 'pointer',
                 transition: 'transform 0.25s ease, box-shadow 0.25s ease',
@@ -458,11 +458,11 @@ export const SpecialistsSection: React.FC<SpecialistsSectionProps> = ({
               }}
               onMouseEnter={(e) => {
                 e.currentTarget.style.transform = 'scale(1.08)';
-                e.currentTarget.style.boxShadow = '0 10px 24px rgba(215, 248, 70, 0.45)';
+                e.currentTarget.style.boxShadow = '0 10px 24px rgba(215, 248, 70, 0.6)';
               }}
               onMouseLeave={(e) => {
                 e.currentTarget.style.transform = 'scale(1)';
-                e.currentTarget.style.boxShadow = '0 6px 20px rgba(0,0,0,0.18)';
+                e.currentTarget.style.boxShadow = '0 6px 20px rgba(215, 248, 70, 0.4)';
               }}
             >
               {showAllServices ? '–See Less' : '+See All'}
@@ -505,7 +505,7 @@ export const SpecialistsSection: React.FC<SpecialistsSectionProps> = ({
                     fontSize: '0.8rem',
                     fontWeight: 700,
                     letterSpacing: '0.15em',
-                    color: 'rgba(255, 255, 255, 0.92)',
+                    color: '#0038A2',
                     textTransform: 'uppercase',
                   }}
                 >
@@ -515,7 +515,7 @@ export const SpecialistsSection: React.FC<SpecialistsSectionProps> = ({
                   style={{
                     width: '32px',
                     height: '3px',
-                    backgroundColor: 'var(--color-lime)',
+                    backgroundColor: '#0038A2',
                     borderRadius: '2px',
                     display: 'inline-block',
                   }}
@@ -528,7 +528,7 @@ export const SpecialistsSection: React.FC<SpecialistsSectionProps> = ({
                   fontSize: 'clamp(2.4rem, 4.8vw, 4.2rem)',
                   fontWeight: 700,
                   letterSpacing: '-0.03em',
-                  color: '#FFFFFF',
+                  color: 'var(--color-neutral-900)',
                   margin: 0,
                   lineHeight: 1.1,
                 }}
@@ -548,23 +548,24 @@ export const SpecialistsSection: React.FC<SpecialistsSectionProps> = ({
                   width: '46px',
                   height: '46px',
                   borderRadius: '50%',
-                  border: '1.5px solid rgba(255, 255, 255, 0.65)',
+                  border: '1.5px solid var(--color-neutral-300)',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
-                  color: '#FFFFFF',
-                  backgroundColor: 'transparent',
+                  color: 'var(--color-brand-500)',
+                  backgroundColor: '#FFFFFF',
                   transition: 'all 0.22s ease',
                   cursor: 'pointer',
+                  boxShadow: '0 2px 8px rgba(0, 0, 0, 0.04)',
                 }}
                 onMouseEnter={(e) => {
-                  e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.2)';
-                  e.currentTarget.style.borderColor = '#FFFFFF';
+                  e.currentTarget.style.backgroundColor = 'var(--color-brand-50)';
+                  e.currentTarget.style.borderColor = 'var(--color-brand-500)';
                   e.currentTarget.style.transform = 'scale(1.05)';
                 }}
                 onMouseLeave={(e) => {
-                  e.currentTarget.style.backgroundColor = 'transparent';
-                  e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.65)';
+                  e.currentTarget.style.backgroundColor = '#FFFFFF';
+                  e.currentTarget.style.borderColor = 'var(--color-neutral-300)';
                   e.currentTarget.style.transform = 'scale(1)';
                 }}
               >
@@ -579,23 +580,24 @@ export const SpecialistsSection: React.FC<SpecialistsSectionProps> = ({
                   width: '46px',
                   height: '46px',
                   borderRadius: '50%',
-                  border: '1.5px solid rgba(255, 255, 255, 0.65)',
+                  border: '1.5px solid var(--color-neutral-300)',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
-                  color: '#FFFFFF',
-                  backgroundColor: 'transparent',
+                  color: 'var(--color-brand-500)',
+                  backgroundColor: '#FFFFFF',
                   transition: 'all 0.22s ease',
                   cursor: 'pointer',
+                  boxShadow: '0 2px 8px rgba(0, 0, 0, 0.04)',
                 }}
                 onMouseEnter={(e) => {
-                  e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.2)';
-                  e.currentTarget.style.borderColor = '#FFFFFF';
+                  e.currentTarget.style.backgroundColor = 'var(--color-brand-50)';
+                  e.currentTarget.style.borderColor = 'var(--color-brand-500)';
                   e.currentTarget.style.transform = 'scale(1.05)';
                 }}
                 onMouseLeave={(e) => {
-                  e.currentTarget.style.backgroundColor = 'transparent';
-                  e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.65)';
+                  e.currentTarget.style.backgroundColor = '#FFFFFF';
+                  e.currentTarget.style.borderColor = 'var(--color-neutral-300)';
                   e.currentTarget.style.transform = 'scale(1)';
                 }}
               >
@@ -645,17 +647,16 @@ export const SpecialistsSection: React.FC<SpecialistsSectionProps> = ({
                   width: '38px',
                   height: '38px',
                   borderRadius: '50%',
-                  backgroundColor: 'rgba(28, 16, 12, 0.65)',
-                  backdropFilter: 'blur(8px)',
-                  WebkitBackdropFilter: 'blur(8px)',
-                  border: '1.5px solid rgba(255, 255, 255, 0.4)',
+                  backgroundColor: '#FFFFFF',
+                  border: '1.5px solid var(--color-neutral-300)',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
-                  color: '#FFFFFF',
+                  color: 'var(--color-brand-500)',
                   zIndex: 80,
                   cursor: 'pointer',
                   WebkitTapHighlightColor: 'transparent',
+                  boxShadow: '0 2px 8px rgba(0, 0, 0, 0.08)',
                 }}
               >
                 <ChevronLeft size={22} />
@@ -671,17 +672,16 @@ export const SpecialistsSection: React.FC<SpecialistsSectionProps> = ({
                   width: '38px',
                   height: '38px',
                   borderRadius: '50%',
-                  backgroundColor: 'rgba(28, 16, 12, 0.65)',
-                  backdropFilter: 'blur(8px)',
-                  WebkitBackdropFilter: 'blur(8px)',
-                  border: '1.5px solid rgba(255, 255, 255, 0.4)',
+                  backgroundColor: '#FFFFFF',
+                  border: '1.5px solid var(--color-neutral-300)',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
-                  color: '#FFFFFF',
+                  color: 'var(--color-brand-500)',
                   zIndex: 80,
                   cursor: 'pointer',
                   WebkitTapHighlightColor: 'transparent',
+                  boxShadow: '0 2px 8px rgba(0, 0, 0, 0.08)',
                 }}
               >
                 <ChevronRight size={22} />
@@ -774,8 +774,8 @@ export const SpecialistsSection: React.FC<SpecialistsSectionProps> = ({
                         display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'center',
-                        border: '3.5px solid rgba(255, 255, 255, 0.85)',
-                        boxShadow: '0 8px 22px rgba(0, 0, 0, 0.12)',
+                        border: '3.5px solid #FFFFFF',
+                        boxShadow: '0 8px 22px rgba(0, 0, 0, 0.08)',
                         transition: 'all 0.3s cubic-bezier(0.16, 1, 0.3, 1)',
                       }}
                     >
@@ -803,17 +803,15 @@ export const SpecialistsSection: React.FC<SpecialistsSectionProps> = ({
                         borderRadius: '9999px',
                         backgroundColor:
                           doc.status === 'Present'
-                            ? 'rgba(34, 197, 94, 0.22)'
-                            : 'rgba(239, 68, 68, 0.22)',
+                            ? 'rgba(22, 163, 74, 0.1)'
+                            : 'rgba(239, 68, 68, 0.1)',
                         border:
                           doc.status === 'Present'
-                            ? '1px solid rgba(74, 222, 128, 0.55)'
-                            : '1px solid rgba(248, 113, 113, 0.55)',
-                        backdropFilter: 'blur(8px)',
-                        WebkitBackdropFilter: 'blur(8px)',
+                            ? '1px solid rgba(22, 163, 74, 0.3)'
+                            : '1px solid rgba(239, 68, 68, 0.3)',
                         marginTop: '0.65rem',
                         marginBottom: '0.15rem',
-                        boxShadow: '0 2px 8px rgba(0, 0, 0, 0.15)',
+                        boxShadow: '0 2px 6px rgba(0, 0, 0, 0.04)',
                       }}
                     >
                       <span
@@ -821,8 +819,8 @@ export const SpecialistsSection: React.FC<SpecialistsSectionProps> = ({
                           width: '6px',
                           height: '6px',
                           borderRadius: '50%',
-                          backgroundColor: doc.status === 'Present' ? '#22C55E' : '#EF4444',
-                          boxShadow: doc.status === 'Present' ? '0 0 8px #22C55E' : '0 0 8px #EF4444',
+                          backgroundColor: doc.status === 'Present' ? '#16A34A' : '#EF4444',
+                          boxShadow: doc.status === 'Present' ? '0 0 6px rgba(22, 163, 74, 0.5)' : '0 0 6px rgba(239, 68, 68, 0.5)',
                           display: 'inline-block',
                         }}
                       />
@@ -833,20 +831,20 @@ export const SpecialistsSection: React.FC<SpecialistsSectionProps> = ({
                           fontWeight: 700,
                           letterSpacing: '0.04em',
                           textTransform: 'uppercase',
-                          color: doc.status === 'Present' ? '#86EFAC' : '#FCA5A5',
+                          color: doc.status === 'Present' ? '#15803D' : '#B91C1C',
                         }}
                       >
                         {doc.status}
                       </span>
                     </div>
 
-                    {/* Doctor Name: Uniform size matching Dr. LIJEESH KADAMBIL */}
+                    {/* Doctor Name */}
                     <h3
                       style={{
                         fontFamily: 'var(--font-display)',
                         fontSize: isMobile ? '0.84rem' : '0.9rem',
                         fontWeight: 700,
-                        color: '#FFFFFF',
+                        color: 'var(--color-neutral-900)',
                         marginTop: '0.35rem',
                         marginBottom: '0.15rem',
                         letterSpacing: '-0.02em',
@@ -872,7 +870,7 @@ export const SpecialistsSection: React.FC<SpecialistsSectionProps> = ({
                           ? '0.71rem'
                           : '0.77rem',
                         fontWeight: 600,
-                        color: 'rgba(255, 255, 255, 0.85)',
+                        color: 'var(--color-brand-500)',
                         margin: 0,
                         lineHeight: 1.25,
                         textAlign: 'center',
@@ -916,7 +914,7 @@ export const SpecialistsSection: React.FC<SpecialistsSectionProps> = ({
                             borderRadius: '28px',
                             padding: 'clamp(4.8rem, 5.2vw, 5.3rem) 1.2rem 1.05rem 1.2rem',
                             boxShadow:
-                              '0 20px 45px rgba(28, 12, 8, 0.22), 0 4px 14px rgba(0,0,0,0.06)',
+                              '0 20px 45px rgba(2, 54, 58, 0.22), 0 4px 14px rgba(0,0,0,0.06)',
                             textAlign: 'center',
                             zIndex: 70,
                             marginBottom: '0px',
@@ -1007,7 +1005,7 @@ export const SpecialistsSection: React.FC<SpecialistsSectionProps> = ({
                                 fontFamily: 'var(--font-display)',
                                 fontSize: 'clamp(1.16rem, 1.38vw, 1.32rem)',
                                 fontWeight: 700,
-                                color: '#18181B',
+                                color: 'var(--color-neutral-900)',
                                 margin: '0.45rem 0 0 0',
                                 textAlign: 'center',
                                 letterSpacing: '-0.02em',
@@ -1023,7 +1021,7 @@ export const SpecialistsSection: React.FC<SpecialistsSectionProps> = ({
                                 fontFamily: 'var(--font-main)',
                                 fontSize: '0.82rem',
                                 fontWeight: 600,
-                                color: '#7C3AED',
+                                color: 'var(--color-brand-500)',
                                 marginTop: '0.2rem',
                                 marginBottom: '0.55rem',
                                 textAlign: 'center',
@@ -1038,7 +1036,7 @@ export const SpecialistsSection: React.FC<SpecialistsSectionProps> = ({
                                 fontFamily: 'var(--font-main)',
                                 fontSize: '0.78rem',
                                 lineHeight: 1.38,
-                                color: '#4B5563',
+                                color: 'var(--color-neutral-600)',
                                 marginBottom: '0.65rem',
                                 textAlign: 'center',
                               }}
@@ -1054,8 +1052,8 @@ export const SpecialistsSection: React.FC<SpecialistsSectionProps> = ({
                                 gap: '0.25rem',
                                 paddingTop: '0.5rem',
                                 paddingBottom: '0.5rem',
-                                borderTop: '1px solid rgba(0, 0, 0, 0.08)',
-                                borderBottom: '1px solid rgba(0, 0, 0, 0.08)',
+                                borderTop: '1px solid var(--color-neutral-200)',
+                                borderBottom: '1px solid var(--color-neutral-200)',
                                 marginBottom: '0.8rem',
                               }}
                             >
@@ -1070,7 +1068,7 @@ export const SpecialistsSection: React.FC<SpecialistsSectionProps> = ({
                               >
                                 <GraduationCap
                                   size={19}
-                                  color="#7C3AED"
+                                  color="#1F5FD4"
                                   style={{ marginBottom: '0.3rem' }}
                                 />
                                 <span
@@ -1078,7 +1076,7 @@ export const SpecialistsSection: React.FC<SpecialistsSectionProps> = ({
                                     fontFamily: 'var(--font-main)',
                                     fontSize: '0.74rem',
                                     fontWeight: 700,
-                                    color: '#18181B',
+                                    color: 'var(--color-neutral-900)',
                                     lineHeight: 1.2,
                                   }}
                                 >
@@ -1089,7 +1087,7 @@ export const SpecialistsSection: React.FC<SpecialistsSectionProps> = ({
                                     fontFamily: 'var(--font-main)',
                                     fontSize: '0.67rem',
                                     fontWeight: 500,
-                                    color: '#6B7280',
+                                    color: 'var(--color-neutral-500)',
                                     lineHeight: 1.2,
                                     marginTop: '2px',
                                   }}
@@ -1105,13 +1103,13 @@ export const SpecialistsSection: React.FC<SpecialistsSectionProps> = ({
                                   flexDirection: 'column',
                                   alignItems: 'center',
                                   textAlign: 'center',
-                                  borderLeft: '1px solid rgba(0, 0, 0, 0.08)',
-                                  borderRight: '1px solid rgba(0, 0, 0, 0.08)',
+                                  borderLeft: '1px solid var(--color-neutral-200)',
+                                  borderRight: '1px solid var(--color-neutral-200)',
                                 }}
                               >
                                 <Award
                                   size={19}
-                                  color="#7C3AED"
+                                  color="#1F5FD4"
                                   style={{ marginBottom: '0.3rem' }}
                                 />
                                 <span
@@ -1119,7 +1117,7 @@ export const SpecialistsSection: React.FC<SpecialistsSectionProps> = ({
                                     fontFamily: 'var(--font-main)',
                                     fontSize: '0.74rem',
                                     fontWeight: 700,
-                                    color: '#18181B',
+                                    color: 'var(--color-neutral-900)',
                                     lineHeight: 1.2,
                                   }}
                                 >
@@ -1130,7 +1128,7 @@ export const SpecialistsSection: React.FC<SpecialistsSectionProps> = ({
                                     fontFamily: 'var(--font-main)',
                                     fontSize: '0.67rem',
                                     fontWeight: 500,
-                                    color: '#6B7280',
+                                    color: 'var(--color-neutral-500)',
                                     lineHeight: 1.2,
                                     marginTop: '2px',
                                   }}
@@ -1150,7 +1148,7 @@ export const SpecialistsSection: React.FC<SpecialistsSectionProps> = ({
                               >
                                 <Users
                                   size={19}
-                                  color="#7C3AED"
+                                  color="#1F5FD4"
                                   style={{ marginBottom: '0.3rem' }}
                                 />
                                 <span
@@ -1158,7 +1156,7 @@ export const SpecialistsSection: React.FC<SpecialistsSectionProps> = ({
                                     fontFamily: 'var(--font-main)',
                                     fontSize: '0.74rem',
                                     fontWeight: 700,
-                                    color: '#18181B',
+                                    color: 'var(--color-neutral-900)',
                                     lineHeight: 1.2,
                                   }}
                                 >
@@ -1169,7 +1167,7 @@ export const SpecialistsSection: React.FC<SpecialistsSectionProps> = ({
                                     fontFamily: 'var(--font-main)',
                                     fontSize: '0.67rem',
                                     fontWeight: 500,
-                                    color: '#6B7280',
+                                    color: 'var(--color-neutral-500)',
                                     lineHeight: 1.2,
                                     marginTop: '2px',
                                   }}
@@ -1179,7 +1177,7 @@ export const SpecialistsSection: React.FC<SpecialistsSectionProps> = ({
                               </div>
                             </div>
 
-                            {/* Lime High-Contrast CTA Button */}
+                            {/* Brand Blue High-Contrast CTA Button */}
                             <button
                               type="button"
                               onClick={(e) => {
@@ -1200,30 +1198,28 @@ export const SpecialistsSection: React.FC<SpecialistsSectionProps> = ({
                                 alignItems: 'center',
                                 justifyContent: 'center',
                                 gap: '0.45rem',
-                                backgroundColor: 'var(--color-lime)',
-                                color: '#18181B',
+                                backgroundColor: 'var(--color-brand-500)',
+                                color: '#FFFFFF',
                                 fontFamily: 'var(--font-main)',
                                 fontSize: '0.82rem',
                                 fontWeight: 700,
                                 padding: '0.6rem 1.1rem',
                                 borderRadius: 'var(--radius-pill)',
-                                boxShadow: '0 5px 16px rgba(215, 248, 70, 0.35)',
+                                boxShadow: '0 5px 16px rgba(31, 95, 212, 0.35)',
                                 cursor: 'pointer',
                                 border: 'none',
                                 transition:
-                                  'transform 0.2s ease, box-shadow 0.2s ease',
+                                  'transform 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease',
                               }}
                               onMouseEnter={(e) => {
-                                e.currentTarget.style.transform =
-                                  'translateY(-2px)';
-                                e.currentTarget.style.boxShadow =
-                                  '0 10px 24px rgba(215, 248, 70, 0.55)';
+                                e.currentTarget.style.backgroundColor = 'var(--color-brand-600)';
+                                e.currentTarget.style.transform = 'translateY(-2px)';
+                                e.currentTarget.style.boxShadow = '0 10px 24px rgba(31, 95, 212, 0.45)';
                               }}
                               onMouseLeave={(e) => {
-                                e.currentTarget.style.transform =
-                                  'translateY(0)';
-                                e.currentTarget.style.boxShadow =
-                                  '0 6px 18px rgba(215, 248, 70, 0.4)';
+                                e.currentTarget.style.backgroundColor = 'var(--color-brand-500)';
+                                e.currentTarget.style.transform = 'translateY(0)';
+                                e.currentTarget.style.boxShadow = '0 6px 18px rgba(31, 95, 212, 0.35)';
                               }}
                             >
                               <span>View Full Profile</span>
@@ -1270,7 +1266,7 @@ export const SpecialistsSection: React.FC<SpecialistsSectionProps> = ({
                       borderRadius: '28px',
                       padding: 'clamp(4.8rem, 5.2vw, 5.3rem) 1.2rem 1.05rem 1.2rem',
                       boxShadow:
-                        '0 20px 45px rgba(28, 12, 8, 0.22), 0 4px 14px rgba(0,0,0,0.06)',
+                        '0 20px 45px rgba(2, 54, 58, 0.22), 0 4px 14px rgba(0,0,0,0.06)',
                       textAlign: 'center',
                       zIndex: 70,
                       marginBottom: '0px',
@@ -1379,7 +1375,7 @@ export const SpecialistsSection: React.FC<SpecialistsSectionProps> = ({
                           fontFamily: 'var(--font-display)',
                           fontSize: 'clamp(1.16rem, 1.38vw, 1.32rem)',
                           fontWeight: 700,
-                          color: '#18181B',
+                          color: 'var(--color-neutral-900)',
                           margin: '0.45rem 0 0 0',
                           textAlign: 'center',
                           letterSpacing: '-0.02em',
@@ -1395,7 +1391,7 @@ export const SpecialistsSection: React.FC<SpecialistsSectionProps> = ({
                           fontFamily: 'var(--font-main)',
                           fontSize: '0.82rem',
                           fontWeight: 600,
-                          color: '#7C3AED',
+                          color: 'var(--color-brand-500)',
                           marginTop: '0.2rem',
                           marginBottom: '0.55rem',
                           textAlign: 'center',
@@ -1410,7 +1406,7 @@ export const SpecialistsSection: React.FC<SpecialistsSectionProps> = ({
                           fontFamily: 'var(--font-main)',
                           fontSize: '0.78rem',
                           lineHeight: 1.38,
-                          color: '#4B5563',
+                          color: 'var(--color-neutral-600)',
                           marginBottom: '0.65rem',
                           textAlign: 'center',
                         }}
@@ -1426,8 +1422,8 @@ export const SpecialistsSection: React.FC<SpecialistsSectionProps> = ({
                           gap: '0.25rem',
                           paddingTop: '0.5rem',
                           paddingBottom: '0.5rem',
-                          borderTop: '1px solid rgba(0, 0, 0, 0.08)',
-                          borderBottom: '1px solid rgba(0, 0, 0, 0.08)',
+                          borderTop: '1px solid var(--color-neutral-200)',
+                          borderBottom: '1px solid var(--color-neutral-200)',
                           marginBottom: '0.8rem',
                         }}
                       >
@@ -1442,7 +1438,7 @@ export const SpecialistsSection: React.FC<SpecialistsSectionProps> = ({
                         >
                           <GraduationCap
                             size={19}
-                            color="#7C3AED"
+                            color="#1F5FD4"
                             style={{ marginBottom: '0.3rem' }}
                           />
                           <span
@@ -1450,7 +1446,7 @@ export const SpecialistsSection: React.FC<SpecialistsSectionProps> = ({
                               fontFamily: 'var(--font-main)',
                               fontSize: '0.74rem',
                               fontWeight: 700,
-                              color: '#18181B',
+                              color: 'var(--color-neutral-900)',
                               lineHeight: 1.2,
                             }}
                           >
@@ -1461,7 +1457,7 @@ export const SpecialistsSection: React.FC<SpecialistsSectionProps> = ({
                               fontFamily: 'var(--font-main)',
                               fontSize: '0.67rem',
                               fontWeight: 500,
-                              color: '#6B7280',
+                              color: 'var(--color-neutral-500)',
                               lineHeight: 1.2,
                               marginTop: '2px',
                             }}
@@ -1477,13 +1473,13 @@ export const SpecialistsSection: React.FC<SpecialistsSectionProps> = ({
                             flexDirection: 'column',
                             alignItems: 'center',
                             textAlign: 'center',
-                            borderLeft: '1px solid rgba(0, 0, 0, 0.08)',
-                            borderRight: '1px solid rgba(0, 0, 0, 0.08)',
+                            borderLeft: '1px solid var(--color-neutral-200)',
+                            borderRight: '1px solid var(--color-neutral-200)',
                           }}
                         >
                           <Award
                             size={19}
-                            color="#7C3AED"
+                            color="#1F5FD4"
                             style={{ marginBottom: '0.3rem' }}
                           />
                           <span
@@ -1491,7 +1487,7 @@ export const SpecialistsSection: React.FC<SpecialistsSectionProps> = ({
                               fontFamily: 'var(--font-main)',
                               fontSize: '0.74rem',
                               fontWeight: 700,
-                              color: '#18181B',
+                              color: 'var(--color-neutral-900)',
                               lineHeight: 1.2,
                             }}
                           >
@@ -1502,7 +1498,7 @@ export const SpecialistsSection: React.FC<SpecialistsSectionProps> = ({
                               fontFamily: 'var(--font-main)',
                               fontSize: '0.67rem',
                               fontWeight: 500,
-                              color: '#6B7280',
+                              color: 'var(--color-neutral-500)',
                               lineHeight: 1.2,
                               marginTop: '2px',
                             }}
@@ -1522,7 +1518,7 @@ export const SpecialistsSection: React.FC<SpecialistsSectionProps> = ({
                         >
                           <Users
                             size={19}
-                            color="#7C3AED"
+                            color="#1F5FD4"
                             style={{ marginBottom: '0.3rem' }}
                           />
                           <span
@@ -1530,7 +1526,7 @@ export const SpecialistsSection: React.FC<SpecialistsSectionProps> = ({
                               fontFamily: 'var(--font-main)',
                               fontSize: '0.74rem',
                               fontWeight: 700,
-                              color: '#18181B',
+                              color: 'var(--color-neutral-900)',
                               lineHeight: 1.2,
                             }}
                           >
@@ -1541,7 +1537,7 @@ export const SpecialistsSection: React.FC<SpecialistsSectionProps> = ({
                               fontFamily: 'var(--font-main)',
                               fontSize: '0.67rem',
                               fontWeight: 500,
-                              color: '#6B7280',
+                              color: 'var(--color-neutral-500)',
                               lineHeight: 1.2,
                               marginTop: '2px',
                             }}
@@ -1551,7 +1547,7 @@ export const SpecialistsSection: React.FC<SpecialistsSectionProps> = ({
                         </div>
                       </div>
 
-                      {/* Lime High-Contrast CTA Button */}
+                      {/* Brand Blue CTA Button */}
                       <button
                         type="button"
                         onClick={(e) => {
@@ -1572,19 +1568,29 @@ export const SpecialistsSection: React.FC<SpecialistsSectionProps> = ({
                           alignItems: 'center',
                           justifyContent: 'center',
                           gap: '0.45rem',
-                          backgroundColor: 'var(--color-lime)',
-                          color: '#18181B',
+                          backgroundColor: 'var(--color-brand-500)',
+                          color: '#FFFFFF',
                           fontFamily: 'var(--font-main)',
                           fontSize: '0.82rem',
                           fontWeight: 700,
                           padding: '0.6rem 1.1rem',
                           borderRadius: 'var(--radius-pill)',
-                          boxShadow: '0 5px 16px rgba(215, 248, 70, 0.35)',
+                          boxShadow: '0 5px 16px rgba(31, 95, 212, 0.35)',
                           cursor: 'pointer',
                           border: 'none',
                           transition:
-                            'transform 0.2s ease, box-shadow 0.2s ease',
+                            'transform 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease',
                           WebkitTapHighlightColor: 'transparent',
+                        }}
+                        onMouseEnter={(e) => {
+                          e.currentTarget.style.backgroundColor = 'var(--color-brand-600)';
+                          e.currentTarget.style.transform = 'translateY(-2px)';
+                          e.currentTarget.style.boxShadow = '0 10px 24px rgba(31, 95, 212, 0.45)';
+                        }}
+                        onMouseLeave={(e) => {
+                          e.currentTarget.style.backgroundColor = 'var(--color-brand-500)';
+                          e.currentTarget.style.transform = 'translateY(0)';
+                          e.currentTarget.style.boxShadow = '0 5px 16px rgba(31, 95, 212, 0.35)';
                         }}
                       >
                         <span>View Full Profile</span>
@@ -1599,10 +1605,10 @@ export const SpecialistsSection: React.FC<SpecialistsSectionProps> = ({
         </div>
       </section>
 
-      {/* Brown Bottom Bar: Sits behind and underneath, compact to house the open/close bar */}
+      {/* Bottom Bar: Clean surface */}
       <div
         style={{
-          backgroundColor: '#5E2614', // continuous brown behind and beneath
+          backgroundColor: '#FFFFFF',
           position: 'relative',
           zIndex: 15,
           paddingTop: isMobile
@@ -1642,13 +1648,11 @@ export const SpecialistsSection: React.FC<SpecialistsSectionProps> = ({
                 display: 'inline-flex',
                 alignItems: 'center',
                 gap: '0.55rem',
-                backgroundColor: 'rgba(28, 14, 8, 0.75)',
-                backdropFilter: 'blur(10px)',
-                WebkitBackdropFilter: 'blur(10px)',
+                backgroundColor: '#FFFFFF',
                 padding: '0.42rem 0.75rem 0.42rem 0.95rem',
                 borderRadius: 'var(--radius-pill)',
-                border: '1px solid rgba(255, 255, 255, 0.14)',
-                boxShadow: '0 4px 16px rgba(0, 0, 0, 0.22)',
+                border: '1px solid var(--color-neutral-200)',
+                boxShadow: '0 4px 16px rgba(0, 0, 0, 0.05)',
               }}
             >
               <span
@@ -1656,7 +1660,7 @@ export const SpecialistsSection: React.FC<SpecialistsSectionProps> = ({
                   fontFamily: 'var(--font-main)',
                   fontSize: '0.72rem',
                   fontWeight: 600,
-                  color: 'rgba(255, 255, 255, 0.7)',
+                  color: 'var(--color-neutral-600)',
                   textTransform: 'uppercase',
                   letterSpacing: '0.06em',
                 }}
@@ -1670,8 +1674,8 @@ export const SpecialistsSection: React.FC<SpecialistsSectionProps> = ({
                   display: 'inline-flex',
                   alignItems: 'center',
                   gap: '5px',
-                  backgroundColor: 'rgba(34, 197, 94, 0.16)',
-                  border: '1px solid rgba(74, 222, 128, 0.45)',
+                  backgroundColor: 'rgba(22, 163, 74, 0.1)',
+                  border: '1px solid rgba(22, 163, 74, 0.3)',
                   borderRadius: 'var(--radius-pill)',
                   padding: '0.24rem 0.65rem',
                   fontSize: '0.74rem',
@@ -1683,14 +1687,14 @@ export const SpecialistsSection: React.FC<SpecialistsSectionProps> = ({
                     width: '6px',
                     height: '6px',
                     borderRadius: '50%',
-                    backgroundColor: '#22C55E',
-                    boxShadow: '0 0 8px #22C55E',
+                    backgroundColor: '#16A34A',
+                    boxShadow: '0 0 6px rgba(22, 163, 74, 0.5)',
                   }}
                 />
-                <span style={{ color: '#FFFFFF', fontWeight: 600 }}>Valanchery</span>
+                <span style={{ color: 'var(--color-neutral-900)', fontWeight: 600 }}>Valanchery</span>
                 <span
                   style={{
-                    color: '#86EFAC',
+                    color: '#15803D',
                     fontWeight: 700,
                     textTransform: 'uppercase',
                     fontSize: '0.64rem',
@@ -1707,8 +1711,8 @@ export const SpecialistsSection: React.FC<SpecialistsSectionProps> = ({
                   display: 'inline-flex',
                   alignItems: 'center',
                   gap: '5px',
-                  backgroundColor: 'rgba(239, 68, 68, 0.16)',
-                  border: '1px solid rgba(248, 113, 113, 0.45)',
+                  backgroundColor: 'rgba(239, 68, 68, 0.1)',
+                  border: '1px solid rgba(239, 68, 68, 0.3)',
                   borderRadius: 'var(--radius-pill)',
                   padding: '0.24rem 0.65rem',
                   fontSize: '0.74rem',
@@ -1721,13 +1725,13 @@ export const SpecialistsSection: React.FC<SpecialistsSectionProps> = ({
                     height: '6px',
                     borderRadius: '50%',
                     backgroundColor: '#EF4444',
-                    boxShadow: '0 0 8px #EF4444',
+                    boxShadow: '0 0 6px rgba(239, 68, 68, 0.5)',
                   }}
                 />
-                <span style={{ color: '#FFFFFF', fontWeight: 600 }}>Edayoor</span>
+                <span style={{ color: 'var(--color-neutral-900)', fontWeight: 600 }}>Edayoor</span>
                 <span
                   style={{
-                    color: '#FCA5A5',
+                    color: '#B91C1C',
                     fontWeight: 700,
                     textTransform: 'uppercase',
                     fontSize: '0.64rem',
@@ -1753,7 +1757,7 @@ export const SpecialistsSection: React.FC<SpecialistsSectionProps> = ({
             <svg width="36" height="15" viewBox="0 0 36 15" fill="none">
               <path
                 d="M1 10C6 3 12 14 18 8C24 2 30 12 35 7"
-                stroke="rgba(255, 255, 255, 0.7)"
+                stroke="var(--color-neutral-400)"
                 strokeWidth="1.6"
                 strokeLinecap="round"
               />
@@ -1764,7 +1768,7 @@ export const SpecialistsSection: React.FC<SpecialistsSectionProps> = ({
                 fontSize: '0.67rem',
                 fontWeight: 600,
                 letterSpacing: '0.12em',
-                color: 'rgba(255, 255, 255, 0.78)',
+                color: 'var(--color-neutral-500)',
                 lineHeight: 1.35,
                 textAlign: 'left',
                 textTransform: 'uppercase',

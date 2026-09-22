@@ -158,7 +158,7 @@ export const AppointmentModal: React.FC<AppointmentModalProps> = ({
       particleCount: 80,
       spread: 70,
       origin: { y: 0.6 },
-      colors: ['#D7F846', '#8F4225', '#FAF4E8', '#B2A4EC'],
+      colors: ['#019EA2', '#0138A2', '#38BDF8', '#FFFFFF'],
     });
 
     setTimeout(() => {
@@ -192,8 +192,8 @@ export const AppointmentModal: React.FC<AppointmentModalProps> = ({
             style={{
               position: 'absolute',
               inset: 0,
-              backgroundColor: 'rgba(14, 10, 8, 0.75)',
-              backdropFilter: 'blur(12px)',
+              backgroundColor: 'rgba(12, 43, 109, 0.5)',
+              backdropFilter: 'blur(8px)',
             }}
           />
 
@@ -212,24 +212,25 @@ export const AppointmentModal: React.FC<AppointmentModalProps> = ({
               maxHeight: '92vh',
               display: 'flex',
               flexDirection: 'column',
-              backgroundColor: '#FAF4E8',
-              borderRadius: '28px',
-              boxShadow: '0 25px 60px rgba(0,0,0,0.45)',
-              border: '1px solid rgba(142, 66, 37, 0.15)',
+              backgroundColor: 'var(--color-neutral-0)',
+              borderRadius: '24px',
+              boxShadow: '0 25px 60px rgba(12, 43, 109, 0.22)',
+              border: '1px solid var(--color-neutral-200)',
               overflow: 'hidden',
             }}
           >
             {/* Header with Title & Close Button */}
             <div
               style={{
-                backgroundColor: 'var(--color-rust)',
-                color: 'var(--color-white)',
+                backgroundColor: 'var(--color-neutral-0)',
+                color: 'var(--color-neutral-900)',
                 padding: 'clamp(1.2rem, 3vw, 1.75rem) clamp(1.2rem, 3.5vw, 2rem)',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'space-between',
                 position: 'relative',
                 flexShrink: 0,
+                borderBottom: '1px solid var(--color-neutral-200)',
               }}
             >
               <div>
@@ -240,6 +241,7 @@ export const AppointmentModal: React.FC<AppointmentModalProps> = ({
                     fontWeight: 700,
                     letterSpacing: '-0.02em',
                     lineHeight: 1.2,
+                    color: 'var(--color-neutral-900)',
                   }}
                 >
                   Book Your Appointment
@@ -248,7 +250,7 @@ export const AppointmentModal: React.FC<AppointmentModalProps> = ({
                   style={{
                     fontFamily: 'var(--font-main)',
                     fontSize: '0.84rem',
-                    color: 'var(--color-lime)',
+                    color: 'var(--color-teal-600)',
                     fontWeight: 600,
                     marginTop: '0.2rem',
                   }}
@@ -264,19 +266,19 @@ export const AppointmentModal: React.FC<AppointmentModalProps> = ({
                   width: '36px',
                   height: '36px',
                   borderRadius: '50%',
-                  backgroundColor: 'rgba(255, 255, 255, 0.15)',
+                  backgroundColor: 'var(--color-neutral-100)',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
-                  color: 'var(--color-white)',
+                  color: 'var(--color-neutral-700)',
                   transition: 'background-color 0.2s',
                   flexShrink: 0,
                   marginLeft: '0.75rem',
                   border: 'none',
                   cursor: 'pointer',
                 }}
-                onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.3)')}
-                onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.15)')}
+                onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = 'var(--color-neutral-200)')}
+                onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = 'var(--color-neutral-100)')}
               >
                 <X size={20} />
               </button>
@@ -291,8 +293,8 @@ export const AppointmentModal: React.FC<AppointmentModalProps> = ({
                       width: '70px',
                       height: '70px',
                       borderRadius: '50%',
-                      backgroundColor: 'var(--color-lime)',
-                      color: 'var(--color-rust-dark)',
+                      backgroundColor: 'var(--color-teal-50)',
+                      color: 'var(--color-teal-600)',
                       display: 'inline-flex',
                       alignItems: 'center',
                       justifyContent: 'center',
@@ -305,7 +307,7 @@ export const AppointmentModal: React.FC<AppointmentModalProps> = ({
                     style={{
                       fontFamily: 'var(--font-display)',
                       fontSize: '1.8rem',
-                      color: 'var(--color-rust-dark)',
+                      color: 'var(--color-neutral-900)',
                       fontWeight: 700,
                       marginBottom: '0.5rem',
                     }}
@@ -314,8 +316,7 @@ export const AppointmentModal: React.FC<AppointmentModalProps> = ({
                   </h3>
                   <p
                     style={{
-                      color: 'var(--color-rust-dark)',
-                      opacity: 0.85,
+                      color: 'var(--color-neutral-600)',
                       fontSize: '0.95rem',
                       lineHeight: 1.5,
                       maxWidth: '380px',
@@ -330,15 +331,18 @@ export const AppointmentModal: React.FC<AppointmentModalProps> = ({
                       display: 'inline-flex',
                       alignItems: 'center',
                       gap: '6px',
-                      padding: '0.5rem 1.2rem',
-                      backgroundColor: '#5E2614',
-                      color: 'var(--color-white)',
+                      padding: '0.6rem 1.4rem',
+                      backgroundColor: 'var(--color-brand-500)',
+                      color: '#FFFFFF',
                       borderRadius: 'var(--radius-pill)',
                       fontFamily: 'var(--font-main)',
-                      fontSize: '0.85rem',
+                      fontSize: '0.88rem',
                       fontWeight: 700,
                       textDecoration: 'none',
+                      transition: 'background-color 0.2s ease',
                     }}
+                    onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = 'var(--color-brand-600)')}
+                    onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = 'var(--color-brand-500)')}
                   >
                     Direct Clinic Line: 094959 64737
                   </a>
@@ -375,7 +379,7 @@ export const AppointmentModal: React.FC<AppointmentModalProps> = ({
                         fontFamily: 'var(--font-main)',
                         fontSize: '0.85rem',
                         fontWeight: 600,
-                        color: 'var(--color-rust-dark)',
+                        color: 'var(--color-neutral-700)',
                         marginBottom: '0.4rem',
                       }}
                     >
@@ -388,13 +392,12 @@ export const AppointmentModal: React.FC<AppointmentModalProps> = ({
                         justifyContent: 'space-between',
                         padding: '0.65rem 1.1rem',
                         borderRadius: 'var(--radius-pill)',
-                        border: '1.5px solid var(--color-rust)',
-                        backgroundColor: 'var(--color-rust)',
-                        color: 'var(--color-white)',
+                        border: '1.5px solid var(--color-teal-200)',
+                        backgroundColor: 'var(--color-teal-50)',
+                        color: 'var(--color-neutral-900)',
                         fontFamily: 'var(--font-main)',
                         fontSize: '0.9rem',
                         fontWeight: 600,
-                        boxShadow: '0 2px 8px rgba(94, 38, 20, 0.15)',
                       }}
                     >
                       <span style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
@@ -404,8 +407,8 @@ export const AppointmentModal: React.FC<AppointmentModalProps> = ({
                       <span
                         style={{
                           fontSize: '0.74rem',
-                          backgroundColor: 'rgba(255, 255, 255, 0.2)',
-                          color: 'var(--color-lime)',
+                          backgroundColor: 'var(--color-teal-500)',
+                          color: '#FFFFFF',
                           padding: '0.2rem 0.65rem',
                           borderRadius: 'var(--radius-pill)',
                           letterSpacing: '0.04em',
@@ -425,7 +428,7 @@ export const AppointmentModal: React.FC<AppointmentModalProps> = ({
                         fontFamily: 'var(--font-main)',
                         fontSize: '0.85rem',
                         fontWeight: 600,
-                        color: 'var(--color-rust-dark)',
+                        color: 'var(--color-neutral-700)',
                         marginBottom: '0.35rem',
                       }}
                     >
@@ -438,13 +441,16 @@ export const AppointmentModal: React.FC<AppointmentModalProps> = ({
                         width: '100%',
                         padding: '0.65rem 0.9rem',
                         borderRadius: '12px',
-                        border: '1.5px solid rgba(94, 38, 20, 0.2)',
-                        backgroundColor: '#FFFFFF',
+                        border: '1.5px solid var(--color-neutral-200)',
+                        backgroundColor: 'var(--color-neutral-0)',
                         fontFamily: 'var(--font-main)',
                         fontSize: '0.9rem',
-                        color: 'var(--color-rust-dark)',
+                        color: 'var(--color-neutral-900)',
                         outline: 'none',
+                        transition: 'border-color 0.2s ease',
                       }}
+                      onFocus={(e) => (e.currentTarget.style.borderColor = 'var(--color-teal-400)')}
+                      onBlur={(e) => (e.currentTarget.style.borderColor = 'var(--color-neutral-200)')}
                     >
                       <option value="Valanchery Main Clinic">Valanchery Main Clinic (Perinthalmanna Rd, Kolamangalam)</option>
                       <option value="Edayoor Branch">Edayoor Branch (Madathil Complex, Mavandiyoor)</option>
@@ -460,7 +466,7 @@ export const AppointmentModal: React.FC<AppointmentModalProps> = ({
                           fontFamily: 'var(--font-main)',
                           fontSize: '0.85rem',
                           fontWeight: 600,
-                          color: 'var(--color-rust-dark)',
+                          color: 'var(--color-neutral-700)',
                           marginBottom: '0.35rem',
                         }}
                       >
@@ -476,13 +482,16 @@ export const AppointmentModal: React.FC<AppointmentModalProps> = ({
                           width: '100%',
                           padding: '0.65rem 0.9rem',
                           borderRadius: '12px',
-                          border: '1.5px solid rgba(94, 38, 20, 0.2)',
-                          backgroundColor: '#FFFFFF',
+                          border: '1.5px solid var(--color-neutral-200)',
+                          backgroundColor: 'var(--color-neutral-0)',
                           fontFamily: 'var(--font-main)',
                           fontSize: '0.9rem',
-                          color: 'var(--color-rust-dark)',
+                          color: 'var(--color-neutral-900)',
                           outline: 'none',
+                          transition: 'border-color 0.2s ease',
                         }}
+                        onFocus={(e) => (e.currentTarget.style.borderColor = 'var(--color-teal-400)')}
+                        onBlur={(e) => (e.currentTarget.style.borderColor = 'var(--color-neutral-200)')}
                       />
                     </div>
                     <div>
@@ -492,7 +501,7 @@ export const AppointmentModal: React.FC<AppointmentModalProps> = ({
                           fontFamily: 'var(--font-main)',
                           fontSize: '0.85rem',
                           fontWeight: 600,
-                          color: 'var(--color-rust-dark)',
+                          color: 'var(--color-neutral-700)',
                           marginBottom: '0.35rem',
                         }}
                       >
@@ -508,13 +517,16 @@ export const AppointmentModal: React.FC<AppointmentModalProps> = ({
                           width: '100%',
                           padding: '0.65rem 0.9rem',
                           borderRadius: '12px',
-                          border: '1.5px solid rgba(94, 38, 20, 0.2)',
-                          backgroundColor: '#FFFFFF',
+                          border: '1.5px solid var(--color-neutral-200)',
+                          backgroundColor: 'var(--color-neutral-0)',
                           fontFamily: 'var(--font-main)',
                           fontSize: '0.9rem',
-                          color: 'var(--color-rust-dark)',
+                          color: 'var(--color-neutral-900)',
                           outline: 'none',
+                          transition: 'border-color 0.2s ease',
                         }}
+                        onFocus={(e) => (e.currentTarget.style.borderColor = 'var(--color-teal-400)')}
+                        onBlur={(e) => (e.currentTarget.style.borderColor = 'var(--color-neutral-200)')}
                       />
                     </div>
                   </div>
@@ -527,7 +539,7 @@ export const AppointmentModal: React.FC<AppointmentModalProps> = ({
                         fontFamily: 'var(--font-main)',
                         fontSize: '0.85rem',
                         fontWeight: 600,
-                        color: 'var(--color-rust-dark)',
+                        color: 'var(--color-neutral-700)',
                         marginBottom: '0.35rem',
                       }}
                     >
@@ -540,13 +552,16 @@ export const AppointmentModal: React.FC<AppointmentModalProps> = ({
                         width: '100%',
                         padding: '0.65rem 0.9rem',
                         borderRadius: '12px',
-                        border: '1.5px solid rgba(94, 38, 20, 0.2)',
-                        backgroundColor: '#FFFFFF',
+                        border: '1.5px solid var(--color-neutral-200)',
+                        backgroundColor: 'var(--color-neutral-0)',
                         fontFamily: 'var(--font-main)',
                         fontSize: '0.9rem',
-                        color: 'var(--color-rust-dark)',
+                        color: 'var(--color-neutral-900)',
                         outline: 'none',
+                        transition: 'border-color 0.2s ease',
                       }}
+                      onFocus={(e) => (e.currentTarget.style.borderColor = 'var(--color-teal-400)')}
+                      onBlur={(e) => (e.currentTarget.style.borderColor = 'var(--color-neutral-200)')}
                     >
                       <option value="Digital Imaging">Digital Imaging (3D CBCT & Diagnostics)</option>
                       <option value="Cosmetic Dentistry">Cosmetic Dentistry (Veneers & Smile Design)</option>
@@ -569,7 +584,7 @@ export const AppointmentModal: React.FC<AppointmentModalProps> = ({
                           fontFamily: 'var(--font-main)',
                           fontSize: '0.85rem',
                           fontWeight: 600,
-                          color: 'var(--color-rust-dark)',
+                          color: 'var(--color-neutral-700)',
                           marginBottom: '0.35rem',
                         }}
                       >
@@ -585,12 +600,19 @@ export const AppointmentModal: React.FC<AppointmentModalProps> = ({
                           width: '100%',
                           padding: '0.65rem 0.9rem',
                           borderRadius: '12px',
-                          border: `1.5px solid ${!isDoctorPresent ? '#EF4444' : 'rgba(94, 38, 20, 0.2)'}`,
-                          backgroundColor: '#FFFFFF',
+                          border: `1.5px solid ${!isDoctorPresent ? '#EF4444' : 'var(--color-neutral-200)'}`,
+                          backgroundColor: 'var(--color-neutral-0)',
                           fontFamily: 'var(--font-main)',
                           fontSize: '0.9rem',
-                          color: 'var(--color-rust-dark)',
+                          color: 'var(--color-neutral-900)',
                           outline: 'none',
+                          transition: 'border-color 0.2s ease',
+                        }}
+                        onFocus={(e) => {
+                          if (isDoctorPresent) e.currentTarget.style.borderColor = 'var(--color-teal-400)';
+                        }}
+                        onBlur={(e) => {
+                          if (isDoctorPresent) e.currentTarget.style.borderColor = 'var(--color-neutral-200)';
                         }}
                       >
                         {DOCTOR_OPTIONS.map((doc) => {
@@ -633,7 +655,7 @@ export const AppointmentModal: React.FC<AppointmentModalProps> = ({
                           fontFamily: 'var(--font-main)',
                           fontSize: '0.85rem',
                           fontWeight: 600,
-                          color: 'var(--color-rust-dark)',
+                          color: 'var(--color-neutral-700)',
                           marginBottom: '0.35rem',
                         }}
                       >
@@ -651,12 +673,19 @@ export const AppointmentModal: React.FC<AppointmentModalProps> = ({
                           width: '100%',
                           padding: '0.65rem 0.9rem',
                           borderRadius: '12px',
-                          border: `1.5px solid ${isSunday ? '#EF4444' : 'rgba(94, 38, 20, 0.2)'}`,
-                          backgroundColor: '#FFFFFF',
+                          border: `1.5px solid ${isSunday ? '#EF4444' : 'var(--color-neutral-200)'}`,
+                          backgroundColor: 'var(--color-neutral-0)',
                           fontFamily: 'var(--font-main)',
                           fontSize: '0.9rem',
-                          color: 'var(--color-rust-dark)',
+                          color: 'var(--color-neutral-900)',
                           outline: 'none',
+                          transition: 'border-color 0.2s ease',
+                        }}
+                        onFocus={(e) => {
+                          if (!isSunday) e.currentTarget.style.borderColor = 'var(--color-teal-400)';
+                        }}
+                        onBlur={(e) => {
+                          if (!isSunday) e.currentTarget.style.borderColor = 'var(--color-neutral-200)';
                         }}
                       />
 
@@ -690,26 +719,32 @@ export const AppointmentModal: React.FC<AppointmentModalProps> = ({
                     style={{
                       marginTop: '0.75rem',
                       width: '100%',
-                      backgroundColor: 'var(--color-lime)',
-                      color: 'var(--color-rust-dark)',
+                      backgroundColor: 'var(--color-brand-500)',
+                      color: '#FFFFFF',
                       padding: '0.95rem',
                       borderRadius: 'var(--radius-pill)',
                       fontFamily: 'var(--font-main)',
                       fontSize: '1rem',
                       fontWeight: 700,
-                      boxShadow: '0 8px 24px rgba(215, 248, 70, 0.35)',
-                      transition: 'all 0.2s',
+                      boxShadow: '0 8px 24px rgba(31, 95, 212, 0.35)',
+                      transition: 'all 0.2s ease',
                       cursor: 'pointer',
                       border: 'none',
                     }}
-                    onMouseEnter={(e) => (e.currentTarget.style.transform = 'translateY(-2px)')}
-                    onMouseLeave={(e) => (e.currentTarget.style.transform = 'translateY(0)')}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.transform = 'translateY(-2px)';
+                      e.currentTarget.style.backgroundColor = 'var(--color-brand-600)';
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.transform = 'translateY(0)';
+                      e.currentTarget.style.backgroundColor = 'var(--color-brand-500)';
+                    }}
                   >
                     Confirm Booking
                   </button>
 
                   <div style={{ textAlign: 'center', marginTop: '0.2rem' }}>
-                    <span style={{ fontSize: '0.8rem', color: 'var(--color-rust-dark)', opacity: 0.75 }}>
+                    <span style={{ fontSize: '0.8rem', color: 'var(--color-neutral-500)' }}>
                       Prefer to speak now?{' '}
                     </span>
                     <a
@@ -717,7 +752,7 @@ export const AppointmentModal: React.FC<AppointmentModalProps> = ({
                       style={{
                         fontSize: '0.82rem',
                         fontWeight: 700,
-                        color: 'var(--color-rust)',
+                        color: 'var(--color-brand-500)',
                         textDecoration: 'underline',
                       }}
                     >

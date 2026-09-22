@@ -118,7 +118,7 @@ export const AdminLoginPage: React.FC<AdminLoginPageProps> = ({
               left: 0,
               right: 0,
               height: '5px',
-              background: 'linear-gradient(90deg, #3B82F6 0%, #06B6D4 50%, #84CC16 100%)',
+              background: 'linear-gradient(90deg, var(--color-brand-500) 0%, var(--color-teal-500) 100%)',
             }}
           />
 
@@ -328,7 +328,7 @@ export const AdminLoginPage: React.FC<AdminLoginPageProps> = ({
                 marginTop: '0.35rem',
                 width: '100%',
                 padding: '0.85rem 1rem',
-                backgroundColor: '#0F172A',
+                backgroundColor: 'var(--color-brand-500)',
                 color: '#FFFFFF',
                 fontSize: '0.88rem',
                 fontWeight: 700,
@@ -339,14 +339,14 @@ export const AdminLoginPage: React.FC<AdminLoginPageProps> = ({
                 alignItems: 'center',
                 justifyContent: 'center',
                 gap: '0.5rem',
-                boxShadow: '0 4px 12px rgba(15, 23, 42, 0.15)',
-                transition: 'background-color 0.15s',
+                boxShadow: '0 4px 12px rgba(31, 95, 212, 0.25)',
+                transition: 'background-color 0.15s, transform 0.15s',
               }}
               onMouseEnter={(e) => {
-                if (!loading) e.currentTarget.style.backgroundColor = '#1E293B';
+                if (!loading) e.currentTarget.style.backgroundColor = 'var(--color-brand-600)';
               }}
               onMouseLeave={(e) => {
-                if (!loading) e.currentTarget.style.backgroundColor = '#0F172A';
+                if (!loading) e.currentTarget.style.backgroundColor = 'var(--color-brand-500)';
               }}
             >
               {loading ? (

@@ -37,7 +37,7 @@ export const RotatingBadge: React.FC<RotatingBadgeProps> = ({ size = 114, classN
           alignItems: 'center',
           justifyContent: 'center',
           transformStyle: 'preserve-3d',
-          filter: 'drop-shadow(0 6px 18px rgba(0, 0, 0, 0.45)) drop-shadow(0 0 16px rgba(2, 132, 199, 0.35))',
+          filter: 'drop-shadow(0 6px 18px rgba(0, 0, 0, 0.35))',
         }}
       >
         <img

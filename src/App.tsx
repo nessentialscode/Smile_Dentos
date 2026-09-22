@@ -1,14 +1,12 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Calendar } from 'lucide-react';
-import { WhatsAppIcon } from './components/WhatsAppIcon';
 import { Navbar } from './components/Navbar';
 import { HeroSection } from './components/HeroSection';
 import { TransformSection } from './components/TransformSection';
 import { ServicesSection } from './components/ServicesSection';
 import { SpecialistsSection } from './components/SpecialistsSection';
 import { BranchesSection } from './components/BranchesSection';
-import { WhoWeHelpSection } from './components/WhoWeHelpSection';
 import { ReviewsSection } from './components/ReviewsSection';
 import { FooterSection } from './components/FooterSection';
 import { AppointmentModal } from './components/AppointmentModal';
@@ -168,9 +166,6 @@ export function App() {
         {/* Clinic Branches Section (Valanchery & Edayoor) */}
         <BranchesSection onOpenBooking={handleOpenBooking} />
 
-        {/* Frame 14: Who We Help? (Kids, Teenage, Adults) */}
-        <WhoWeHelpSection />
-
         {/* Frames 15-17: 39 Google Reviews Testimonial Slider */}
         <ReviewsSection />
       </main>
@@ -204,8 +199,8 @@ export function App() {
                 display: 'inline-flex',
                 alignItems: 'center',
                 gap: '0.55rem',
-                backgroundColor: 'var(--color-lime)',
-                color: '#18181B',
+                backgroundColor: '#D7F846',
+                color: '#5E2614',
                 fontFamily: 'var(--font-main)',
                 fontSize: 'clamp(0.78rem, 0.95vw, 0.84rem)',
                 fontWeight: 800,
@@ -213,20 +208,20 @@ export function App() {
                 textTransform: 'uppercase',
                 padding: '0.72rem 1.35rem',
                 borderRadius: 'var(--radius-pill)',
-                border: '2px solid rgba(255, 255, 255, 0.55)',
+                border: '2px solid rgba(255, 255, 255, 0.75)',
                 cursor: 'pointer',
-                boxShadow: '0 8px 24px rgba(0, 0, 0, 0.3), 0 2px 12px rgba(215, 248, 70, 0.5)',
+                boxShadow: '0 8px 24px rgba(0, 0, 0, 0.18), 0 0 16px rgba(215, 248, 70, 0.4)',
                 backdropFilter: 'blur(10px)',
                 WebkitBackdropFilter: 'blur(10px)',
-                transition: 'box-shadow 0.2s ease',
+                transition: 'background-color 0.2s ease, box-shadow 0.2s ease',
               }}
               onMouseEnter={(e) => {
-                e.currentTarget.style.boxShadow =
-                  '0 12px 30px rgba(0, 0, 0, 0.35), 0 4px 18px rgba(215, 248, 70, 0.7)';
+                e.currentTarget.style.backgroundColor = '#E2FA65';
+                e.currentTarget.style.boxShadow = '0 12px 30px rgba(0, 0, 0, 0.22), 0 0 22px rgba(215, 248, 70, 0.6)';
               }}
               onMouseLeave={(e) => {
-                e.currentTarget.style.boxShadow =
-                  '0 8px 24px rgba(0, 0, 0, 0.3), 0 2px 12px rgba(215, 248, 70, 0.5)';
+                e.currentTarget.style.backgroundColor = '#D7F846';
+                e.currentTarget.style.boxShadow = '0 8px 24px rgba(0, 0, 0, 0.18), 0 0 16px rgba(215, 248, 70, 0.4)';
               }}
             >
               <Calendar size={17} strokeWidth={2.4} />
@@ -235,63 +230,6 @@ export function App() {
           </motion.div>
         )}
       </AnimatePresence>
-
-      {/* Desktop Mode Only: WhatsApp contact button on the right end */}
-      {!isMobile && (
-        <motion.div
-          initial={{ opacity: 0, scale: 0.9 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.35, delay: 0.1 }}
-          style={{
-            position: 'fixed',
-            bottom: 'clamp(1.25rem, 2.8vw, 2.25rem)',
-            right: 'clamp(1.25rem, 3vw, 2.5rem)',
-            zIndex: 90,
-          }}
-        >
-          <motion.a
-            href="https://wa.me/919495964737?text=Hello%20Smile%20Dentos%2C%20I%20would%20like%20to%20inquire%20about%20an%20appointment."
-            target="_blank"
-            rel="noopener noreferrer"
-            whileHover={{ scale: 1.06, y: -2 }}
-            whileTap={{ scale: 0.95 }}
-            aria-label="Contact through WhatsApp"
-            title="Chat on WhatsApp: 094959 64737"
-            style={{
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: '0.55rem',
-              backgroundColor: '#25D366',
-              color: '#FFFFFF',
-              fontFamily: 'var(--font-main)',
-              fontSize: 'clamp(0.78rem, 0.95vw, 0.84rem)',
-              fontWeight: 800,
-              letterSpacing: '0.04em',
-              textTransform: 'uppercase',
-              padding: '0.72rem 1.35rem',
-              borderRadius: 'var(--radius-pill)',
-              border: '2px solid rgba(255, 255, 255, 0.45)',
-              cursor: 'pointer',
-              boxShadow: '0 8px 24px rgba(0, 0, 0, 0.25), 0 2px 14px rgba(37, 211, 102, 0.5)',
-              backdropFilter: 'blur(10px)',
-              WebkitBackdropFilter: 'blur(10px)',
-              textDecoration: 'none',
-              transition: 'box-shadow 0.2s ease',
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.boxShadow =
-                '0 12px 30px rgba(0, 0, 0, 0.35), 0 4px 20px rgba(37, 211, 102, 0.7)';
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.boxShadow =
-                '0 8px 24px rgba(0, 0, 0, 0.25), 0 2px 14px rgba(37, 211, 102, 0.5)';
-            }}
-          >
-            <WhatsAppIcon size={18} />
-            <span>WhatsApp</span>
-          </motion.a>
-        </motion.div>
-      )}
 
       {/* Interactive Booking Modal */}
       <AppointmentModal

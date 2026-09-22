@@ -22,7 +22,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onOpenBooking }) => {
         paddingTop: 'clamp(6rem, 12vw, 8rem)',
         paddingBottom: 'clamp(2.5rem, 5vw, 4.5rem)',
         overflow: 'hidden',
-        backgroundColor: '#1E120D',
+        backgroundColor: '#FFFFFF',
       }}
     >
       {/* Background Macro Smile Image with Subtle Cinematic Zoom (Keyframe 02) */}
@@ -45,18 +45,6 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onOpenBooking }) => {
             height: '100%',
             objectFit: 'cover',
             objectPosition: 'center 35%',
-            filter: 'contrast(1.02) brightness(0.96)',
-          }}
-        />
-        {/* Subtle Vignette & Gradient for Perfect Typography Contrast */}
-        <div
-          style={{
-            position: 'absolute',
-            inset: 0,
-            background: `
-              linear-gradient(to bottom, rgba(14, 10, 8, 0.38) 0%, rgba(14, 10, 8, 0.08) 30%, rgba(14, 10, 8, 0.45) 65%, rgba(14, 10, 8, 0.88) 100%),
-              radial-gradient(ellipse at center, transparent 40%, rgba(14, 10, 8, 0.5) 100%)
-            `,
           }}
         />
       </motion.div>
@@ -79,6 +67,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onOpenBooking }) => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.85, delay: 0.15, ease: [0.16, 1, 0.3, 1] }}
             style={{ flex: '1 1 420px', maxWidth: '100%' }}
+            className="hero-title-col"
           >
             <h1
               style={{
@@ -88,12 +77,11 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onOpenBooking }) => {
                 lineHeight: 0.98,
                 letterSpacing: '-0.035em',
                 color: 'var(--color-white)',
-                textShadow: '0 4px 20px rgba(0,0,0,0.4)',
                 margin: 0,
                 wordBreak: 'break-word',
               }}
             >
-              Gentle<br />Dental Care
+              Gentle<br />Dental <span style={{ color: 'var(--color-teal-500)' }}>Care</span>
             </h1>
           </motion.div>
 
@@ -105,8 +93,8 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onOpenBooking }) => {
             style={{
               display: 'flex',
               flexDirection: 'column',
-              alignItems: 'flex-end',
-              textAlign: 'right',
+              alignItems: 'flex-start',
+              textAlign: 'left',
               gap: '1.25rem',
               flex: '0 1 380px',
             }}
@@ -123,10 +111,10 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onOpenBooking }) => {
                 fontFamily: 'var(--font-main)',
                 fontSize: 'clamp(0.92rem, 1.2vw, 1.05rem)',
                 lineHeight: 1.55,
-                color: 'rgba(255, 255, 255, 0.92)',
+                color: '#18181B',
                 maxWidth: '380px',
-                fontWeight: 400,
-                textShadow: '0 2px 10px rgba(0,0,0,0.5)',
+                fontWeight: 600,
+                textAlign: 'left',
                 margin: 0,
               }}
             >
@@ -145,18 +133,27 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onOpenBooking }) => {
                   alignItems: 'center',
                   justifyContent: 'center',
                   gap: '0.45rem',
-                  backgroundColor: 'var(--color-lime)',
-                  color: '#18181B',
+                  backgroundColor: 'var(--color-brand-500)',
+                  color: '#FFFFFF',
                   padding: '0.82rem 1.2rem',
                   borderRadius: 'var(--radius-pill)',
                   fontWeight: 800,
                   fontSize: '0.88rem',
                   fontFamily: 'var(--font-main)',
                   letterSpacing: '0.04em',
-                  boxShadow: '0 8px 24px rgba(215, 248, 70, 0.35)',
+                  boxShadow: '0 8px 24px rgba(31, 95, 212, 0.35)',
                   cursor: 'pointer',
                   textAlign: 'center',
                   border: 'none',
+                  transition: 'background-color 0.2s ease, transform 0.2s ease',
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.backgroundColor = 'var(--color-brand-600)';
+                  e.currentTarget.style.transform = 'translateY(-2px)';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.backgroundColor = 'var(--color-brand-500)';
+                  e.currentTarget.style.transform = 'translateY(0)';
                 }}
               >
                 <Calendar size={17} strokeWidth={2.4} />
@@ -198,25 +195,31 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onOpenBooking }) => {
 
       <style>{`
         @media (max-width: 768px) {
+          #hero {
+            padding-bottom: clamp(1.5rem, 5vw, 2.25rem) !important;
+          }
           .hero-bg-img {
             object-position: center 25% !important;
           }
           .hero-bottom-container {
             flex-direction: column !important;
             align-items: flex-start !important;
-            gap: 1.5rem !important;
+            gap: clamp(1.35rem, 3.6vw, 1.65rem) !important;
+          }
+          .hero-title-col {
+            flex: 0 0 auto !important;
+            width: 100% !important;
+            max-width: 100% !important;
           }
           .hero-right-col {
             align-items: flex-start !important;
             text-align: left !important;
             width: 100% !important;
-            flex: 1 1 auto !important;
-            gap: 1rem !important;
+            flex: 0 0 auto !important;
+            gap: 0.75rem !important;
           }
           .hero-rotating-badge {
-            transform: scale(0.82);
-            transform-origin: left center;
-            margin-bottom: -0.5rem;
+            display: none !important;
           }
           .hero-mobile-cta {
             display: flex !important;

@@ -10,7 +10,7 @@ export const TransformSection: React.FC<TransformSectionProps> = ({ onOpenBookin
     <section
       id="about"
       style={{
-        backgroundColor: 'var(--color-rust)',
+        backgroundColor: '#0038A2',
         paddingTop: 'clamp(5rem, 9vw, 9rem)',
         paddingBottom: 'clamp(5rem, 9vw, 9rem)',
         position: 'relative',
@@ -31,7 +31,7 @@ export const TransformSection: React.FC<TransformSectionProps> = ({ onOpenBookin
               fontWeight: 700,
               lineHeight: 1.15,
               letterSpacing: '-0.03em',
-              color: 'var(--color-white)',
+              color: '#FFFFFF',
               maxWidth: '1200px',
               margin: 0,
               wordBreak: 'break-word',
@@ -45,7 +45,7 @@ export const TransformSection: React.FC<TransformSectionProps> = ({ onOpenBookin
                 display: 'inline-flex',
                 alignItems: 'center',
                 gap: '0.5rem',
-                color: 'var(--color-lime)',
+                color: 'var(--color-teal-300)',
                 marginRight: '0.5rem',
               }}
             >
@@ -70,7 +70,7 @@ export const TransformSection: React.FC<TransformSectionProps> = ({ onOpenBookin
             <span>with State-of-the</span>
             <br />
             <span>art </span>
-            <span style={{ color: 'var(--color-lime)' }}>Dental Care</span>
+            <span style={{ color: 'var(--color-teal-300)' }}>Dental Care</span>
             {/* Inline Horizontal Capsule Aligner Pill (Strictly matching Frame 04) */}
             <span
               style={{
@@ -82,7 +82,7 @@ export const TransformSection: React.FC<TransformSectionProps> = ({ onOpenBookin
                 borderRadius: 'var(--radius-pill)',
                 overflow: 'hidden',
                 border: '2px solid rgba(255, 255, 255, 0.4)',
-                boxShadow: '0 4px 14px rgba(0,0,0,0.25)',
+                boxShadow: '0 4px 14px rgba(0, 0, 0, 0.25)',
                 transform: 'translateY(-2px)',
               }}
             >
@@ -130,7 +130,7 @@ export const TransformSection: React.FC<TransformSectionProps> = ({ onOpenBookin
                 fontFamily: 'var(--font-main)',
                 fontSize: 'clamp(0.95rem, 1.2vw, 1.12rem)',
                 lineHeight: 1.6,
-                color: 'rgba(255, 255, 255, 0.88)',
+                color: 'rgba(255, 255, 255, 0.92)',
                 fontWeight: 400,
                 margin: 0,
               }}
@@ -144,12 +144,12 @@ export const TransformSection: React.FC<TransformSectionProps> = ({ onOpenBookin
                 display: 'flex',
                 alignItems: 'center',
                 gap: '8px',
-                color: 'rgba(255, 255, 255, 0.85)',
+                color: 'rgba(255, 255, 255, 0.88)',
                 fontSize: '0.85rem',
                 fontFamily: 'var(--font-main)',
               }}
             >
-              <span style={{ color: 'var(--color-lime)' }}>📍</span>
+              <span style={{ color: 'var(--color-teal-300)' }}>📍</span>
               <span>Opposite Hamad Lab & OBG Clinic, Kolamangalam, Valanchery</span>
             </div>
 
@@ -158,7 +158,7 @@ export const TransformSection: React.FC<TransformSectionProps> = ({ onOpenBookin
               style={{
                 width: '100%',
                 height: '1px',
-                backgroundColor: 'rgba(215, 248, 70, 0.3)',
+                backgroundColor: 'rgba(255, 255, 255, 0.22)',
               }}
             />
 
@@ -180,7 +180,7 @@ export const TransformSection: React.FC<TransformSectionProps> = ({ onOpenBookin
                     fontFamily: 'var(--font-main)',
                     fontSize: '0.9rem',
                     letterSpacing: '0.02em',
-                    color: 'rgba(255, 255, 255, 0.8)',
+                    color: 'rgba(255, 255, 255, 0.85)',
                     cursor: 'pointer',
                     textAlign: 'left',
                     background: 'none',
@@ -188,12 +188,22 @@ export const TransformSection: React.FC<TransformSectionProps> = ({ onOpenBookin
                     padding: 0,
                     transition: 'color 0.2s',
                   }}
-                  onMouseEnter={(e) => (e.currentTarget.style.color = 'var(--color-lime)')}
-                  onMouseLeave={(e) => (e.currentTarget.style.color = 'rgba(255, 255, 255, 0.8)')}
+                  onMouseEnter={(e) => (e.currentTarget.style.color = '#FFFFFF')}
+                  onMouseLeave={(e) => (e.currentTarget.style.color = 'rgba(255, 255, 255, 0.85)')}
                 >
                   Call Clinic Directly
                 </button>
-                <span style={{ fontSize: '0.75rem', color: 'var(--color-lime)', fontWeight: 600 }}>
+                <span
+                  style={{
+                    fontSize: '0.75rem',
+                    color: '#FFFFFF',
+                    backgroundColor: 'rgba(255, 255, 255, 0.15)',
+                    border: '1px solid rgba(255, 255, 255, 0.25)',
+                    padding: '0.2rem 0.65rem',
+                    borderRadius: 'var(--radius-pill)',
+                    fontWeight: 600,
+                  }}
+                >
                   Mon – Sat · 10 AM – 6:30 PM
                 </span>
               </div>
@@ -203,16 +213,16 @@ export const TransformSection: React.FC<TransformSectionProps> = ({ onOpenBookin
                   fontFamily: 'var(--font-display)',
                   fontSize: 'clamp(1.7rem, 4.5vw, 2.5rem)',
                   fontWeight: 700,
-                  color: 'var(--color-lime)',
+                  color: '#FFFFFF',
                   letterSpacing: '-0.02em',
                   textDecoration: 'underline',
                   textUnderlineOffset: '6px',
                   textDecorationThickness: '2px',
                   display: 'inline-block',
-                  transition: 'opacity 0.2s ease',
+                  transition: 'color 0.2s ease, opacity 0.2s ease',
                 }}
-                onMouseEnter={(e) => (e.currentTarget.style.opacity = '0.85')}
-                onMouseLeave={(e) => (e.currentTarget.style.opacity = '1')}
+                onMouseEnter={(e) => (e.currentTarget.style.color = 'var(--color-teal-300)')}
+                onMouseLeave={(e) => (e.currentTarget.style.color = '#FFFFFF')}
               >
                 094959 64737
               </a>

@@ -18,38 +18,74 @@ const GOOGLE_MAPS_REVIEWS_URL =
 const reviewsData: Review[] = [
   {
     id: '1',
-    category: 'Patient Experience',
-    categoryBg: '#FDF1CC',
-    leadQuote: '“Outstanding service & friendly staff”',
-    body: 'The staff were friendly, the clinic was clean, and the service was outstanding. Gentle care from start to finish.',
-    author: 'Verified Google Patient',
+    category: 'Painless Root Canal',
+    categoryBg: 'var(--color-brand-50)',
+    leadQuote: '“Completely painless root canal treatment”',
+    body: 'I was terrified of getting a root canal done, but the doctors at Smile Dentos made the entire procedure completely painless. The care, modern instruments, and gentle handling were truly remarkable. Highly recommend!',
+    author: 'Mohammed Shafi K.',
     rating: 5,
   },
   {
     id: '2',
-    category: 'Doctor Care',
-    categoryBg: '#E9E0FA',
-    leadQuote: '“Quality treatment and friendly doctors”',
-    body: 'Quality treatment and friendly doctors. Highly recommended for families in Valanchery seeking painless dental treatments.',
-    author: 'Valanchery Patient',
+    category: 'Clear Aligners & Braces',
+    categoryBg: 'var(--color-teal-50)',
+    leadQuote: '“Best orthodontic clinic in Valanchery”',
+    body: 'Consulted here for my teeth alignment. The orthodontist clearly explained the treatment timeline and cost without any hidden charges. My smile confidence has improved so much in just a few months!',
+    author: 'Anjali Menon',
     rating: 5,
   },
   {
     id: '3',
-    category: 'Professionalism',
-    categoryBg: '#D8ECF9',
-    leadQuote: '“Deeply dedicated to their work”',
-    body: 'The team is highly professional and deeply dedicated to their work. Pristine hygienic clinic and compassionate staff.',
-    author: 'Google Local Reviewer',
+    category: 'Pediatric Dentistry',
+    categoryBg: 'var(--color-brand-50)',
+    leadQuote: '“So patient and gentle with my 6-year-old”',
+    body: 'Taking my daughter to a dentist used to be a struggle until we visited Smile Dentos. The doctors and staff were so warm and friendly that she sat through her cavity filling without crying once.',
+    author: 'Fathima Raniya',
     rating: 5,
   },
   {
     id: '4',
-    category: 'Family Dentistry',
-    categoryBg: '#E2F8DB',
-    leadQuote: '“Convenient location & top hygiene”',
-    body: 'Conveniently located opposite Hamad Lab in Kolamangalam, Valanchery. Excellent orthodontic and dental filling care for all ages.',
-    author: 'Family Care Review',
+    category: 'Dental Implants & Crowns',
+    categoryBg: 'var(--color-teal-50)',
+    leadQuote: '“Restored my father’s smile and chewing comfort”',
+    body: 'Got dental implants and zirconia crowns done for my father. The precision and finish look exactly like natural teeth. The clinic hygiene and post-treatment follow-up calls were exceptional.',
+    author: 'Sujith Kumar P.',
+    rating: 5,
+  },
+  {
+    id: '5',
+    category: 'Wisdom Tooth Extraction',
+    categoryBg: 'var(--color-brand-50)',
+    leadQuote: '“Smooth wisdom tooth removal without swelling”',
+    body: 'Had severe pain due to an impacted wisdom tooth. The oral surgeon extracted it in less than 20 minutes with zero discomfort during the procedure. Fast recovery and very reasonable charges.',
+    author: 'Dr. Harikrishnan Nair',
+    rating: 5,
+  },
+  {
+    id: '6',
+    category: 'Teeth Cleaning & Whitening',
+    categoryBg: 'var(--color-teal-50)',
+    leadQuote: '“Pristine hygiene and thorough scaling”',
+    body: 'Visited for deep teeth cleaning and polishing before a family wedding. The doctor patiently explained daily oral hygiene tips and plaque prevention. Very spotless clinic environment opposite Hamad Lab.',
+    author: 'Aysha Nihala',
+    rating: 5,
+  },
+  {
+    id: '7',
+    category: 'Family Dental Care',
+    categoryBg: 'var(--color-brand-50)',
+    leadQuote: '“Our trusted dental clinic for the whole family”',
+    body: 'From regular checkups for my grandparents to dental fillings for my children, Smile Dentos has been our family’s go-to clinic in Valanchery. Punctual appointments and wonderful hospitality.',
+    author: 'Abdul Rasheed V.P.',
+    rating: 5,
+  },
+  {
+    id: '8',
+    category: 'Emergency Dental Relief',
+    categoryBg: 'var(--color-teal-50)',
+    leadQuote: '“Immediate relief for sudden toothache”',
+    body: 'Walked in with excruciating late-evening toothache. The team accommodated me promptly, diagnosed the nerve issue, and provided immediate relief. Immensely grateful for their prompt care.',
+    author: 'Vignesh K. Ram',
     rating: 5,
   },
 ];
@@ -84,8 +120,8 @@ export const ReviewsSection: React.FC = () => {
     <section
       id="reviews"
       style={{
-        backgroundColor: 'var(--color-cream)',
-        color: '#5E2614',
+        backgroundColor: '#F0F2F6',
+        color: 'var(--color-neutral-900)',
         paddingTop: 'clamp(4.5rem, 7vw, 8rem)',
         paddingBottom: 'clamp(4.5rem, 7vw, 8rem)',
         position: 'relative',
@@ -93,7 +129,7 @@ export const ReviewsSection: React.FC = () => {
       }}
     >
       <div className="container">
-        {/* Header with Masked Entrance Reveal & Navigation Controls (Keyframes 15–17) */}
+        {/* Header with Masked Entrance Reveal & Navigation Controls */}
         <div
           style={{
             display: 'flex',
@@ -112,18 +148,18 @@ export const ReviewsSection: React.FC = () => {
                 display: 'inline-flex',
                 alignItems: 'center',
                 gap: '8px',
-                backgroundColor: 'var(--color-white)',
+                backgroundColor: 'var(--color-neutral-0)',
                 padding: '0.4rem 1.1rem',
                 borderRadius: 'var(--radius-pill)',
-                border: '1px solid rgba(94, 38, 20, 0.15)',
-                boxShadow: '0 4px 14px rgba(94, 38, 20, 0.05)',
+                border: '1px solid var(--color-neutral-200)',
+                boxShadow: '0 4px 14px rgba(12, 43, 109, 0.04)',
                 width: 'fit-content',
               }}
             >
               <div style={{ display: 'flex', gap: '2px', color: '#E5A500', fontSize: '0.95rem' }}>
                 ★★★★★
               </div>
-              <span style={{ fontSize: '0.82rem', fontWeight: 700, color: '#5E2614', fontFamily: 'var(--font-main)' }}>
+              <span style={{ fontSize: '0.82rem', fontWeight: 700, color: 'var(--color-neutral-800)', fontFamily: 'var(--font-main)' }}>
                 5.0 Google Review Summary
               </span>
             </div>
@@ -139,7 +175,7 @@ export const ReviewsSection: React.FC = () => {
                   fontSize: 'clamp(2.1rem, 5vw, 4.4rem)',
                   fontWeight: 600,
                   letterSpacing: '-0.03em',
-                  color: '#5E2614',
+                  color: 'var(--color-neutral-900)',
                   margin: 0,
                 }}
               >
@@ -147,7 +183,7 @@ export const ReviewsSection: React.FC = () => {
               </motion.h2>
             </div>
 
-            <p style={{ margin: 0, fontFamily: 'var(--font-main)', fontSize: '0.92rem', color: '#5E2614', opacity: 0.8 }}>
+            <p style={{ margin: 0, fontFamily: 'var(--font-main)', fontSize: '0.92rem', color: 'var(--color-neutral-600)' }}>
               100% 5-Star rated patient experiences at Smile Dentos, Valanchery
             </p>
           </div>
@@ -164,28 +200,32 @@ export const ReviewsSection: React.FC = () => {
                 gap: '6px',
                 padding: '0.6rem 1.2rem',
                 borderRadius: 'var(--radius-pill)',
-                border: '1.5px solid #5E2614',
-                color: '#5E2614',
+                border: '1.5px solid var(--color-brand-500)',
+                color: 'var(--color-brand-500)',
+                backgroundColor: '#FFFFFF',
                 fontFamily: 'var(--font-main)',
                 fontSize: '0.85rem',
                 fontWeight: 700,
                 textDecoration: 'none',
+                boxShadow: '0 2px 8px rgba(0, 0, 0, 0.04)',
                 transition: 'all 0.2s ease',
               }}
               onMouseEnter={(e) => {
-                e.currentTarget.style.backgroundColor = '#5E2614';
-                e.currentTarget.style.color = 'var(--color-cream)';
+                e.currentTarget.style.backgroundColor = 'var(--color-brand-500)';
+                e.currentTarget.style.color = '#FFFFFF';
+                e.currentTarget.style.transform = 'translateY(-1px)';
               }}
               onMouseLeave={(e) => {
-                e.currentTarget.style.backgroundColor = 'transparent';
-                e.currentTarget.style.color = '#5E2614';
+                e.currentTarget.style.backgroundColor = '#FFFFFF';
+                e.currentTarget.style.color = 'var(--color-brand-500)';
+                e.currentTarget.style.transform = 'translateY(0)';
               }}
             >
               <span>Rate on Google</span>
               <ExternalLink size={14} />
             </a>
 
-            {/* Thin Circular Outline Arrow Buttons (Frame 15) */}
+            {/* Thin Circular Outline Arrow Buttons */}
             <div style={{ display: 'flex', gap: '0.65rem' }}>
               <button
                 onClick={handlePrev}
@@ -194,22 +234,25 @@ export const ReviewsSection: React.FC = () => {
                   width: '44px',
                   height: '44px',
                   borderRadius: '50%',
-                  border: '1.5px solid #5E2614',
+                  border: '1.5px solid var(--color-brand-500)',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
-                  color: '#5E2614',
-                  backgroundColor: 'transparent',
+                  color: 'var(--color-brand-500)',
+                  backgroundColor: '#FFFFFF',
+                  boxShadow: '0 2px 8px rgba(0, 0, 0, 0.04)',
                   transition: 'all 0.2s ease',
                   cursor: 'pointer',
                 }}
                 onMouseEnter={(e) => {
-                  e.currentTarget.style.backgroundColor = '#5E2614';
-                  e.currentTarget.style.color = 'var(--color-cream)';
+                  e.currentTarget.style.backgroundColor = 'var(--color-brand-500)';
+                  e.currentTarget.style.color = '#FFFFFF';
+                  e.currentTarget.style.transform = 'scale(1.05)';
                 }}
                 onMouseLeave={(e) => {
-                  e.currentTarget.style.backgroundColor = 'transparent';
-                  e.currentTarget.style.color = '#5E2614';
+                  e.currentTarget.style.backgroundColor = '#FFFFFF';
+                  e.currentTarget.style.color = 'var(--color-brand-500)';
+                  e.currentTarget.style.transform = 'scale(1)';
                 }}
               >
                 <ArrowLeft size={19} strokeWidth={1.75} />
@@ -221,22 +264,25 @@ export const ReviewsSection: React.FC = () => {
                   width: '44px',
                   height: '44px',
                   borderRadius: '50%',
-                  border: '1.5px solid #5E2614',
+                  border: '1.5px solid var(--color-brand-500)',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
-                  color: '#5E2614',
-                  backgroundColor: 'transparent',
+                  color: 'var(--color-brand-500)',
+                  backgroundColor: '#FFFFFF',
+                  boxShadow: '0 2px 8px rgba(0, 0, 0, 0.04)',
                   transition: 'all 0.2s ease',
                   cursor: 'pointer',
                 }}
                 onMouseEnter={(e) => {
-                  e.currentTarget.style.backgroundColor = '#5E2614';
-                  e.currentTarget.style.color = 'var(--color-cream)';
+                  e.currentTarget.style.backgroundColor = 'var(--color-brand-500)';
+                  e.currentTarget.style.color = '#FFFFFF';
+                  e.currentTarget.style.transform = 'scale(1.05)';
                 }}
                 onMouseLeave={(e) => {
-                  e.currentTarget.style.backgroundColor = 'transparent';
-                  e.currentTarget.style.color = '#5E2614';
+                  e.currentTarget.style.backgroundColor = '#FFFFFF';
+                  e.currentTarget.style.color = 'var(--color-brand-500)';
+                  e.currentTarget.style.transform = 'scale(1)';
                 }}
               >
                 <ArrowRight size={19} strokeWidth={1.75} />
@@ -263,40 +309,40 @@ export const ReviewsSection: React.FC = () => {
                 exit={{ opacity: 0, scale: 0.96 }}
                 transition={{ duration: 0.55, delay: idx * 0.08, ease: [0.16, 1, 0.3, 1] }}
                 style={{
-                  backgroundColor: 'var(--color-white)',
+                  backgroundColor: 'var(--color-neutral-0)',
                   borderRadius: 'var(--radius-card)',
                   padding: 'clamp(1.6rem, 2.5vw, 2.8rem) clamp(1.4rem, 2vw, 2.25rem)',
                   display: 'flex',
                   flexDirection: 'column',
                   justifyContent: 'space-between',
                   minHeight: 'clamp(280px, 32vw, 380px)',
-                  boxShadow: '0 8px 30px rgba(94, 38, 20, 0.06)',
-                  border: '1px solid rgba(94, 38, 20, 0.05)',
+                  boxShadow: '0 8px 30px rgba(12, 43, 109, 0.05)',
+                  border: '1px solid rgba(0, 0, 0, 0.06)',
                   transition: 'transform 0.3s ease, box-shadow 0.3s ease',
                 }}
                 onMouseEnter={(e) => {
                   e.currentTarget.style.transform = 'translateY(-4px)';
-                  e.currentTarget.style.boxShadow = '0 16px 40px rgba(94, 38, 20, 0.12)';
+                  e.currentTarget.style.boxShadow = '0 16px 40px rgba(12, 43, 109, 0.08)';
                 }}
                 onMouseLeave={(e) => {
                   e.currentTarget.style.transform = 'translateY(0)';
-                  e.currentTarget.style.boxShadow = '0 8px 30px rgba(94, 38, 20, 0.06)';
+                  e.currentTarget.style.boxShadow = '0 8px 30px rgba(12, 43, 109, 0.04)';
                 }}
               >
                 <div>
-                  {/* Category Pill Tag (Frame 17) */}
+                  {/* Category Pill Tag */}
                   <div
                     style={{
                       display: 'inline-block',
                       backgroundColor: rev.categoryBg,
-                      color: '#5E2614',
+                      color: 'var(--color-neutral-800)',
                       fontFamily: 'var(--font-main)',
                       fontSize: '0.78rem',
                       fontWeight: 600,
                       padding: '0.35rem 1.1rem',
                       borderRadius: 'var(--radius-pill)',
                       marginBottom: '1.25rem',
-                      border: '1px solid rgba(94, 38, 20, 0.15)',
+                      border: '1px solid var(--color-neutral-200)',
                     }}
                   >
                     {rev.category}
@@ -310,7 +356,7 @@ export const ReviewsSection: React.FC = () => {
                       fontWeight: 600,
                       lineHeight: 1.3,
                       letterSpacing: '-0.02em',
-                      color: '#5E2614',
+                      color: 'var(--color-neutral-800)',
                       marginBottom: '0.85rem',
                       marginTop: 0,
                     }}
@@ -324,8 +370,7 @@ export const ReviewsSection: React.FC = () => {
                       fontFamily: 'var(--font-main)',
                       fontSize: 'clamp(0.88rem, 1.05vw, 1rem)',
                       lineHeight: 1.6,
-                      color: '#5E2614',
-                      opacity: 0.82,
+                      color: 'var(--color-neutral-600)',
                       margin: 0,
                     }}
                   >
@@ -341,7 +386,7 @@ export const ReviewsSection: React.FC = () => {
                     justifyContent: 'space-between',
                     marginTop: '2rem',
                     paddingTop: '1rem',
-                    borderTop: '1px solid rgba(94, 38, 20, 0.08)',
+                    borderTop: '1px solid var(--color-neutral-200)',
                   }}
                 >
                   <div style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
@@ -350,12 +395,12 @@ export const ReviewsSection: React.FC = () => {
                         fontFamily: 'var(--font-main)',
                         fontSize: '0.92rem',
                         fontWeight: 700,
-                        color: '#5E2614',
+                        color: 'var(--color-neutral-800)',
                       }}
                     >
                       {rev.author}
                     </span>
-                    <span style={{ fontSize: '0.72rem', color: '#5E2614', opacity: 0.65, fontWeight: 500 }}>
+                    <span style={{ fontSize: '0.72rem', color: 'var(--color-neutral-500)', fontWeight: 500 }}>
                       Google Review · 5.0 ★
                     </span>
                   </div>

@@ -69,8 +69,8 @@ export const BranchesSection: React.FC<BranchesSectionProps> = ({ onOpenBooking 
     <section
       id="branches"
       style={{
-        backgroundColor: 'var(--color-rust)',
-        color: 'var(--color-white)',
+        backgroundColor: '#FFFFFF',
+        color: 'var(--color-neutral-900)',
         paddingTop: 'clamp(5.8rem, 7.8vw, 8.5rem)',
         paddingBottom: 'clamp(4.5rem, 7vw, 7rem)',
         position: 'relative',
@@ -97,7 +97,7 @@ export const BranchesSection: React.FC<BranchesSectionProps> = ({ onOpenBooking 
               fontWeight: 700,
               letterSpacing: '0.14em',
               textTransform: 'uppercase',
-              color: 'var(--color-lime)',
+              color: 'var(--color-brand-600)',
               marginBottom: '0.65rem',
               display: 'inline-block',
             }}
@@ -113,22 +113,28 @@ export const BranchesSection: React.FC<BranchesSectionProps> = ({ onOpenBooking 
               fontWeight: 700,
               letterSpacing: '-0.025em',
               lineHeight: 1.15,
-              color: 'var(--color-white)',
+              color: 'var(--color-neutral-900)',
               margin: '0 0 1.75rem 0',
             }}
           >
             Visit Our Branches
           </h2>
 
-          {/* Refined Branch Selector */}
+          {/* Refined Branch Selector (Unified Semi-Circle Pill) */}
           <div
             role="tablist"
             aria-label="Clinic Branches"
             style={{
               display: 'inline-flex',
               alignItems: 'center',
-              gap: 'clamp(1.75rem, 3.5vw, 3.25rem)',
+              backgroundColor: '#F1F5F9',
+              padding: '6px',
+              borderRadius: '9999px',
+              border: '1px solid #E2E8F0',
+              boxShadow: '0 2px 10px rgba(0, 0, 0, 0.04)',
+              gap: '6px',
               position: 'relative',
+              maxWidth: '100%',
             }}
           >
             {branches.map((branch) => {
@@ -141,77 +147,80 @@ export const BranchesSection: React.FC<BranchesSectionProps> = ({ onOpenBooking 
                   onClick={() => setActiveBranchId(branch.id)}
                   style={{
                     position: 'relative',
-                    padding: '0.5rem 0.25rem 0.85rem 0.25rem',
-                    background: 'none',
-                    border: 'none',
-                    color: isActive ? 'var(--color-lime)' : 'rgba(255, 255, 255, 0.65)',
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: '0.65rem',
+                    padding: '0.65rem 1.4rem',
+                    borderRadius: '9999px',
+                    backgroundColor: isActive ? 'var(--color-brand-500)' : 'transparent',
+                    color: isActive ? '#FFFFFF' : 'var(--color-neutral-600)',
                     fontFamily: 'var(--font-main)',
-                    fontSize: 'clamp(0.92rem, 1.1vw, 1.05rem)',
+                    fontSize: 'clamp(0.85rem, 1.05vw, 0.95rem)',
                     fontWeight: 700,
-                    letterSpacing: '0.1em',
+                    letterSpacing: '0.04em',
                     textTransform: 'uppercase',
                     cursor: 'pointer',
-                    transition: 'color 0.25s ease',
+                    transition: 'all 0.25s ease',
+                    border: 'none',
+                    boxShadow: isActive ? '0 4px 14px rgba(0, 56, 162, 0.35)' : 'none',
                   }}
                   onMouseEnter={(e) => {
-                    if (!isActive) e.currentTarget.style.color = 'var(--color-white)';
+                    if (!isActive) e.currentTarget.style.color = 'var(--color-neutral-900)';
                   }}
                   onMouseLeave={(e) => {
-                    if (!isActive) e.currentTarget.style.color = 'rgba(255, 255, 255, 0.65)';
+                    if (!isActive) e.currentTarget.style.color = 'var(--color-neutral-600)';
                   }}
                 >
-                  <span style={{ display: 'inline-flex', alignItems: 'center', gap: '0.55rem' }}>
-                    <span>{branch.shortName}</span>
+                  <MapPin size={15} color={isActive ? '#FFFFFF' : 'var(--color-brand-500)'} />
+                  <span>{branch.shortName}</span>
+                  <span
+                    style={{
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      gap: '4px',
+                      padding: '2px 7px',
+                      borderRadius: '9999px',
+                      fontSize: '0.62rem',
+                      fontWeight: 700,
+                      letterSpacing: '0.04em',
+                      textTransform: 'uppercase',
+                      backgroundColor: isActive
+                        ? 'rgba(255, 255, 255, 0.22)'
+                        : branch.status === 'Opened'
+                        ? 'rgba(22, 163, 74, 0.12)'
+                        : 'rgba(239, 68, 68, 0.12)',
+                      border: isActive
+                        ? '1px solid rgba(255, 255, 255, 0.35)'
+                        : branch.status === 'Opened'
+                        ? '1px solid rgba(22, 163, 74, 0.35)'
+                        : '1px solid rgba(239, 68, 68, 0.35)',
+                      color: isActive
+                        ? '#FFFFFF'
+                        : branch.status === 'Opened'
+                        ? '#15803D'
+                        : '#DC2626',
+                      lineHeight: 1.2,
+                    }}
+                  >
                     <span
                       style={{
-                        display: 'inline-flex',
-                        alignItems: 'center',
-                        gap: '4px',
-                        padding: '2px 7px',
-                        borderRadius: '9999px',
-                        fontSize: '0.62rem',
-                        fontWeight: 700,
-                        letterSpacing: '0.04em',
-                        textTransform: 'uppercase',
-                        backgroundColor:
-                          branch.status === 'Opened'
-                            ? 'rgba(34, 197, 94, 0.2)'
-                            : 'rgba(239, 68, 68, 0.2)',
-                        border:
-                          branch.status === 'Opened'
-                            ? '1px solid rgba(74, 222, 128, 0.45)'
-                            : '1px solid rgba(248, 113, 113, 0.45)',
-                        color: branch.status === 'Opened' ? '#86EFAC' : '#FCA5A5',
-                        lineHeight: 1.2,
+                        width: '5px',
+                        height: '5px',
+                        borderRadius: '50%',
+                        backgroundColor: isActive
+                          ? '#FFFFFF'
+                          : branch.status === 'Opened'
+                          ? '#16A34A'
+                          : '#EF4444',
+                        boxShadow: isActive
+                          ? '0 0 6px #FFFFFF'
+                          : branch.status === 'Opened'
+                          ? '0 0 6px rgba(22, 163, 74, 0.4)'
+                          : '0 0 6px rgba(239, 68, 68, 0.4)',
                       }}
-                    >
-                      <span
-                        style={{
-                          width: '5px',
-                          height: '5px',
-                          borderRadius: '50%',
-                          backgroundColor: branch.status === 'Opened' ? '#22C55E' : '#EF4444',
-                          boxShadow: branch.status === 'Opened' ? '0 0 6px #22C55E' : '0 0 6px #EF4444',
-                        }}
-                      />
-                      {branch.status}
-                    </span>
-                  </span>
-                  {isActive && (
-                    <motion.div
-                      layoutId="activeBranchIndicator"
-                      style={{
-                        position: 'absolute',
-                        bottom: 0,
-                        left: 0,
-                        right: 0,
-                        height: '3px',
-                        backgroundColor: 'var(--color-lime)',
-                        borderRadius: '2px',
-                      }}
-                      transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
                     />
-                  )}
+                    {branch.status}
+                  </span>
                 </button>
               );
             })}
@@ -235,9 +244,9 @@ export const BranchesSection: React.FC<BranchesSectionProps> = ({ onOpenBooking 
               borderRadius: '28px',
               overflow: 'hidden',
               aspectRatio: '16 / 10',
-              boxShadow: '0 24px 60px -15px rgba(0, 0, 0, 0.55)',
-              backgroundColor: 'rgba(0, 0, 0, 0.25)',
-              border: '1.5px solid rgba(255, 255, 255, 0.18)',
+              boxShadow: '0 20px 50px rgba(0, 0, 0, 0.1)',
+              backgroundColor: 'var(--color-neutral-100)',
+              border: '1.5px solid var(--color-neutral-200)',
             }}
           >
             <AnimatePresence mode="wait">
@@ -268,17 +277,17 @@ export const BranchesSection: React.FC<BranchesSectionProps> = ({ onOpenBooking 
                 display: 'inline-flex',
                 alignItems: 'center',
                 gap: '8px',
-                backgroundColor: 'rgba(14, 10, 8, 0.72)',
+                backgroundColor: 'rgba(255, 255, 255, 0.94)',
                 backdropFilter: 'blur(12px)',
                 WebkitBackdropFilter: 'blur(12px)',
-                color: 'var(--color-white)',
+                color: 'var(--color-neutral-900)',
                 padding: '0.45rem 1rem',
                 borderRadius: 'var(--radius-pill)',
                 fontSize: '0.8rem',
                 fontFamily: 'var(--font-main)',
                 fontWeight: 600,
-                border: '1px solid rgba(255, 255, 255, 0.15)',
-                boxShadow: '0 4px 16px rgba(0, 0, 0, 0.3)',
+                border: '1px solid var(--color-neutral-200)',
+                boxShadow: '0 4px 16px rgba(0, 0, 0, 0.08)',
               }}
             >
               <span
@@ -286,9 +295,9 @@ export const BranchesSection: React.FC<BranchesSectionProps> = ({ onOpenBooking 
                   width: '8px',
                   height: '8px',
                   borderRadius: '50%',
-                  backgroundColor: 'var(--color-lime)',
+                  backgroundColor: 'var(--color-teal-500)',
                   display: 'inline-block',
-                  boxShadow: '0 0 8px var(--color-lime)',
+                  boxShadow: '0 0 8px rgba(1, 158, 162, 0.5)',
                 }}
               />
               <span>{activeBranch.badge}</span>
@@ -325,7 +334,7 @@ export const BranchesSection: React.FC<BranchesSectionProps> = ({ onOpenBooking 
                     fontWeight: 700,
                     letterSpacing: '-0.025em',
                     lineHeight: 1.2,
-                    color: 'var(--color-white)',
+                    color: 'var(--color-neutral-900)',
                     margin: 0,
                   }}
                 >
@@ -344,13 +353,13 @@ export const BranchesSection: React.FC<BranchesSectionProps> = ({ onOpenBooking 
                     textTransform: 'uppercase',
                     backgroundColor:
                       activeBranch.status === 'Opened'
-                        ? 'rgba(34, 197, 94, 0.18)'
-                        : 'rgba(239, 68, 68, 0.18)',
+                        ? 'rgba(22, 163, 74, 0.12)'
+                        : 'rgba(239, 68, 68, 0.12)',
                     border:
                       activeBranch.status === 'Opened'
-                        ? '1px solid rgba(74, 222, 128, 0.5)'
-                        : '1px solid rgba(248, 113, 113, 0.5)',
-                    color: activeBranch.status === 'Opened' ? '#86EFAC' : '#FCA5A5',
+                        ? '1px solid rgba(22, 163, 74, 0.35)'
+                        : '1px solid rgba(239, 68, 68, 0.35)',
+                    color: activeBranch.status === 'Opened' ? '#15803D' : '#DC2626',
                   }}
                 >
                   <span
@@ -358,40 +367,76 @@ export const BranchesSection: React.FC<BranchesSectionProps> = ({ onOpenBooking 
                       width: '6px',
                       height: '6px',
                       borderRadius: '50%',
-                      backgroundColor: activeBranch.status === 'Opened' ? '#22C55E' : '#EF4444',
-                      boxShadow: activeBranch.status === 'Opened' ? '0 0 8px #22C55E' : '0 0 8px #EF4444',
+                      backgroundColor: activeBranch.status === 'Opened' ? '#16A34A' : '#EF4444',
+                      boxShadow: activeBranch.status === 'Opened' ? '0 0 6px rgba(22, 163, 74, 0.4)' : '0 0 6px rgba(239, 68, 68, 0.4)',
                     }}
                   />
                   {activeBranch.status}
                 </span>
               </div>
 
-              {/* Minimal Line Information Block */}
+              {/* Clinic Details Grid */}
               <div
+                className="clinic-details-grid"
                 style={{
-                  display: 'flex',
-                  flexDirection: 'column',
-                  gap: '1.4rem',
-                  marginBottom: '2.5rem',
-                  borderLeft: '2px solid rgba(215, 248, 70, 0.4)',
-                  paddingLeft: '1.5rem',
+                  display: 'grid',
+                  gridTemplateColumns: 'repeat(2, 1fr)',
+                  gap: '0.9rem',
+                  marginBottom: '2.2rem',
                 }}
               >
-                {/* Location */}
-                <div style={{ display: 'flex', alignItems: 'flex-start', gap: '0.85rem' }}>
-                  <MapPin
-                    size={20}
-                    color="var(--color-lime)"
-                    style={{ flexShrink: 0, marginTop: '2px' }}
-                  />
+                {/* Location Card (Spanning 2 columns) */}
+                <div
+                  style={{
+                    gridColumn: 'span 2',
+                    display: 'flex',
+                    alignItems: 'flex-start',
+                    gap: '0.9rem',
+                    backgroundColor: '#F8FAFC',
+                    border: '1px solid #E2E8F0',
+                    borderRadius: '16px',
+                    padding: '1.05rem 1.2rem',
+                    transition: 'border-color 0.2s ease, box-shadow 0.2s ease',
+                  }}
+                >
+                  <div
+                    style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      width: '40px',
+                      height: '40px',
+                      borderRadius: '12px',
+                      backgroundColor: 'rgba(0, 56, 162, 0.08)',
+                      color: 'var(--color-brand-500)',
+                      flexShrink: 0,
+                      marginTop: '2px',
+                    }}
+                  >
+                    <MapPin size={20} />
+                  </div>
                   <div>
+                    <span
+                      style={{
+                        display: 'block',
+                        fontFamily: 'var(--font-main)',
+                        fontSize: '0.74rem',
+                        fontWeight: 700,
+                        color: 'var(--color-brand-600)',
+                        textTransform: 'uppercase',
+                        letterSpacing: '0.06em',
+                        marginBottom: '3px',
+                      }}
+                    >
+                      Clinic Location
+                    </span>
                     <p
                       style={{
                         fontFamily: 'var(--font-main)',
-                        fontSize: '1rem',
-                        color: 'var(--color-white)',
+                        fontSize: '0.98rem',
+                        color: 'var(--color-neutral-900)',
                         fontWeight: 600,
-                        lineHeight: 1.45,
+                        lineHeight: 1.4,
                         margin: 0,
                       }}
                     >
@@ -400,8 +445,8 @@ export const BranchesSection: React.FC<BranchesSectionProps> = ({ onOpenBooking 
                     <p
                       style={{
                         fontFamily: 'var(--font-main)',
-                        fontSize: '0.88rem',
-                        color: 'rgba(255, 255, 255, 0.72)',
+                        fontSize: '0.86rem',
+                        color: 'var(--color-neutral-600)',
                         margin: '0.25rem 0 0 0',
                       }}
                     >
@@ -410,21 +455,56 @@ export const BranchesSection: React.FC<BranchesSectionProps> = ({ onOpenBooking 
                   </div>
                 </div>
 
-                {/* Opening Hours */}
-                <div style={{ display: 'flex', alignItems: 'flex-start', gap: '0.85rem' }}>
-                  <Clock
-                    size={20}
-                    color="var(--color-lime)"
-                    style={{ flexShrink: 0, marginTop: '2px' }}
-                  />
+                {/* Working Hours Card */}
+                <div
+                  style={{
+                    display: 'flex',
+                    alignItems: 'flex-start',
+                    gap: '0.85rem',
+                    backgroundColor: '#F8FAFC',
+                    border: '1px solid #E2E8F0',
+                    borderRadius: '16px',
+                    padding: '1.05rem 1.15rem',
+                  }}
+                >
+                  <div
+                    style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      width: '40px',
+                      height: '40px',
+                      borderRadius: '12px',
+                      backgroundColor: 'rgba(0, 56, 162, 0.08)',
+                      color: 'var(--color-brand-500)',
+                      flexShrink: 0,
+                      marginTop: '2px',
+                    }}
+                  >
+                    <Clock size={20} />
+                  </div>
                   <div>
+                    <span
+                      style={{
+                        display: 'block',
+                        fontFamily: 'var(--font-main)',
+                        fontSize: '0.74rem',
+                        fontWeight: 700,
+                        color: 'var(--color-brand-600)',
+                        textTransform: 'uppercase',
+                        letterSpacing: '0.06em',
+                        marginBottom: '3px',
+                      }}
+                    >
+                      Opening Hours
+                    </span>
                     <p
                       style={{
                         fontFamily: 'var(--font-main)',
-                        fontSize: '1rem',
-                        color: 'var(--color-white)',
-                        fontWeight: 600,
-                        lineHeight: 1.45,
+                        fontSize: '0.98rem',
+                        color: 'var(--color-neutral-900)',
+                        fontWeight: 700,
+                        lineHeight: 1.4,
                         margin: 0,
                       }}
                     >
@@ -433,9 +513,9 @@ export const BranchesSection: React.FC<BranchesSectionProps> = ({ onOpenBooking 
                     <p
                       style={{
                         fontFamily: 'var(--font-main)',
-                        fontSize: '0.88rem',
-                        color: 'rgba(255, 255, 255, 0.72)',
-                        margin: '0.25rem 0 0 0',
+                        fontSize: '0.82rem',
+                        color: 'var(--color-neutral-600)',
+                        margin: '0.2rem 0 0 0',
                       }}
                     >
                       {activeBranch.openDays}
@@ -443,42 +523,86 @@ export const BranchesSection: React.FC<BranchesSectionProps> = ({ onOpenBooking 
                   </div>
                 </div>
 
-                {/* Phone */}
-                <div style={{ display: 'flex', alignItems: 'flex-start', gap: '0.85rem' }}>
-                  <Phone
-                    size={20}
-                    color="var(--color-lime)"
-                    style={{ flexShrink: 0, marginTop: '2px' }}
-                  />
+                {/* Contact Phone Card */}
+                <a
+                  href={`tel:${activeBranch.phone}`}
+                  style={{
+                    display: 'flex',
+                    alignItems: 'flex-start',
+                    gap: '0.85rem',
+                    backgroundColor: '#F8FAFC',
+                    border: '1px solid #E2E8F0',
+                    borderRadius: '16px',
+                    padding: '1.05rem 1.15rem',
+                    textDecoration: 'none',
+                    transition: 'border-color 0.2s ease, background-color 0.2s ease, transform 0.2s ease',
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.borderColor = 'var(--color-brand-500)';
+                    e.currentTarget.style.backgroundColor = 'rgba(0, 56, 162, 0.03)';
+                    e.currentTarget.style.transform = 'translateY(-2px)';
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.borderColor = '#E2E8F0';
+                    e.currentTarget.style.backgroundColor = '#F8FAFC';
+                    e.currentTarget.style.transform = 'translateY(0)';
+                  }}
+                >
+                  <div
+                    style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      width: '40px',
+                      height: '40px',
+                      borderRadius: '12px',
+                      backgroundColor: 'rgba(0, 56, 162, 0.08)',
+                      color: 'var(--color-brand-500)',
+                      flexShrink: 0,
+                      marginTop: '2px',
+                    }}
+                  >
+                    <Phone size={20} />
+                  </div>
                   <div>
-                    <a
-                      href={`tel:${activeBranch.phone}`}
+                    <span
+                      style={{
+                        display: 'block',
+                        fontFamily: 'var(--font-main)',
+                        fontSize: '0.74rem',
+                        fontWeight: 700,
+                        color: 'var(--color-brand-600)',
+                        textTransform: 'uppercase',
+                        letterSpacing: '0.06em',
+                        marginBottom: '3px',
+                      }}
+                    >
+                      Direct Phone
+                    </span>
+                    <p
                       style={{
                         fontFamily: 'var(--font-main)',
-                        fontSize: '1.05rem',
-                        color: 'var(--color-white)',
+                        fontSize: '1rem',
+                        color: 'var(--color-brand-600)',
                         fontWeight: 700,
-                        textDecoration: 'none',
-                        transition: 'color 0.2s ease',
-                        display: 'inline-block',
+                        lineHeight: 1.4,
+                        margin: 0,
                       }}
-                      onMouseEnter={(e) => (e.currentTarget.style.color = 'var(--color-lime)')}
-                      onMouseLeave={(e) => (e.currentTarget.style.color = 'var(--color-white)')}
                     >
                       {activeBranch.phoneDisplay}
-                    </a>
+                    </p>
                     <p
                       style={{
                         fontFamily: 'var(--font-main)',
                         fontSize: '0.82rem',
-                        color: 'rgba(255, 255, 255, 0.65)',
-                        margin: '0.15rem 0 0 0',
+                        color: 'var(--color-neutral-600)',
+                        margin: '0.2rem 0 0 0',
                       }}
                     >
-                      Direct clinic line & appointment inquiries
+                      Inquiries & booking
                     </p>
                   </div>
-                </div>
+                </a>
               </div>
 
               {/* Action Buttons: Book at This Branch + Get Directions */}
@@ -499,26 +623,28 @@ export const BranchesSection: React.FC<BranchesSectionProps> = ({ onOpenBooking 
                     alignItems: 'center',
                     justifyContent: 'center',
                     gap: '8px',
-                    backgroundColor: 'var(--color-lime)',
-                    color: 'var(--color-rust-dark)',
+                    backgroundColor: 'var(--color-brand-500)',
+                    color: '#FFFFFF',
                     padding: '0.95rem 1.85rem',
                     borderRadius: 'var(--radius-pill)',
                     fontFamily: 'var(--font-main)',
                     fontSize: '0.95rem',
                     fontWeight: 700,
                     letterSpacing: '0.01em',
-                    boxShadow: '0 8px 24px rgba(0, 0, 0, 0.25)',
+                    boxShadow: '0 8px 24px rgba(22, 119, 210, 0.28)',
                     cursor: 'pointer',
                     border: 'none',
-                    transition: 'transform 0.2s ease, box-shadow 0.2s ease',
+                    transition: 'transform 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease',
                   }}
                   onMouseEnter={(e) => {
                     e.currentTarget.style.transform = 'translateY(-2px)';
-                    e.currentTarget.style.boxShadow = '0 12px 28px rgba(215, 248, 70, 0.35)';
+                    e.currentTarget.style.backgroundColor = 'var(--color-brand-600)';
+                    e.currentTarget.style.boxShadow = '0 12px 28px rgba(22, 119, 210, 0.4)';
                   }}
                   onMouseLeave={(e) => {
                     e.currentTarget.style.transform = 'translateY(0)';
-                    e.currentTarget.style.boxShadow = '0 8px 24px rgba(0, 0, 0, 0.25)';
+                    e.currentTarget.style.backgroundColor = 'var(--color-brand-500)';
+                    e.currentTarget.style.boxShadow = '0 8px 24px rgba(22, 119, 210, 0.28)';
                   }}
                 >
                   <Calendar size={17} />
@@ -535,26 +661,24 @@ export const BranchesSection: React.FC<BranchesSectionProps> = ({ onOpenBooking 
                     alignItems: 'center',
                     justifyContent: 'center',
                     gap: '8px',
-                    backgroundColor: 'transparent',
-                    color: 'var(--color-white)',
+                    backgroundColor: 'var(--color-brand-50)',
+                    color: 'var(--color-brand-600)',
                     padding: '0.92rem 1.6rem',
                     borderRadius: 'var(--radius-pill)',
                     fontFamily: 'var(--font-main)',
                     fontSize: '0.95rem',
                     fontWeight: 600,
-                    border: '1.5px solid rgba(255, 255, 255, 0.35)',
+                    border: '1.5px solid var(--color-brand-200)',
                     textDecoration: 'none',
                     transition: 'all 0.2s ease',
                   }}
                   onMouseEnter={(e) => {
-                    e.currentTarget.style.borderColor = 'var(--color-lime)';
-                    e.currentTarget.style.color = 'var(--color-lime)';
-                    e.currentTarget.style.backgroundColor = 'rgba(215, 248, 70, 0.08)';
+                    e.currentTarget.style.borderColor = 'var(--color-brand-500)';
+                    e.currentTarget.style.backgroundColor = 'var(--color-brand-100)';
                   }}
                   onMouseLeave={(e) => {
-                    e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.35)';
-                    e.currentTarget.style.color = 'var(--color-white)';
-                    e.currentTarget.style.backgroundColor = 'transparent';
+                    e.currentTarget.style.borderColor = 'var(--color-brand-200)';
+                    e.currentTarget.style.backgroundColor = 'var(--color-brand-50)';
                   }}
                 >
                   <span>Get Directions</span>
@@ -571,6 +695,14 @@ export const BranchesSection: React.FC<BranchesSectionProps> = ({ onOpenBooking 
           .branch-showcase-composition {
             grid-template-columns: 1fr !important;
             gap: 2.25rem !important;
+          }
+        }
+        @media (max-width: 580px) {
+          .clinic-details-grid {
+            grid-template-columns: 1fr !important;
+          }
+          .clinic-details-grid > * {
+            grid-column: span 1 !important;
           }
         }
         @media (max-width: 520px) {

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, Phone, MapPin, Shield } from 'lucide-react';
+import { X, Phone, MapPin } from 'lucide-react';
 import { WhatsAppIcon } from './WhatsAppIcon';
 
 interface NavbarProps {
@@ -38,11 +38,13 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenBooking, onOpenAdmin }) =>
           left: 0,
           right: 0,
           zIndex: 100,
-          transition: 'background-color 0.35s ease, backdrop-filter 0.35s ease, padding 0.35s ease',
+          transition: 'background-color 0.35s ease, backdrop-filter 0.35s ease, padding 0.35s ease, box-shadow 0.35s ease',
           padding: scrolled ? '0.75rem 0' : '1.15rem 0',
-          backgroundColor: scrolled ? 'rgba(74, 31, 16, 0.92)' : 'transparent',
+          backgroundColor: scrolled ? 'rgba(255, 255, 255, 0.95)' : 'transparent',
           backdropFilter: scrolled ? 'blur(16px)' : 'none',
-          borderBottom: scrolled ? '1px solid rgba(255, 255, 255, 0.08)' : 'none',
+          WebkitBackdropFilter: scrolled ? 'blur(16px)' : 'none',
+          borderBottom: scrolled ? '1px solid var(--color-neutral-200)' : 'none',
+          boxShadow: scrolled ? '0 4px 20px rgba(0, 0, 0, 0.06)' : 'none',
         }}
       >
         <div className="container">
@@ -96,13 +98,19 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenBooking, onOpenAdmin }) =>
                     fontSize: 'clamp(0.82rem, 0.88vw, 0.92rem)',
                     fontWeight: 600,
                     letterSpacing: '0.12em',
-                    color: 'var(--color-white)',
+                    color: 'var(--color-neutral-700)',
                     textDecoration: 'none',
-                    transition: 'color 0.2s ease',
+                    transition: 'color 0.2s ease, transform 0.2s ease',
                     padding: '4px 0',
                   }}
-                  onMouseEnter={(e) => (e.currentTarget.style.color = 'var(--color-lime)')}
-                  onMouseLeave={(e) => (e.currentTarget.style.color = 'var(--color-white)')}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.color = 'var(--color-brand-500)';
+                    e.currentTarget.style.transform = 'translateY(-1px)';
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.color = 'var(--color-neutral-700)';
+                    e.currentTarget.style.transform = 'translateY(0)';
+                  }}
                 >
                   {link.name}
                 </a>
@@ -113,66 +121,34 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenBooking, onOpenAdmin }) =>
                 style={{
                   display: 'inline-flex',
                   alignItems: 'center',
-                  gap: '0.45rem',
-                  padding: '0.45rem 0.95rem',
+                  gap: '0.5rem',
+                  padding: '0.52rem 1.15rem',
                   borderRadius: 'var(--radius-pill)',
-                  backgroundColor: 'rgba(215, 248, 70, 0.15)',
-                  border: '1px solid var(--color-lime)',
-                  color: 'var(--color-lime)',
+                  backgroundColor: 'var(--color-teal-500)',
+                  border: 'none',
+                  color: '#FFFFFF',
                   fontFamily: 'var(--font-main)',
-                  fontSize: '0.8rem',
+                  fontSize: '0.82rem',
                   fontWeight: 700,
                   letterSpacing: '0.04em',
                   textDecoration: 'none',
+                  boxShadow: '0 4px 14px rgba(1, 158, 162, 0.35)',
                   transition: 'all 0.2s ease',
                 }}
                 onMouseEnter={(e) => {
-                  e.currentTarget.style.backgroundColor = 'var(--color-lime)';
-                  e.currentTarget.style.color = 'var(--color-rust-dark)';
+                  e.currentTarget.style.backgroundColor = 'var(--color-teal-600)';
+                  e.currentTarget.style.transform = 'translateY(-2px)';
+                  e.currentTarget.style.boxShadow = '0 6px 18px rgba(1, 158, 162, 0.45)';
                 }}
                 onMouseLeave={(e) => {
-                  e.currentTarget.style.backgroundColor = 'rgba(215, 248, 70, 0.15)';
-                  e.currentTarget.style.color = 'var(--color-lime)';
+                  e.currentTarget.style.backgroundColor = 'var(--color-teal-500)';
+                  e.currentTarget.style.transform = 'translateY(0)';
+                  e.currentTarget.style.boxShadow = '0 4px 14px rgba(1, 158, 162, 0.35)';
                 }}
               >
-                <Phone size={13} />
-                <span>094959 64737</span>
+                <Phone size={14} color="#FFFFFF" strokeWidth={2.4} />
+                <span style={{ color: '#FFFFFF' }}>094959 64737</span>
               </a>
-
-              {onOpenAdmin && (
-                <button
-                  type="button"
-                  onClick={onOpenAdmin}
-                  style={{
-                    display: 'inline-flex',
-                    alignItems: 'center',
-                    gap: '0.35rem',
-                    padding: '0.45rem 0.85rem',
-                    borderRadius: 'var(--radius-pill, 999px)',
-                    backgroundColor: 'rgba(255, 255, 255, 0.12)',
-                    border: '1px solid rgba(255, 255, 255, 0.28)',
-                    color: '#FFFFFF',
-                    fontFamily: 'var(--font-main, sans-serif)',
-                    fontSize: '0.78rem',
-                    fontWeight: 600,
-                    cursor: 'pointer',
-                    transition: 'all 0.2s ease',
-                  }}
-                  onMouseEnter={(e) => {
-                    e.currentTarget.style.backgroundColor = 'var(--color-lime, #D7F846)';
-                    e.currentTarget.style.color = '#3B180D';
-                    e.currentTarget.style.borderColor = 'var(--color-lime, #D7F846)';
-                  }}
-                  onMouseLeave={(e) => {
-                    e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.12)';
-                    e.currentTarget.style.color = '#FFFFFF';
-                    e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.28)';
-                  }}
-                  title="Smile Dentos Admin Portal"
-                >
-                  <span>Admin</span>
-                </button>
-              )}
 
               {/* WhatsApp Contact Button (Desktop mode only) */}
               <a
@@ -220,13 +196,14 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenBooking, onOpenAdmin }) =>
                   width: '38px',
                   height: '38px',
                   borderRadius: '50%',
-                  backgroundColor: 'rgba(215, 248, 70, 0.15)',
-                  border: '1.5px solid var(--color-lime)',
-                  color: 'var(--color-lime)',
+                  backgroundColor: 'var(--color-teal-500)',
+                  border: 'none',
+                  color: '#FFFFFF',
+                  boxShadow: '0 4px 12px rgba(1, 158, 162, 0.35)',
                   textDecoration: 'none',
                 }}
               >
-                <Phone size={17} />
+                <Phone size={17} color="#FFFFFF" />
               </a>
 
               <button
@@ -248,7 +225,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenBooking, onOpenAdmin }) =>
                     display: 'block',
                     width: '26px',
                     height: '2.5px',
-                    backgroundColor: 'var(--color-white)',
+                    backgroundColor: 'var(--color-neutral-800)',
                     borderRadius: '2px',
                     transition: 'transform 0.3s ease',
                   }}
@@ -258,7 +235,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenBooking, onOpenAdmin }) =>
                     display: 'block',
                     width: '26px',
                     height: '2.5px',
-                    backgroundColor: 'var(--color-white)',
+                    backgroundColor: 'var(--color-neutral-800)',
                     borderRadius: '2px',
                     transition: 'transform 0.3s ease',
                   }}
@@ -285,44 +262,15 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenBooking, onOpenAdmin }) =>
               top: 0,
               left: 0,
               right: 0,
-              backgroundColor: 'rgba(94, 38, 20, 0.98)',
+              backgroundColor: 'rgba(255, 255, 255, 0.98)',
               backdropFilter: 'blur(24px)',
+              WebkitBackdropFilter: 'blur(24px)',
               zIndex: 999,
               padding: '5.5rem 2rem 3rem',
-              borderBottom: '1px solid rgba(255, 255, 255, 0.12)',
-              boxShadow: '0 20px 50px rgba(0,0,0,0.6)',
+              borderBottom: '1px solid var(--color-neutral-200)',
+              boxShadow: '0 20px 50px rgba(0, 0, 0, 0.08)',
             }}
           >
-            {onOpenAdmin && (
-              <button
-                type="button"
-                onClick={() => {
-                  setMobileMenuOpen(false);
-                  onOpenAdmin();
-                }}
-                aria-label="Admin Portal"
-                title="Admin Authentication Panel"
-                style={{
-                  position: 'absolute',
-                  top: '1.5rem',
-                  left: '1.5rem',
-                  color: 'var(--color-white)',
-                  padding: '8px',
-                  cursor: 'pointer',
-                  backgroundColor: 'rgba(255, 255, 255, 0.12)',
-                  border: '1.5px solid rgba(255, 255, 255, 0.28)',
-                  borderRadius: '50%',
-                  width: '42px',
-                  height: '42px',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  transition: 'all 0.2s ease',
-                }}
-              >
-                <Shield size={20} />
-              </button>
-            )}
             <button
               onClick={() => setMobileMenuOpen(false)}
               aria-label="Close Navigation"
@@ -330,7 +278,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenBooking, onOpenAdmin }) =>
                 position: 'absolute',
                 top: '1.5rem',
                 right: '1.5rem',
-                color: 'var(--color-white)',
+                color: 'var(--color-neutral-800)',
                 padding: '8px',
                 cursor: 'pointer',
               }}
@@ -356,16 +304,16 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenBooking, onOpenAdmin }) =>
                     fontSize: '1.5rem',
                     fontWeight: 700,
                     letterSpacing: '0.08em',
-                    color: 'var(--color-white)',
+                    color: 'var(--color-neutral-800)',
                     transition: 'color 0.2s',
                   }}
-                  onMouseEnter={(e) => (e.currentTarget.style.color = 'var(--color-lime)')}
-                  onMouseLeave={(e) => (e.currentTarget.style.color = 'var(--color-white)')}
+                  onMouseEnter={(e) => (e.currentTarget.style.color = 'var(--color-brand-500)')}
+                  onMouseLeave={(e) => (e.currentTarget.style.color = 'var(--color-neutral-800)')}
                 >
                   {link.name}
                 </a>
               ))}
-              <div style={{ width: '60px', height: '2px', backgroundColor: 'var(--color-lime)', margin: '0.5rem 0' }} />
+              <div style={{ width: '60px', height: '2px', backgroundColor: 'var(--color-teal-500)', margin: '0.5rem 0' }} />
               <div style={{ display: 'flex', flexDirection: 'column', gap: '0.85rem', width: '100%', maxWidth: '290px' }}>
                 <button
                   onClick={() => {
@@ -373,14 +321,15 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenBooking, onOpenAdmin }) =>
                     onOpenBooking();
                   }}
                   style={{
-                    backgroundColor: 'var(--color-lime)',
-                    color: 'var(--color-rust-dark)',
+                    backgroundColor: 'var(--color-brand-500)',
+                    color: '#FFFFFF',
                     padding: '0.85rem 2rem',
                     borderRadius: 'var(--radius-pill)',
                     fontWeight: 700,
                     fontSize: '1rem',
                     width: '100%',
                     cursor: 'pointer',
+                    boxShadow: '0 4px 14px rgba(31, 95, 212, 0.35)',
                   }}
                 >
                   Book Appointment
@@ -392,9 +341,9 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenBooking, onOpenAdmin }) =>
                     alignItems: 'center',
                     justifyContent: 'center',
                     gap: '0.5rem',
-                    backgroundColor: 'rgba(255, 255, 255, 0.1)',
-                    border: '1px solid var(--color-lime)',
-                    color: 'var(--color-lime)',
+                    backgroundColor: 'var(--color-teal-50)',
+                    border: '1px solid var(--color-teal-300)',
+                    color: 'var(--color-teal-700)',
                     padding: '0.75rem 1.5rem',
                     borderRadius: 'var(--radius-pill)',
                     fontWeight: 700,
@@ -414,8 +363,9 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenBooking, onOpenAdmin }) =>
                     alignItems: 'center',
                     justifyContent: 'center',
                     gap: '0.5rem',
-                    border: '1px solid rgba(255, 255, 255, 0.25)',
-                    color: 'var(--color-white)',
+                    backgroundColor: '#FFFFFF',
+                    border: '1px solid var(--color-neutral-200)',
+                    color: 'var(--color-neutral-700)',
                     padding: '0.7rem 1.5rem',
                     borderRadius: 'var(--radius-pill)',
                     fontWeight: 600,
@@ -426,6 +376,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenBooking, onOpenAdmin }) =>
                   <MapPin size={15} />
                   <span>Valanchery, Kerala</span>
                 </a>
+
                 {onOpenAdmin && (
                   <button
                     type="button"
@@ -438,9 +389,9 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenBooking, onOpenAdmin }) =>
                       alignItems: 'center',
                       justifyContent: 'center',
                       gap: '0.5rem',
-                      border: '1px solid rgba(255, 255, 255, 0.25)',
-                      backgroundColor: 'rgba(255, 255, 255, 0.08)',
-                      color: 'rgba(255, 255, 255, 0.9)',
+                      border: '1px solid var(--color-neutral-200)',
+                      backgroundColor: 'var(--color-brand-50)',
+                      color: 'var(--color-brand-600)',
                       padding: '0.7rem 1.5rem',
                       borderRadius: 'var(--radius-pill)',
                       fontWeight: 600,
@@ -450,7 +401,6 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenBooking, onOpenAdmin }) =>
                       transition: 'all 0.2s ease',
                     }}
                   >
-                    <Shield size={16} />
                     <span>Admin Panel</span>
                   </button>
                 )}

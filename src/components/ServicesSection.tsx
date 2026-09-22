@@ -100,12 +100,14 @@ export const ServicesSection: React.FC<ServicesSectionProps> = ({
     return (
       <div
         key={service.id}
+        onMouseEnter={() => setActiveId(service.id)}
         style={{
-          borderBottom: '1px solid rgba(94, 38, 20, 0.18)',
+          borderBottom: '1px solid var(--color-neutral-200)',
           transition: 'background-color 0.25s ease',
+          backgroundColor: isActive ? 'rgba(8, 185, 195, 0.03)' : 'transparent',
         }}
       >
-        {/* Clickable Header Row */}
+        {/* Clickable / Hoverable Header Row */}
         <button
           type="button"
           onClick={() => setActiveId(isActive ? null : service.id)}
@@ -128,45 +130,15 @@ export const ServicesSection: React.FC<ServicesSectionProps> = ({
               fontSize: 'clamp(1.75rem, 4.2vw, 4.4rem)',
               fontWeight: 500,
               letterSpacing: '-0.03em',
-              color: '#5E2614',
+              color: isActive ? '#08B9C3' : 'var(--color-neutral-800)',
               lineHeight: 1.15,
               margin: 0,
+              transform: isActive ? 'translateX(12px)' : 'translateX(0)',
+              transition: 'color 0.25s ease, transform 0.28s cubic-bezier(0.16, 1, 0.3, 1)',
             }}
           >
             {service.title}
           </h3>
-
-          {/* Tactile + / - toggle icon */}
-          <div
-            style={{
-              width: '38px',
-              height: '38px',
-              borderRadius: '50%',
-              border: '1.5px solid rgba(94, 38, 20, 0.25)',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              flexShrink: 0,
-              marginLeft: '1rem',
-              color: '#5E2614',
-              backgroundColor: isActive ? 'rgba(94, 38, 20, 0.08)' : 'transparent',
-              transition: 'all 0.25s ease',
-            }}
-          >
-            <motion.span
-              animate={{ rotate: isActive ? 45 : 0 }}
-              transition={{ duration: 0.25, ease: 'easeOut' }}
-              style={{
-                display: 'inline-block',
-                fontSize: '1.5rem',
-                lineHeight: 1,
-                fontWeight: 300,
-                userSelect: 'none',
-              }}
-            >
-              +
-            </motion.span>
-          </div>
         </button>
 
         {/* Smooth, Strictly-Contained Expandable Content */}
@@ -197,8 +169,7 @@ export const ServicesSection: React.FC<ServicesSectionProps> = ({
                       fontFamily: 'var(--font-main)',
                       fontSize: 'clamp(0.95rem, 1.25vw, 1.12rem)',
                       lineHeight: 1.65,
-                      color: '#5E2614',
-                      opacity: 0.85,
+                      color: 'var(--color-neutral-600)',
                       maxWidth: '520px',
                       paddingRight: '0.5rem',
                       margin: 0,
@@ -218,12 +189,12 @@ export const ServicesSection: React.FC<ServicesSectionProps> = ({
                 >
                   <div
                     style={{
-                      borderRadius: '16px',
+                      width: 'clamp(210px, 24vw, 290px)',
+                      height: 'clamp(140px, 16vw, 190px)',
+                      borderRadius: 'var(--radius-card)',
                       overflow: 'hidden',
-                      boxShadow: '0 12px 30px rgba(94, 38, 20, 0.12)',
-                      width: 'clamp(280px, 35vw, 460px)',
-                      height: 'clamp(170px, 22vw, 280px)',
-                      backgroundColor: service.bg || '#F5EDE0',
+                      boxShadow: '0 8px 24px rgba(0, 0, 0, 0.08)',
+                      backgroundColor: service.bg || 'var(--color-brand-50)',
                     }}
                     className="service-image-card"
                   >
@@ -234,8 +205,6 @@ export const ServicesSection: React.FC<ServicesSectionProps> = ({
                         width: '100%',
                         height: '100%',
                         objectFit: 'cover',
-                        objectPosition: 'center',
-                        display: 'block',
                       }}
                     />
                   </div>
@@ -252,8 +221,8 @@ export const ServicesSection: React.FC<ServicesSectionProps> = ({
     <section
       id="services"
       style={{
-        backgroundColor: 'var(--color-cream)',
-        color: '#5E2614',
+        backgroundColor: 'var(--color-neutral-0)',
+        color: 'var(--color-neutral-900)',
         paddingTop: 'clamp(4rem, 7vw, 7rem)',
         paddingBottom: 'clamp(1rem, 1.5vw, 1.8rem)',
         overflow: 'hidden',
@@ -292,12 +261,12 @@ export const ServicesSection: React.FC<ServicesSectionProps> = ({
                 fontSize: 'clamp(2.6rem, 6.5vw, 7.2rem)',
                 fontWeight: 600,
                 letterSpacing: '-0.03em',
-                color: '#5E2614',
+                color: 'var(--color-neutral-900)',
                 lineHeight: 1,
               }}
             >
               <span>Our Services</span>
-              <span style={{ fontSize: '0.85em', color: '#5E2614', opacity: 0.9 }}>✻</span>
+              <span style={{ fontSize: '0.85em', color: '#08B9C3' }}>✻</span>
             </div>
           ))}
         </motion.div>
@@ -306,8 +275,9 @@ export const ServicesSection: React.FC<ServicesSectionProps> = ({
       {/* Accordion List Container */}
       <div className="container">
         <div
+          onMouseLeave={() => setActiveId(null)}
           style={{
-            borderTop: '1px solid rgba(94, 38, 20, 0.18)',
+            borderTop: '1px solid var(--color-neutral-200)',
             display: 'flex',
             flexDirection: 'column',
           }}
