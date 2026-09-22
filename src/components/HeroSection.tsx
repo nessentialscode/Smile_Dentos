@@ -61,7 +61,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onOpenBooking }) => {
           }}
           className="hero-bottom-container"
         >
-          {/* Bottom-Left: Display Headline & Google Rating Badge */}
+          {/* Bottom-Left: Display Headline & Spinning Logo at Left End */}
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
@@ -70,6 +70,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onOpenBooking }) => {
             className="hero-title-col"
           >
             <h1
+              className="hero-main-title"
               style={{
                 fontFamily: 'var(--font-display)',
                 fontSize: 'clamp(3.3rem, 8.8vw, 8.6rem)',
@@ -81,11 +82,12 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onOpenBooking }) => {
                 wordBreak: 'break-word',
               }}
             >
-              Gentle<br />Dental <span style={{ color: 'var(--color-teal-500)' }}>Care</span>
+              Gentle<br />
+              <span style={{ whiteSpace: 'nowrap' }}>Dental <span style={{ color: 'var(--color-teal-500)' }}>Care</span></span>
             </h1>
           </motion.div>
 
-          {/* Bottom-Right: Rotating Circular Badge & Subtext */}
+          {/* Bottom-Right: Subtext & CTAs */}
           <motion.div
             initial={{ opacity: 0, y: 25 }}
             animate={{ opacity: 1, y: 0 }}
@@ -100,8 +102,15 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onOpenBooking }) => {
             }}
             className="hero-right-col"
           >
-            {/* The Smile Dentos Spinning Logo Badge */}
-            <div className="hero-rotating-badge">
+            {/* The Smile Dentos Spinning Logo Badge moved to right end (end of the black text) */}
+            <div
+              className="hero-rotating-badge"
+              style={{
+                alignSelf: 'flex-end',
+                display: 'flex',
+                justifyContent: 'flex-end',
+              }}
+            >
               <RotatingBadge size={114} />
             </div>
 
@@ -204,12 +213,22 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onOpenBooking }) => {
           .hero-bottom-container {
             flex-direction: column !important;
             align-items: flex-start !important;
-            gap: clamp(1.35rem, 3.6vw, 1.65rem) !important;
+            gap: clamp(0.9rem, 2.8vw, 1.25rem) !important;
           }
           .hero-title-col {
             flex: 0 0 auto !important;
             width: 100% !important;
             max-width: 100% !important;
+          }
+          .hero-main-title {
+            font-size: clamp(3.65rem, 14.2vw, 4.85rem) !important;
+            line-height: 0.92 !important;
+            letter-spacing: -0.04em !important;
+            font-weight: 800 !important;
+            color: #FFFFFF !important;
+            text-shadow: 0 4px 24px rgba(0, 0, 0, 0.38) !important;
+            margin: 0 0 0.85rem 0 !important;
+            word-break: normal !important;
           }
           .hero-right-col {
             align-items: flex-start !important;

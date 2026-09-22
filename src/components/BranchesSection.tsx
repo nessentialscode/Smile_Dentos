@@ -124,6 +124,7 @@ export const BranchesSection: React.FC<BranchesSectionProps> = ({ onOpenBooking 
           <div
             role="tablist"
             aria-label="Clinic Branches"
+            className="branch-switcher-container"
             style={{
               display: 'inline-flex',
               alignItems: 'center',
@@ -145,6 +146,7 @@ export const BranchesSection: React.FC<BranchesSectionProps> = ({ onOpenBooking 
                   role="tab"
                   aria-selected={isActive}
                   onClick={() => setActiveBranchId(branch.id)}
+                  className="branch-switcher-btn"
                   style={{
                     position: 'relative',
                     display: 'inline-flex',
@@ -171,9 +173,10 @@ export const BranchesSection: React.FC<BranchesSectionProps> = ({ onOpenBooking 
                     if (!isActive) e.currentTarget.style.color = 'var(--color-neutral-600)';
                   }}
                 >
-                  <MapPin size={15} color={isActive ? '#FFFFFF' : 'var(--color-brand-500)'} />
+                  <MapPin size={15} color={isActive ? '#FFFFFF' : 'var(--color-brand-500)'} style={{ flexShrink: 0 }} />
                   <span>{branch.shortName}</span>
                   <span
+                    className="branch-status-pill"
                     style={{
                       display: 'inline-flex',
                       alignItems: 'center',
@@ -203,23 +206,20 @@ export const BranchesSection: React.FC<BranchesSectionProps> = ({ onOpenBooking 
                     }}
                   >
                     <span
+                      className="branch-status-dot"
                       style={{
-                        width: '5px',
-                        height: '5px',
+                        width: '6px',
+                        height: '6px',
                         borderRadius: '50%',
-                        backgroundColor: isActive
-                          ? '#FFFFFF'
-                          : branch.status === 'Opened'
-                          ? '#16A34A'
-                          : '#EF4444',
-                        boxShadow: isActive
-                          ? '0 0 6px #FFFFFF'
-                          : branch.status === 'Opened'
-                          ? '0 0 6px rgba(22, 163, 74, 0.4)'
-                          : '0 0 6px rgba(239, 68, 68, 0.4)',
+                        backgroundColor: branch.status === 'Opened' ? '#16A34A' : '#EF4444',
+                        boxShadow:
+                          branch.status === 'Opened'
+                            ? '0 0 6px rgba(22, 163, 74, 0.5)'
+                            : '0 0 6px rgba(239, 68, 68, 0.5)',
+                        flexShrink: 0,
                       }}
                     />
-                    {branch.status}
+                    <span className="branch-status-text">{branch.status}</span>
                   </span>
                 </button>
               );
@@ -695,6 +695,36 @@ export const BranchesSection: React.FC<BranchesSectionProps> = ({ onOpenBooking 
           .branch-showcase-composition {
             grid-template-columns: 1fr !important;
             gap: 2.25rem !important;
+          }
+        }
+        @media (max-width: 640px) {
+          .branch-switcher-container {
+            width: 100% !important;
+            max-width: 350px !important;
+            padding: 4px !important;
+            gap: 4px !important;
+            box-sizing: border-box !important;
+          }
+          .branch-switcher-btn {
+            flex: 1 1 0 !important;
+            padding: 0.55rem 0.6rem !important;
+            font-size: 0.8rem !important;
+            letter-spacing: 0.02em !important;
+            gap: 0.32rem !important;
+            justify-content: center !important;
+          }
+          .branch-status-text {
+            display: none !important;
+          }
+          .branch-status-pill {
+            padding: 0 !important;
+            background: transparent !important;
+            border: none !important;
+            gap: 0 !important;
+          }
+          .branch-status-dot {
+            width: 7px !important;
+            height: 7px !important;
           }
         }
         @media (max-width: 580px) {
