@@ -2,6 +2,8 @@ import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, CheckCircle2, AlertTriangle, AlertCircle } from 'lucide-react';
 import confetti from 'canvas-confetti';
+import { getDoctors, getBranches } from '../services/supabaseService';
+import type { DbDoctor, DbBranch } from '../services/supabaseService';
 
 interface AppointmentModalProps {
   isOpen: boolean;
@@ -41,26 +43,7 @@ const checkIsSunday = (dateStr: string): boolean => {
   return d.getDay() === 0; // 0 is Sunday
 };
 
-const checkDoctorIsPresent = (doctorName: string): boolean => {
-  if (typeof window !== 'undefined') {
-    const saved = localStorage.getItem('smile_dentos_admin_doctors');
-    if (saved) {
-      try {
-        const parsed = JSON.parse(saved);
-        const found = parsed.find((d: any) =>
-          d.name === doctorName || doctorName.includes(d.name) || (d.name && d.name.includes(doctorName))
-        );
-        if (found && typeof found.is_present === 'boolean') {
-          return found.is_present;
-        }
-      } catch {
-        // fallback
-      }
-    }
-  }
-  const match = DOCTOR_OPTIONS.find((d) => d.name === doctorName);
-  return match ? match.defaultPresent : true;
-};
+const normalizeDoctorName = (s: string) => s.toLowerCase().replace(/[^a-z]/g, '');
 
 export const AppointmentModal: React.FC<AppointmentModalProps> = ({
   isOpen,
@@ -68,6 +51,61 @@ export const AppointmentModal: React.FC<AppointmentModalProps> = ({
   selectedBranch,
   selectedDoctor,
 }) => {
+  const [dbDoctors, setDbDoctors] = useState<DbDoctor[]>([]);
+  const [dbBranches, setDbBranches] = useState<DbBranch[]>([]);
+
+  useEffect(() => {
+    if (isOpen) {
+      let isMounted = true;
+      Promise.all([getDoctors(), getBranches()]).then(([docs, brs]) => {
+        if (!isMounted) return;
+        if (docs && docs.length > 0) setDbDoctors(docs);
+        if (brs && brs.length > 0) setDbBranches(brs);
+      });
+      return () => {
+        isMounted = false;
+      };
+    }
+  }, [isOpen]);
+
+  const checkDoctorIsPresent = (doctorName: string): boolean => {
+    if (dbDoctors.length > 0) {
+      const normTarget = normalizeDoctorName(doctorName);
+      const match = dbDoctors.find((d) => {
+        const norm = normalizeDoctorName(d.name);
+        return (
+          norm === normTarget ||
+          norm.includes(normTarget.replace('dr', '')) ||
+          normTarget.includes(norm.replace('dr', '')) ||
+          (normTarget.includes('haris') && norm.includes('haris')) ||
+          (normTarget.includes('shanaha') && norm.includes('shanaha')) ||
+          (normTarget.includes('bhagy') && norm.includes('bhagiya')) ||
+          (normTarget.includes('vipin') && norm.includes('vipin'))
+        );
+      });
+      if (match) {
+        return match.is_active;
+      }
+    }
+    const match = DOCTOR_OPTIONS.find((d) => d.name === doctorName);
+    return match ? match.defaultPresent : true;
+  };
+
+  const isBranchActive = (branchName: string): boolean => {
+    if (dbBranches.length > 0) {
+      const isEdayoor = branchName.toLowerCase().includes('edayoor');
+      const match = dbBranches.find((b) =>
+        isEdayoor
+          ? b.name.toLowerCase().includes('edayoor') || b.id === 'e0e38ad6-dafd-4049-9aa2-4b49c55208bb'
+          : b.name.toLowerCase().includes('valanchery') || b.id === '0a19849f-aac8-477e-b951-d7c1e0d55a46'
+      );
+      if (match) {
+        return match.is_active;
+      }
+    }
+    return true;
+  };
+
   const [branchOverride, setBranchOverride] = useState<string | null>(null);
   const defaultBranch =
     selectedBranch && selectedBranch.includes('Edayoor')
@@ -107,6 +145,16 @@ export const AppointmentModal: React.FC<AppointmentModalProps> = ({
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+
+    // 0. Enforce Branch Active: Cannot book inactive branch
+    if (!isBranchActive(branch)) {
+      setBookingAlert({
+        type: 'error',
+        message: `${branch} is currently CLOSED. Appointments cannot be booked for closed branches.`,
+      });
+      alert(`Branch Unavailable: ${branch} is currently CLOSED. Please choose an active branch.`);
+      return;
+    }
 
     // 1. Enforce Clinic Working Days: Monday to Saturday. Sunday closed.
     if (checkIsSunday(date)) {
@@ -452,8 +500,12 @@ export const AppointmentModal: React.FC<AppointmentModalProps> = ({
                       onFocus={(e) => (e.currentTarget.style.borderColor = 'var(--color-teal-400)')}
                       onBlur={(e) => (e.currentTarget.style.borderColor = 'var(--color-neutral-200)')}
                     >
-                      <option value="Valanchery Main Clinic">Valanchery Main Clinic (Perinthalmanna Rd, Kolamangalam)</option>
-                      <option value="Edayoor Branch">Edayoor Branch (Madathil Complex, Mavandiyoor)</option>
+                      <option value="Valanchery Main Clinic" disabled={!isBranchActive('Valanchery')}>
+                        Valanchery Main Clinic (Perinthalmanna Rd, Kolamangalam) {!isBranchActive('Valanchery') ? '• CLOSED' : ''}
+                      </option>
+                      <option value="Edayoor Branch" disabled={!isBranchActive('Edayoor')}>
+                        Edayoor Branch (Madathil Complex, Mavandiyoor) {!isBranchActive('Edayoor') ? '• CLOSED' : ''}
+                      </option>
                     </select>
                   </div>
 

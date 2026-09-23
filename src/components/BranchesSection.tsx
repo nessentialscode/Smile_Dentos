@@ -1,13 +1,18 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { MapPin, Phone, Clock, ExternalLink, Calendar } from 'lucide-react';
+import { getBranches } from '../services/supabaseService';
 
 interface BranchesSectionProps {
   onOpenBooking: (branchName?: string) => void;
 }
 
+const VALANCHERY_UUID = '0a19849f-aac8-477e-b951-d7c1e0d55a46';
+const EDAYOOR_UUID = 'e0e38ad6-dafd-4049-9aa2-4b49c55208bb';
+
 interface Branch {
   id: string;
+  dbId: string;
   name: string;
   shortName: string;
   badge: string;
@@ -20,33 +25,35 @@ interface Branch {
   phoneDisplay: string;
   googleMapsUrl: string;
   image: string;
-  status: 'Opened' | 'Closed';
+  status: 'OPEN' | 'CLOSED' | 'Opened' | 'Closed';
 }
 
-const branches: Branch[] = [
+const initialBranches: Branch[] = [
   {
     id: 'valanchery',
+    dbId: VALANCHERY_UUID,
     name: 'Valanchery Main Clinic',
     shortName: 'Valanchery',
     badge: 'Multi-Specialty Center',
-    status: 'Opened',
+    status: 'OPEN',
     address: 'Perinthalmanna Road, opposite Hamad Lab & OBG Clinic',
     city: 'Valanchery, Malappuram, Kerala',
     pincode: '676552',
     hours: '10:00 AM – 6:30 PM',
     openDays: 'Monday – Saturday (Sunday Closed)',
-    phone: '09633964787',
-    phoneDisplay: '09633 964 787',
+    phone: '09495964737',
+    phoneDisplay: '094959 64737',
     googleMapsUrl:
       'https://maps.google.com/maps?vet=10CAAQoqAOahcKEwjQvq_-tO-WAxUAAAAAHQAAAAAQBQ..i&pvq=Cg0vZy8xMXk4NGczOHdfIicKIXNtaWxlIGRlbnRvcyBmYW1pbHkgZGVudGFsIGNsaW5pYxACGAM&lqi=CiFzbWlsZSBkZW50b3MgZmFtaWx5IGRlbnRhbCBjbGluaWNI_8aGx6C9gIAIWjcQABABEAIQAxAEGAAYARgCGAMYBCIhc21pbGUgZGVudG9zIGZhbWlseSBkZW50YWwgY2xpbmljkgEHZGVudGlzdA&fvr=1&cs=1&um=1&ie=UTF-8&fb=1&gl=in&sa=X&ftid=0x3ba7b70c7574ba2b:0x724a06ff017fd89b',
     image: '/images/branch_valanchery.jpg',
   },
   {
     id: 'edayoor',
+    dbId: EDAYOOR_UUID,
     name: 'Edayoor / Mavandiyoor Branch',
     shortName: 'Edayoor',
     badge: 'Multi-Speciality Suite',
-    status: 'Closed',
+    status: 'CLOSED',
     address: 'Madathil Complex, opposite Kerala Gramin Bank',
     city: 'Edayur, Malappuram, Kerala',
     pincode: '676552',
@@ -61,7 +68,42 @@ const branches: Branch[] = [
 ];
 
 export const BranchesSection: React.FC<BranchesSectionProps> = ({ onOpenBooking }) => {
+  const [branches, setBranches] = useState<Branch[]>(initialBranches);
   const [activeBranchId, setActiveBranchId] = useState<string>('valanchery');
+
+  useEffect(() => {
+    let isMounted = true;
+    getBranches().then((dbBranches) => {
+      if (!isMounted || !dbBranches || dbBranches.length === 0) return;
+      setBranches((prev) =>
+        prev.map((branch) => {
+          const match = dbBranches.find(
+            (db) =>
+              db.id === branch.dbId ||
+              (branch.id === 'valanchery' && db.id === VALANCHERY_UUID) ||
+              (branch.id === 'edayoor' && db.id === EDAYOOR_UUID) ||
+              (branch.id === 'valanchery' && db.name.toLowerCase().includes('valanchery')) ||
+              (branch.id === 'edayoor' && db.name.toLowerCase().includes('edayoor'))
+          );
+          if (!match) return branch;
+          const cleanPhone = match.phone ? match.phone.replace(/\D/g, '') : '';
+          const phoneFormatted = cleanPhone.length === 10
+            ? `0${cleanPhone.slice(0, 5)} ${cleanPhone.slice(5)}`
+            : match.phone || branch.phoneDisplay;
+          return {
+            ...branch,
+            dbId: match.id,
+            status: match.is_active ? 'OPEN' : 'CLOSED',
+            phone: match.phone ? cleanPhone : branch.phone,
+            phoneDisplay: match.phone ? phoneFormatted : branch.phoneDisplay,
+          };
+        })
+      );
+    });
+    return () => {
+      isMounted = false;
+    };
+  }, []);
 
   const activeBranch = branches.find((b) => b.id === activeBranchId) || branches[0];
 
@@ -189,17 +231,17 @@ export const BranchesSection: React.FC<BranchesSectionProps> = ({ onOpenBooking 
                       textTransform: 'uppercase',
                       backgroundColor: isActive
                         ? 'rgba(255, 255, 255, 0.22)'
-                        : branch.status === 'Opened'
+                        : branch.status === 'OPEN' || branch.status === 'Opened'
                         ? 'rgba(22, 163, 74, 0.12)'
                         : 'rgba(239, 68, 68, 0.12)',
                       border: isActive
                         ? '1px solid rgba(255, 255, 255, 0.35)'
-                        : branch.status === 'Opened'
+                        : branch.status === 'OPEN' || branch.status === 'Opened'
                         ? '1px solid rgba(22, 163, 74, 0.35)'
                         : '1px solid rgba(239, 68, 68, 0.35)',
                       color: isActive
                         ? '#FFFFFF'
-                        : branch.status === 'Opened'
+                        : branch.status === 'OPEN' || branch.status === 'Opened'
                         ? '#15803D'
                         : '#DC2626',
                       lineHeight: 1.2,
@@ -211,15 +253,18 @@ export const BranchesSection: React.FC<BranchesSectionProps> = ({ onOpenBooking 
                         width: '6px',
                         height: '6px',
                         borderRadius: '50%',
-                        backgroundColor: branch.status === 'Opened' ? '#16A34A' : '#EF4444',
+                        backgroundColor:
+                          branch.status === 'OPEN' || branch.status === 'Opened' ? '#16A34A' : '#EF4444',
                         boxShadow:
-                          branch.status === 'Opened'
+                          branch.status === 'OPEN' || branch.status === 'Opened'
                             ? '0 0 6px rgba(22, 163, 74, 0.5)'
                             : '0 0 6px rgba(239, 68, 68, 0.5)',
                         flexShrink: 0,
                       }}
                     />
-                    <span className="branch-status-text">{branch.status}</span>
+                    <span className="branch-status-text">
+                      {branch.status === 'OPEN' || branch.status === 'Opened' ? 'OPEN' : 'CLOSED'}
+                    </span>
                   </span>
                 </button>
               );
@@ -352,14 +397,17 @@ export const BranchesSection: React.FC<BranchesSectionProps> = ({ onOpenBooking 
                     letterSpacing: '0.04em',
                     textTransform: 'uppercase',
                     backgroundColor:
-                      activeBranch.status === 'Opened'
+                      activeBranch.status === 'OPEN' || activeBranch.status === 'Opened'
                         ? 'rgba(22, 163, 74, 0.12)'
                         : 'rgba(239, 68, 68, 0.12)',
                     border:
-                      activeBranch.status === 'Opened'
+                      activeBranch.status === 'OPEN' || activeBranch.status === 'Opened'
                         ? '1px solid rgba(22, 163, 74, 0.35)'
                         : '1px solid rgba(239, 68, 68, 0.35)',
-                    color: activeBranch.status === 'Opened' ? '#15803D' : '#DC2626',
+                    color:
+                      activeBranch.status === 'OPEN' || activeBranch.status === 'Opened'
+                        ? '#15803D'
+                        : '#DC2626',
                   }}
                 >
                   <span
@@ -367,11 +415,17 @@ export const BranchesSection: React.FC<BranchesSectionProps> = ({ onOpenBooking 
                       width: '6px',
                       height: '6px',
                       borderRadius: '50%',
-                      backgroundColor: activeBranch.status === 'Opened' ? '#16A34A' : '#EF4444',
-                      boxShadow: activeBranch.status === 'Opened' ? '0 0 6px rgba(22, 163, 74, 0.4)' : '0 0 6px rgba(239, 68, 68, 0.4)',
+                      backgroundColor:
+                        activeBranch.status === 'OPEN' || activeBranch.status === 'Opened'
+                          ? '#16A34A'
+                          : '#EF4444',
+                      boxShadow:
+                        activeBranch.status === 'OPEN' || activeBranch.status === 'Opened'
+                          ? '0 0 6px rgba(22, 163, 74, 0.4)'
+                          : '0 0 6px rgba(239, 68, 68, 0.4)',
                     }}
                   />
-                  {activeBranch.status}
+                  {activeBranch.status === 'OPEN' || activeBranch.status === 'Opened' ? 'OPEN' : 'CLOSED'}
                 </span>
               </div>
 

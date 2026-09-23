@@ -12,7 +12,8 @@ import { FooterSection } from './components/FooterSection';
 import { AppointmentModal } from './components/AppointmentModal';
 import { AdminLoginPage } from './components/AdminLoginPage';
 import { AdminPortal } from './components/AdminPortal';
-import { getAdminSession, signOutAdmin, type AdminSession } from './services/authService';
+import { getAdminSession, signOutAdmin, type AdminSession, type AdminUser } from './services/authService';
+import { supabase } from './lib/supabase';
 import {
   initSmoothScroll,
   smoothScrollTo,
@@ -84,6 +85,54 @@ export function App() {
     return () => {
       window.removeEventListener('popstate', handleLocationChange);
       window.removeEventListener('hashchange', handleLocationChange);
+    };
+  }, []);
+
+  // Synchronize admin authentication state with Supabase Auth
+  useEffect(() => {
+    if (!supabase) return;
+
+    // Check existing active Supabase session
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      if (session?.user && session.user.email?.toLowerCase() === 'smiledentos@gmail.com') {
+        const user: AdminUser = {
+          id: session.user.id,
+          email: session.user.email,
+          name: 'Smile Dentos Administrator',
+          role: 'admin',
+        };
+        const admSession: AdminSession = {
+          user,
+          token: session.access_token,
+          expiresAt: (session.expires_at || 0) * 1000,
+        };
+        setAdminSession(admSession);
+      }
+    });
+
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((_event, session) => {
+      if (session?.user && session.user.email?.toLowerCase() === 'smiledentos@gmail.com') {
+        const user: AdminUser = {
+          id: session.user.id,
+          email: session.user.email,
+          name: 'Smile Dentos Administrator',
+          role: 'admin',
+        };
+        const admSession: AdminSession = {
+          user,
+          token: session.access_token,
+          expiresAt: (session.expires_at || 0) * 1000,
+        };
+        setAdminSession(admSession);
+      } else if (!session) {
+        setAdminSession(null);
+      }
+    });
+
+    return () => {
+      subscription.unsubscribe();
     };
   }, []);
 

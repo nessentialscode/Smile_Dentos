@@ -73,9 +73,9 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onOpenBooking }) => {
               className="hero-main-title"
               style={{
                 fontFamily: 'var(--font-display)',
-                fontSize: 'clamp(4.95rem, 13.2vw, 12.8rem)',
+                fontSize: 'clamp(3.3rem, 8.8vw, 8.6rem)',
                 fontWeight: 700,
-                lineHeight: 0.92,
+                lineHeight: 0.98,
                 letterSpacing: '-0.035em',
                 color: 'var(--color-white)',
                 margin: 0,
@@ -83,7 +83,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onOpenBooking }) => {
               }}
             >
               Gentle<br />
-              Dental <span style={{ color: 'var(--color-teal-500)' }}>Clinic</span>
+              <span className="hero-title-line2" style={{ whiteSpace: 'nowrap' }}>Dental <span style={{ color: 'var(--color-teal-500)' }}>Clinic</span></span>
             </h1>
           </motion.div>
 
@@ -229,6 +229,9 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onOpenBooking }) => {
             text-shadow: 0 4px 24px rgba(0, 0, 0, 0.4) !important;
             margin: 0 0 0.85rem 0 !important;
             word-break: normal !important;
+          }
+          .hero-title-line2 {
+            white-space: normal !important;
           }
           .hero-right-col {
             align-items: flex-start !important;

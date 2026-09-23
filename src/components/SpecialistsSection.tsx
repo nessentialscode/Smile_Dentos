@@ -9,6 +9,8 @@ import {
   ChevronLeft,
   ChevronRight,
 } from 'lucide-react';
+import { getDoctors, getBranches } from '../services/supabaseService';
+import type { DbDoctor, DbBranch } from '../services/supabaseService';
 
 export interface Doctor {
   id: string;
@@ -27,7 +29,25 @@ export interface Doctor {
   patientsSub: string;
 }
 
-const doctors: Doctor[] = [
+const normalizeDoctorName = (s: string) => s.toLowerCase().replace(/[^a-z]/g, '');
+
+const matchDoctorWithDb = (uiName: string, dbDoctors: DbDoctor[]): DbDoctor | undefined => {
+  const normUI = normalizeDoctorName(uiName);
+  return dbDoctors.find((d) => {
+    const normDB = normalizeDoctorName(d.name);
+    return (
+      normDB === normUI ||
+      normDB.includes(normUI.replace('dr', '')) ||
+      normUI.includes(normDB.replace('dr', '')) ||
+      (normUI.includes('haris') && normDB.includes('haris')) ||
+      (normUI.includes('shanaha') && normDB.includes('shanaha')) ||
+      (normUI.includes('bhagy') && normDB.includes('bhagiya')) ||
+      (normUI.includes('vipin') && normDB.includes('vipin'))
+    );
+  });
+};
+
+const initialDoctors: Doctor[] = [
   {
     id: 'athira-s',
     name: 'Dr. ATHIRA.S',
@@ -166,6 +186,34 @@ export const SpecialistsSection: React.FC<SpecialistsSectionProps> = ({
   showAllServices,
   onToggleShowAllServices,
 }) => {
+  const [doctors, setDoctors] = useState<Doctor[]>(initialDoctors);
+  const [branchList, setBranchList] = useState<DbBranch[]>([]);
+
+  useEffect(() => {
+    let isMounted = true;
+    Promise.all([getDoctors(), getBranches()]).then(([dbDoctors, dbBranches]) => {
+      if (!isMounted) return;
+      if (dbBranches && dbBranches.length > 0) {
+        setBranchList(dbBranches);
+      }
+      if (dbDoctors && dbDoctors.length > 0) {
+        setDoctors((prev) =>
+          prev.map((doc) => {
+            const match = matchDoctorWithDb(doc.name, dbDoctors);
+            if (!match) return doc;
+            return {
+              ...doc,
+              status: match.is_active ? 'Present' : 'Absent',
+            };
+          })
+        );
+      }
+    });
+    return () => {
+      isMounted = false;
+    };
+  }, []);
+
   // Detailed card only opens when cursor is placed on it (hover). Default is null.
   const [hoveredDoctorIndex, setHoveredDoctorIndex] = useState<number | null>(null);
   const [isMobile, setIsMobile] = useState(false);
@@ -1668,79 +1716,107 @@ export const SpecialistsSection: React.FC<SpecialistsSectionProps> = ({
                 Locations:
               </span>
 
-              {/* Valanchery Clinic: Opened */}
-              <div
-                style={{
-                  display: 'inline-flex',
-                  alignItems: 'center',
-                  gap: '5px',
-                  backgroundColor: 'rgba(22, 163, 74, 0.1)',
-                  border: '1px solid rgba(22, 163, 74, 0.3)',
-                  borderRadius: 'var(--radius-pill)',
-                  padding: '0.24rem 0.65rem',
-                  fontSize: '0.74rem',
-                  fontFamily: 'var(--font-main)',
-                }}
-              >
-                <span
-                  style={{
-                    width: '6px',
-                    height: '6px',
-                    borderRadius: '50%',
-                    backgroundColor: '#16A34A',
-                    boxShadow: '0 0 6px rgba(22, 163, 74, 0.5)',
-                  }}
-                />
-                <span style={{ color: 'var(--color-neutral-900)', fontWeight: 600 }}>Valanchery</span>
-                <span
-                  style={{
-                    color: '#15803D',
-                    fontWeight: 700,
-                    textTransform: 'uppercase',
-                    fontSize: '0.64rem',
-                    letterSpacing: '0.04em',
-                  }}
-                >
-                  Opened
-                </span>
-              </div>
+              {/* Valanchery Clinic: Dynamic from Supabase */}
+              {(() => {
+                const valBranch = branchList.find(
+                  (b) =>
+                    b.id === '0a19849f-aac8-477e-b951-d7c1e0d55a46' ||
+                    b.name.toLowerCase().includes('valanchery')
+                );
+                const isValOpen = valBranch ? valBranch.is_active : true;
+                return (
+                  <div
+                    style={{
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      gap: '5px',
+                      backgroundColor: isValOpen ? 'rgba(22, 163, 74, 0.1)' : 'rgba(239, 68, 68, 0.1)',
+                      border: isValOpen
+                        ? '1px solid rgba(22, 163, 74, 0.3)'
+                        : '1px solid rgba(239, 68, 68, 0.3)',
+                      borderRadius: 'var(--radius-pill)',
+                      padding: '0.24rem 0.65rem',
+                      fontSize: '0.74rem',
+                      fontFamily: 'var(--font-main)',
+                    }}
+                  >
+                    <span
+                      style={{
+                        width: '6px',
+                        height: '6px',
+                        borderRadius: '50%',
+                        backgroundColor: isValOpen ? '#16A34A' : '#EF4444',
+                        boxShadow: isValOpen
+                          ? '0 0 6px rgba(22, 163, 74, 0.5)'
+                          : '0 0 6px rgba(239, 68, 68, 0.5)',
+                      }}
+                    />
+                    <span style={{ color: 'var(--color-neutral-900)', fontWeight: 600 }}>Valanchery</span>
+                    <span
+                      style={{
+                        color: isValOpen ? '#15803D' : '#B91C1C',
+                        fontWeight: 700,
+                        textTransform: 'uppercase',
+                        fontSize: '0.64rem',
+                        letterSpacing: '0.04em',
+                      }}
+                    >
+                      {isValOpen ? 'Opened' : 'Closed'}
+                    </span>
+                  </div>
+                );
+              })()}
 
-              {/* Edayoor Clinic: Closed */}
-              <div
-                style={{
-                  display: 'inline-flex',
-                  alignItems: 'center',
-                  gap: '5px',
-                  backgroundColor: 'rgba(239, 68, 68, 0.1)',
-                  border: '1px solid rgba(239, 68, 68, 0.3)',
-                  borderRadius: 'var(--radius-pill)',
-                  padding: '0.24rem 0.65rem',
-                  fontSize: '0.74rem',
-                  fontFamily: 'var(--font-main)',
-                }}
-              >
-                <span
-                  style={{
-                    width: '6px',
-                    height: '6px',
-                    borderRadius: '50%',
-                    backgroundColor: '#EF4444',
-                    boxShadow: '0 0 6px rgba(239, 68, 68, 0.5)',
-                  }}
-                />
-                <span style={{ color: 'var(--color-neutral-900)', fontWeight: 600 }}>Edayoor</span>
-                <span
-                  style={{
-                    color: '#B91C1C',
-                    fontWeight: 700,
-                    textTransform: 'uppercase',
-                    fontSize: '0.64rem',
-                    letterSpacing: '0.04em',
-                  }}
-                >
-                  Closed
-                </span>
-              </div>
+              {/* Edayoor Clinic: Dynamic from Supabase */}
+              {(() => {
+                const edBranch = branchList.find(
+                  (b) =>
+                    b.id === 'e0e38ad6-dafd-4049-9aa2-4b49c55208bb' ||
+                    b.name.toLowerCase().includes('edayoor')
+                );
+                const isEdOpen = edBranch ? edBranch.is_active : true;
+                return (
+                  <div
+                    style={{
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      gap: '5px',
+                      backgroundColor: isEdOpen ? 'rgba(22, 163, 74, 0.1)' : 'rgba(239, 68, 68, 0.1)',
+                      border: isEdOpen
+                        ? '1px solid rgba(22, 163, 74, 0.3)'
+                        : '1px solid rgba(239, 68, 68, 0.3)',
+                      borderRadius: 'var(--radius-pill)',
+                      padding: '0.24rem 0.65rem',
+                      fontSize: '0.74rem',
+                      fontFamily: 'var(--font-main)',
+                    }}
+                  >
+                    <span
+                      style={{
+                        width: '6px',
+                        height: '6px',
+                        borderRadius: '50%',
+                        backgroundColor: isEdOpen ? '#16A34A' : '#EF4444',
+                        boxShadow: isEdOpen
+                          ? '0 0 6px rgba(22, 163, 74, 0.5)'
+                          : '0 0 6px rgba(239, 68, 68, 0.5)',
+                      }}
+                    />
+                    <span style={{ color: 'var(--color-neutral-900)', fontWeight: 600 }}>Edayoor</span>
+                    <span
+                      style={{
+                        color: isEdOpen ? '#15803D' : '#B91C1C',
+                        fontWeight: 700,
+                        textTransform: 'uppercase',
+                        fontSize: '0.64rem',
+                        letterSpacing: '0.04em',
+                      }}
+                    >
+                      {isEdOpen ? 'Opened' : 'Closed'}
+                    </span>
+                  </div>
+                );
+              })()}
             </div>
           </div>
 

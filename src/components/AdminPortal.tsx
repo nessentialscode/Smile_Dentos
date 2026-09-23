@@ -20,6 +20,14 @@ import {
   ChevronRight,
 } from 'lucide-react';
 
+import {
+  getBranches,
+  updateBranchAvailability,
+  getDoctors,
+  updateDoctorAvailability,
+} from '../services/supabaseService';
+import type { DbDoctor } from '../services/supabaseService';
+
 export type AppointmentStatus = 'pending' | 'confirmed' | 'completed' | 'cancelled';
 
 export interface Appointment {
@@ -50,15 +58,33 @@ export interface ClinicBranch {
   is_active: boolean;
 }
 
+const normalizeDoctorName = (s: string) => s.toLowerCase().replace(/[^a-z]/g, '');
+
+const matchDoctorWithDb = (uiName: string, dbDoctors: DbDoctor[]): DbDoctor | undefined => {
+  const normUI = normalizeDoctorName(uiName);
+  return dbDoctors.find((d) => {
+    const normDB = normalizeDoctorName(d.name);
+    return (
+      normDB === normUI ||
+      normDB.includes(normUI.replace('dr', '')) ||
+      normUI.includes(normDB.replace('dr', '')) ||
+      (normUI.includes('haris') && normDB.includes('haris')) ||
+      (normUI.includes('shanaha') && normDB.includes('shanaha')) ||
+      (normUI.includes('bhagy') && normDB.includes('bhagiya')) ||
+      (normUI.includes('vipin') && normDB.includes('vipin'))
+    );
+  });
+};
+
 const defaultBranches: ClinicBranch[] = [
   {
-    id: 'branch-valanchery',
+    id: '0a19849f-aac8-477e-b951-d7c1e0d55a46',
     name: 'Valanchery Main Clinic',
     location: 'Perinthalmanna Rd, Near Indian Oil Pump, Kolamangalam',
     is_active: true,
   },
   {
-    id: 'branch-edayoor',
+    id: 'e0e38ad6-dafd-4049-9aa2-4b49c55208bb',
     name: 'Edayoor Branch Clinic',
     location: 'Madathil Complex, Mavandiyoor Road, Edayoor North',
     is_active: true,
@@ -66,14 +92,14 @@ const defaultBranches: ClinicBranch[] = [
 ];
 
 const defaultDoctors: DoctorRecord[] = [
-  { id: 'doc-1', name: 'Dr. ATHIRA.S', specialty: 'Chief Dental Surgeon', is_present: true },
-  { id: 'doc-2', name: 'Dr. LIJEESH KADAMBIL', specialty: 'Dental Surgeon', is_present: true },
-  { id: 'doc-3', name: 'Dr. BHAGYA.R', specialty: 'Lady Dental Surgeon', is_present: true },
-  { id: 'doc-4', name: 'Dr. AYISHA NIZMIYA', specialty: 'Orthodontist | Invisalign® Provider', is_present: true },
-  { id: 'doc-5', name: 'Dr. SHANAHAS', specialty: 'Orthodontist | Smile Dentos', is_present: false },
-  { id: 'doc-6', name: 'Dr. JABIR KOTTAMMAL', specialty: 'Oral & Maxillofacial Surgeon', is_present: true },
-  { id: 'doc-7', name: 'Dr. MOHAMMED HARIS', specialty: 'Consultant Periodontist', is_present: false },
-  { id: 'doc-8', name: 'Dr. VIPIN DAS', specialty: 'Oral & Maxillofacial Surgeon', is_present: true },
+  { id: 'abae4392-2b46-49ab-8676-d555f5bfa854', name: 'Dr. ATHIRA.S', specialty: 'Chief Dental Surgeon', is_present: true },
+  { id: '3cea5115-3bc9-4214-bf6c-b5956674974f', name: 'Dr. LIJEESH KADAMBIL', specialty: 'Dental Surgeon', is_present: true },
+  { id: 'ea6c3ae0-f01d-441b-afe5-a4c9cd08b3fa', name: 'Dr. BHAGYA.R', specialty: 'Lady Dental Surgeon', is_present: true },
+  { id: '3d3546b6-52fd-48de-b46a-1ae11da9c2ca', name: 'Dr. AYISHA NIZMIYA', specialty: 'Orthodontist | Invisalign® Provider', is_present: true },
+  { id: '29ec3f63-8a75-4068-a383-8a645e28f49a', name: 'Dr. SHANAHAS', specialty: 'Orthodontist | Smile Dentos', is_present: false },
+  { id: '4e80d32d-8566-41b1-953c-ff80b1e849a9', name: 'Dr. JABIR KOTTAMMAL', specialty: 'Oral & Maxillofacial Surgeon', is_present: true },
+  { id: '9c36a7e9-7a4a-4d1f-8aa2-c10aa61f5240', name: 'Dr. MOHAMMED HARIS', specialty: 'Consultant Periodontist', is_present: false },
+  { id: 'doc-vipin-das', name: 'Dr. VIPIN DAS', specialty: 'Oral & Maxillofacial Surgeon', is_present: true },
 ];
 
 const defaultAppointments: Appointment[] = [
@@ -209,20 +235,6 @@ const defaultAppointments: Appointment[] = [
   },
 ];
 
-const normalizeStoredDoctors = (data: unknown): DoctorRecord[] => {
-  if (!Array.isArray(data) || data.length === 0) return defaultDoctors;
-  return data.map((doc: Record<string, unknown>, idx: number) => ({
-    id: String(doc.id || defaultDoctors[idx]?.id || `doc-${idx}`),
-    name: String(doc.name || defaultDoctors[idx]?.name || 'Specialist'),
-    specialty: String(doc.specialty || defaultDoctors[idx]?.specialty || 'Dental Specialist'),
-    is_present:
-      doc.is_present !== undefined
-        ? Boolean(doc.is_present)
-        : doc.isPresent !== undefined
-        ? Boolean(doc.isPresent)
-        : true,
-  }));
-};
 
 const normalizeStoredAppointments = (data: unknown): Appointment[] => {
   if (!Array.isArray(data) || data.length === 0) return defaultAppointments;
@@ -274,33 +286,55 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
     return defaultAppointments;
   });
 
-  const [branches, setBranches] = useState<ClinicBranch[]>(() => {
-    if (typeof window !== 'undefined') {
-      const saved = localStorage.getItem('smile_dentos_admin_branches');
-      if (saved) {
-        try {
-          return JSON.parse(saved);
-        } catch {
-          // ignore
-        }
-      }
-    }
-    return defaultBranches;
-  });
+  const [branches, setBranches] = useState<ClinicBranch[]>(defaultBranches);
+  const [doctors, setDoctors] = useState<DoctorRecord[]>(defaultDoctors);
 
-  const [doctors, setDoctors] = useState<DoctorRecord[]>(() => {
-    if (typeof window !== 'undefined') {
-      const saved = localStorage.getItem('smile_dentos_admin_doctors');
-      if (saved) {
-        try {
-          return normalizeStoredDoctors(JSON.parse(saved));
-        } catch {
-          // ignore
-        }
+  const refreshFromSupabase = async () => {
+    try {
+      const [dbBranches, dbDoctors] = await Promise.all([getBranches(), getDoctors()]);
+      if (dbBranches && dbBranches.length > 0) {
+        setBranches((prev) =>
+          prev.map((b) => {
+            const match = dbBranches.find(
+              (db) =>
+                db.id === b.id ||
+                (b.id.includes('valanchery') && db.id === '0a19849f-aac8-477e-b951-d7c1e0d55a46') ||
+                (b.id.includes('edayoor') && db.id === 'e0e38ad6-dafd-4049-9aa2-4b49c55208bb') ||
+                (b.name.toLowerCase().includes('valanchery') && db.name.toLowerCase().includes('valanchery')) ||
+                (b.name.toLowerCase().includes('edayoor') && db.name.toLowerCase().includes('edayoor'))
+            );
+            if (!match) return b;
+            return {
+              ...b,
+              id: match.id,
+              name: match.name || b.name,
+              location: match.address || b.location,
+              is_active: match.is_active,
+            };
+          })
+        );
       }
+      if (dbDoctors && dbDoctors.length > 0) {
+        setDoctors((prev) =>
+          prev.map((d) => {
+            const match = matchDoctorWithDb(d.name, dbDoctors);
+            if (!match) return d;
+            return {
+              ...d,
+              id: match.id,
+              is_present: match.is_active,
+            };
+          })
+        );
+      }
+    } catch (err) {
+      console.error('[Admin] Error refreshing availability from Supabase:', err);
     }
-    return defaultDoctors;
-  });
+  };
+
+  useEffect(() => {
+    refreshFromSupabase();
+  }, []);
 
   const [loading, setLoading] = useState(false);
 
@@ -334,6 +368,7 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
   }, []);
 
   // Persistence
+  // Persistence for appointments only
   useEffect(() => {
     try {
       localStorage.setItem('smile_dentos_admin_appointments', JSON.stringify(appointments));
@@ -341,22 +376,6 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
       // ignore
     }
   }, [appointments]);
-
-  useEffect(() => {
-    try {
-      localStorage.setItem('smile_dentos_admin_branches', JSON.stringify(branches));
-    } catch {
-      // ignore
-    }
-  }, [branches]);
-
-  useEffect(() => {
-    try {
-      localStorage.setItem('smile_dentos_admin_doctors', JSON.stringify(doctors));
-    } catch {
-      // ignore
-    }
-  }, [doctors]);
 
   // Helper for today's date in YYYY-MM-DD
   const getTodayDateString = (): string => {
@@ -450,18 +469,40 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
   }, [appointments]);
 
   // Handlers
-  const handleToggleDoctorPresence = (doc: DoctorRecord, targetPresent: boolean) => {
-    setDoctors((prev) =>
-      prev.map((d) => (d.id === doc.id ? { ...d, is_present: targetPresent } : d))
-    );
+  const handleToggleDoctorPresence = async (doc: DoctorRecord, targetPresent: boolean) => {
     setDoctorConfirmModal(null);
+    setLoading(true);
+    try {
+      const res = await updateDoctorAvailability(doc.id, targetPresent);
+      if (!res.success) {
+        alert(`Could not update doctor in Supabase: ${res.error || 'Database update rejected.'}`);
+      } else {
+        await refreshFromSupabase();
+      }
+    } catch (err: unknown) {
+      const msg = err instanceof Error ? err.message : 'Database error';
+      alert(`Database error updating doctor: ${msg}`);
+    } finally {
+      setLoading(false);
+    }
   };
 
-  const handleToggleBranch = (branch: ClinicBranch, targetActive: boolean) => {
-    setBranches((prev) =>
-      prev.map((b) => (b.id === branch.id ? { ...b, is_active: targetActive } : b))
-    );
+  const handleToggleBranch = async (branch: ClinicBranch, targetActive: boolean) => {
     setBranchConfirmModal(null);
+    setLoading(true);
+    try {
+      const res = await updateBranchAvailability(branch.id, targetActive);
+      if (!res.success) {
+        alert(`Could not update branch in Supabase: ${res.error || 'Database update rejected.'}`);
+      } else {
+        await refreshFromSupabase();
+      }
+    } catch (err: unknown) {
+      const msg = err instanceof Error ? err.message : 'Database error';
+      alert(`Database error updating branch: ${msg}`);
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleUpdateStatus = (apptId: string, newStatus: AppointmentStatus) => {

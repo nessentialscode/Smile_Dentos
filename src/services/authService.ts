@@ -1,3 +1,5 @@
+import { supabase } from '../lib/supabase';
+
 export interface AdminUser {
   id: string;
   email: string;
@@ -13,45 +15,49 @@ export interface AdminSession {
 
 const STORAGE_KEY = 'smile_dentos_admin_session';
 
-
 /**
- * Authenticates the administrator.
- * Supports smiledentos@gmail.com, admin@smiledentos.com, and clinic staff credentials.
+ * Authenticates the administrator using Supabase Email/Password Authentication.
+ * Authorizes the designated smiledentos@gmail.com account.
  */
 export async function signInAdmin(
   email: string,
   password: string
 ): Promise<{ user: AdminUser; session: AdminSession }> {
-  // Brief simulated auth check latency
-  await new Promise((res) => setTimeout(res, 350));
+  if (!supabase) {
+    throw new Error('Supabase client is not configured.');
+  }
 
   const trimmedEmail = email.trim().toLowerCase();
 
-  // Allow clinic admin credentials entered by user
-  const isAuthorized =
-    trimmedEmail === 'smiledentos@gmail.com' ||
-    trimmedEmail === 'admin@smiledentos.com' ||
-    trimmedEmail === 'admin' ||
-    trimmedEmail.includes('smiledentos') ||
-    trimmedEmail.includes('admin') ||
-    password === 'smiledentos2026' ||
-    password.length >= 4;
+  // Enforce authorized administrator email
+  if (trimmedEmail !== 'smiledentos@gmail.com') {
+    throw new Error('Unauthorized account. Only smiledentos@gmail.com is authorized for admin access.');
+  }
 
-  if (!isAuthorized) {
-    throw new Error('Invalid administrator email or password. Please try again.');
+  const { data, error } = await supabase.auth.signInWithPassword({
+    email: trimmedEmail,
+    password,
+  });
+
+  if (error) {
+    throw new Error(error.message || 'Invalid administrator email or password.');
+  }
+
+  if (!data.user || !data.session) {
+    throw new Error('Failed to obtain authenticated session from Supabase.');
   }
 
   const user: AdminUser = {
-    id: 'admin_usr_01',
-    email: trimmedEmail.includes('@') ? trimmedEmail : 'smiledentos@gmail.com',
-    name: 'Smile Dentos Clinic Administrator',
+    id: data.user.id,
+    email: data.user.email || trimmedEmail,
+    name: 'Smile Dentos Administrator',
     role: 'admin',
   };
 
   const session: AdminSession = {
     user,
-    token: `sdt_${Date.now()}_${Math.random().toString(36).substring(2, 9)}`,
-    expiresAt: Date.now() + 7 * 24 * 60 * 60 * 1000, // 7 days
+    token: data.session.access_token,
+    expiresAt: (data.session.expires_at || 0) * 1000,
   };
 
   if (typeof window !== 'undefined') {
@@ -66,6 +72,14 @@ export async function signInAdmin(
 }
 
 export async function signOutAdmin(): Promise<void> {
+  if (supabase) {
+    try {
+      await supabase.auth.signOut();
+    } catch {
+      // ignore
+    }
+  }
+
   if (typeof window !== 'undefined') {
     try {
       localStorage.removeItem(STORAGE_KEY);
