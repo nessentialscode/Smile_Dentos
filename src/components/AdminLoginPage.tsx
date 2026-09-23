@@ -208,11 +208,11 @@ export const AdminLoginPage: React.FC<AdminLoginPageProps> = ({
                 <input
                   id="admin-email"
                   type="email"
-                  autoComplete="email"
+                  autoComplete="off"
                   required
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  placeholder="smiledentos@gmail.com"
+                  placeholder=""
                   disabled={loading}
                   style={{
                     width: '100%',

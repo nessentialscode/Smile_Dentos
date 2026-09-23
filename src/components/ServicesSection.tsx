@@ -53,7 +53,7 @@ const initialServices: ServiceItem[] = [
   },
 ];
 
-// 3 services revealed when clicking 'See All'
+// 4 services revealed when clicking 'See All'
 const seeAllServices: ServiceItem[] = [
   {
     id: 'endodontics',
@@ -78,6 +78,14 @@ const seeAllServices: ServiceItem[] = [
       'Professional in-clinic laser whitening and customized take-home trays that safely and effectively brighten your smile by several shades in a single visit.',
     image: '/images/service_whitening.jpg',
     bg: '#F8DA68',
+  },
+  {
+    id: 'dental-aligner',
+    title: 'Dental Aligner',
+    description:
+      'Customized clear aligner therapy and 3D digital bite alignment planning designed to discreetly and comfortably straighten teeth without visible metal wires.',
+    image: '/images/service_aligner.jpg',
+    bg: '#EFF7F6',
   },
 ];
 
@@ -285,7 +293,7 @@ export const ServicesSection: React.FC<ServicesSectionProps> = ({
           {/* 5 services in first view */}
           {initialServices.map(renderServiceRow)}
 
-          {/* 3 services in See All section */}
+          {/* 4 services in See All section */}
           <AnimatePresence>
             {isShowAll && (
               <motion.div

@@ -16,9 +16,9 @@ import {
   ExternalLink,
   RotateCcw,
   Building2,
-  MessageCircle,
   ChevronRight,
 } from 'lucide-react';
+import { WhatsAppIcon } from './WhatsAppIcon';
 
 import {
   getBranches,
@@ -600,7 +600,18 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
   const getWhatsAppUrl = (appt: Appointment) => {
     const rawNumber = appt.phone.replace(/\D/g, '').replace(/^0+/, '');
     const phone = rawNumber.length === 10 ? `91${rawNumber}` : rawNumber;
-    const message = `Hello ${appt.full_name}, this is Smile Dentos Family Dental Clinic regarding your appointment for ${appt.service} on ${appt.preferred_date} (${appt.preferred_time}).`;
+
+    let message = '';
+    if (appt.status === 'confirmed') {
+      message = `Hello ${appt.full_name}, your appointment for ${appt.service} is approved at Smile Dentos (${appt.branch}) on ${appt.preferred_date} at ${appt.preferred_time}.`;
+    } else if (appt.status === 'cancelled') {
+      message = `Hello ${appt.full_name}, your appointment for ${appt.service} at Smile Dentos (${appt.branch}) on ${appt.preferred_date} at ${appt.preferred_time} has been rejected.`;
+    } else if (appt.status === 'completed') {
+      message = `Hello ${appt.full_name}, thank you for visiting Smile Dentos (${appt.branch}) for ${appt.service}. We wish you the best oral health!`;
+    } else {
+      message = `Hello ${appt.full_name}, this is Smile Dentos Family Dental Clinic regarding your appointment for ${appt.service} on ${appt.preferred_date} (${appt.preferred_time}) at ${appt.branch}.`;
+    }
+
     return `https://wa.me/${phone}?text=${encodeURIComponent(message)}`;
   };
 
@@ -1556,20 +1567,27 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
                             href={getWhatsAppUrl(appt)}
                             target="_blank"
                             rel="noopener noreferrer"
-                            title="Chat on WhatsApp"
+                            title={
+                              appt.status === 'confirmed'
+                                ? 'Send Approval via WhatsApp'
+                                : appt.status === 'cancelled'
+                                ? 'Send Rejection via WhatsApp'
+                                : 'Chat on WhatsApp'
+                            }
                             style={{
                               display: 'inline-flex',
                               alignItems: 'center',
                               justifyContent: 'center',
-                              width: '18px',
-                              height: '18px',
-                              borderRadius: '4px',
+                              width: '20px',
+                              height: '20px',
+                              borderRadius: '5px',
                               backgroundColor: '#ECFDF5',
                               color: '#059669',
                               textDecoration: 'none',
+                              transition: 'all 0.15s ease',
                             }}
                           >
-                            <MessageCircle size={11} />
+                            <WhatsAppIcon size={12} color="#059669" />
                           </a>
                         </div>
                       </td>
@@ -1714,10 +1732,43 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
                 <span style={{ fontSize: '0.68rem', fontWeight: 700, color: '#64748B', textTransform: 'uppercase', display: 'block', marginBottom: '0.2rem' }}>
                   Contact
                 </span>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', fontSize: '0.84rem', fontWeight: 700, color: '#0F172A' }}>
-                  <Phone size={13} color="#059669" />
-                  <a href={`tel:${selectedAppointment.phone.replace(/\D/g, '')}`} style={{ color: '#0F172A', textDecoration: 'none' }}>
-                    {selectedAppointment.phone}
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '0.4rem' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', fontSize: '0.84rem', fontWeight: 700, color: '#0F172A' }}>
+                    <Phone size={13} color="#059669" />
+                    <a href={`tel:${selectedAppointment.phone.replace(/\D/g, '')}`} style={{ color: '#0F172A', textDecoration: 'none' }}>
+                      {selectedAppointment.phone}
+                    </a>
+                  </div>
+                  <a
+                    href={getWhatsAppUrl(selectedAppointment)}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    title={
+                      selectedAppointment.status === 'confirmed'
+                        ? 'Send Approval message via WhatsApp'
+                        : selectedAppointment.status === 'cancelled'
+                        ? 'Send Rejection message via WhatsApp'
+                        : 'Chat on WhatsApp'
+                    }
+                    style={{
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      gap: '0.3rem',
+                      padding: '0.25rem 0.55rem',
+                      borderRadius: '6px',
+                      backgroundColor: '#25D366',
+                      color: '#FFFFFF',
+                      textDecoration: 'none',
+                      fontSize: '0.72rem',
+                      fontWeight: 700,
+                      boxShadow: '0 1px 2px rgba(37, 211, 102, 0.25)',
+                      transition: 'background-color 0.15s ease',
+                    }}
+                    onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = '#1EBE5D')}
+                    onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = '#25D366')}
+                  >
+                    <WhatsAppIcon size={12} color="#FFFFFF" />
+                    <span>WhatsApp</span>
                   </a>
                 </div>
               </div>
@@ -1785,68 +1836,209 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
               <span style={{ fontSize: '0.7rem', fontWeight: 700, color: '#64748B', textTransform: 'uppercase', display: 'block', marginBottom: '0.5rem' }}>
                 Update Appointment Status:
               </span>
-              <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap' }}>
-                <button
-                  type="button"
-                  onClick={() => {
-                    handleUpdateStatus(selectedAppointment.id, 'confirmed');
-                    setSelectedAppointment((prev) => prev ? { ...prev, status: 'confirmed' } : null);
-                  }}
-                  style={{
-                    flex: 1,
-                    padding: '0.55rem',
-                    borderRadius: '8px',
-                    border: '1px solid #BAE6FD',
-                    backgroundColor: selectedAppointment.status === 'confirmed' ? '#0284C7' : '#E0F2FE',
-                    color: selectedAppointment.status === 'confirmed' ? '#FFFFFF' : '#0369A1',
-                    fontWeight: 700,
-                    fontSize: '0.75rem',
-                    cursor: 'pointer',
-                  }}
-                >
-                  ✓ Confirm
-                </button>
-                <button
-                  type="button"
-                  onClick={() => {
-                    handleUpdateStatus(selectedAppointment.id, 'completed');
-                    setSelectedAppointment((prev) => prev ? { ...prev, status: 'completed' } : null);
-                  }}
-                  style={{
-                    flex: 1,
-                    padding: '0.55rem',
-                    borderRadius: '8px',
-                    border: '1px solid #A7F3D0',
-                    backgroundColor: selectedAppointment.status === 'completed' ? '#059669' : '#ECFDF5',
-                    color: selectedAppointment.status === 'completed' ? '#FFFFFF' : '#047857',
-                    fontWeight: 700,
-                    fontSize: '0.75rem',
-                    cursor: 'pointer',
-                  }}
-                >
-                  ✓ Complete
-                </button>
-                <button
-                  type="button"
-                  onClick={() => {
-                    handleUpdateStatus(selectedAppointment.id, 'cancelled');
-                    setSelectedAppointment((prev) => prev ? { ...prev, status: 'cancelled' } : null);
-                  }}
-                  style={{
-                    flex: 1,
-                    padding: '0.55rem',
-                    borderRadius: '8px',
-                    border: '1px solid #FECDD3',
-                    backgroundColor: selectedAppointment.status === 'cancelled' ? '#E11D48' : '#FFF1F2',
-                    color: selectedAppointment.status === 'cancelled' ? '#FFFFFF' : '#BE123C',
-                    fontWeight: 700,
-                    fontSize: '0.75rem',
-                    cursor: 'pointer',
-                  }}
-                >
-                  ✕ Cancel
-                </button>
-              </div>
+              
+              {selectedAppointment.status === 'pending' && (
+                <div style={{ display: 'flex', gap: '0.5rem' }}>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      handleUpdateStatus(selectedAppointment.id, 'confirmed');
+                      setSelectedAppointment((prev) => (prev ? { ...prev, status: 'confirmed' } : null));
+                    }}
+                    style={{
+                      flex: 1,
+                      padding: '0.6rem 0.75rem',
+                      borderRadius: '8px',
+                      border: '1px solid #BAE6FD',
+                      backgroundColor: '#0284C7',
+                      color: '#FFFFFF',
+                      fontWeight: 700,
+                      fontSize: '0.78rem',
+                      cursor: 'pointer',
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      gap: '0.35rem',
+                    }}
+                  >
+                    ✓ Confirm
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      handleUpdateStatus(selectedAppointment.id, 'cancelled');
+                      setSelectedAppointment((prev) => (prev ? { ...prev, status: 'cancelled' } : null));
+                    }}
+                    style={{
+                      flex: 1,
+                      padding: '0.6rem 0.75rem',
+                      borderRadius: '8px',
+                      border: '1px solid #FECDD3',
+                      backgroundColor: '#FFF1F2',
+                      color: '#BE123C',
+                      fontWeight: 700,
+                      fontSize: '0.78rem',
+                      cursor: 'pointer',
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      gap: '0.35rem',
+                    }}
+                  >
+                    ✕ Cancel
+                  </button>
+                </div>
+              )}
+
+              {selectedAppointment.status === 'confirmed' && (
+                <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      handleUpdateStatus(selectedAppointment.id, 'completed');
+                      setSelectedAppointment((prev) => (prev ? { ...prev, status: 'completed' } : null));
+                    }}
+                    style={{
+                      flex: 1,
+                      padding: '0.6rem 0.85rem',
+                      borderRadius: '8px',
+                      border: '1px solid #A7F3D0',
+                      backgroundColor: '#059669',
+                      color: '#FFFFFF',
+                      fontWeight: 700,
+                      fontSize: '0.78rem',
+                      cursor: 'pointer',
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      gap: '0.35rem',
+                    }}
+                  >
+                    ✓ Complete
+                  </button>
+                  <a
+                    href={getWhatsAppUrl(selectedAppointment)}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    title="Send WhatsApp Approval Message"
+                    style={{
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      gap: '0.35rem',
+                      padding: '0.6rem 0.85rem',
+                      borderRadius: '8px',
+                      backgroundColor: '#25D366',
+                      color: '#FFFFFF',
+                      fontWeight: 700,
+                      fontSize: '0.78rem',
+                      textDecoration: 'none',
+                      boxShadow: '0 1px 3px rgba(37, 211, 102, 0.3)',
+                      transition: 'background-color 0.15s ease',
+                    }}
+                    onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = '#1EBE5D')}
+                    onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = '#25D366')}
+                  >
+                    <WhatsAppIcon size={14} color="#FFFFFF" />
+                    <span>WhatsApp</span>
+                  </a>
+                </div>
+              )}
+
+              {selectedAppointment.status === 'cancelled' && (
+                <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
+                  <div
+                    style={{
+                      flex: 1,
+                      padding: '0.6rem 0.85rem',
+                      borderRadius: '8px',
+                      backgroundColor: '#FFF1F2',
+                      border: '1px solid #FECDD3',
+                      color: '#BE123C',
+                      fontSize: '0.76rem',
+                      fontWeight: 700,
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '0.4rem',
+                    }}
+                  >
+                    <XCircle size={14} color="#E11D48" />
+                    <span>Appointment Cancelled</span>
+                  </div>
+                  <a
+                    href={getWhatsAppUrl(selectedAppointment)}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    title="Send Rejection via WhatsApp"
+                    style={{
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      gap: '0.35rem',
+                      padding: '0.6rem 0.85rem',
+                      borderRadius: '8px',
+                      backgroundColor: '#25D366',
+                      color: '#FFFFFF',
+                      fontWeight: 700,
+                      fontSize: '0.76rem',
+                      textDecoration: 'none',
+                      boxShadow: '0 1px 3px rgba(37, 211, 102, 0.3)',
+                      transition: 'background-color 0.15s ease',
+                    }}
+                    onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = '#1EBE5D')}
+                    onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = '#25D366')}
+                  >
+                    <WhatsAppIcon size={14} color="#FFFFFF" />
+                    <span>WhatsApp</span>
+                  </a>
+                </div>
+              )}
+
+              {selectedAppointment.status === 'completed' && (
+                <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
+                  <div
+                    style={{
+                      flex: 1,
+                      padding: '0.6rem 0.85rem',
+                      borderRadius: '8px',
+                      backgroundColor: '#ECFDF5',
+                      border: '1px solid #A7F3D0',
+                      color: '#047857',
+                      fontSize: '0.76rem',
+                      fontWeight: 700,
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '0.4rem',
+                    }}
+                  >
+                    <CheckCircle2 size={14} color="#059669" />
+                    <span>Consultation Completed</span>
+                  </div>
+                  <a
+                    href={getWhatsAppUrl(selectedAppointment)}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    title="Send Thank You via WhatsApp"
+                    style={{
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      gap: '0.35rem',
+                      padding: '0.6rem 0.85rem',
+                      borderRadius: '8px',
+                      backgroundColor: '#25D366',
+                      color: '#FFFFFF',
+                      fontWeight: 700,
+                      fontSize: '0.76rem',
+                      textDecoration: 'none',
+                      boxShadow: '0 1px 3px rgba(37, 211, 102, 0.3)',
+                    }}
+                  >
+                    <WhatsAppIcon size={14} color="#FFFFFF" />
+                    <span>WhatsApp</span>
+                  </a>
+                </div>
+              )}
             </div>
           </div>
         </div>
