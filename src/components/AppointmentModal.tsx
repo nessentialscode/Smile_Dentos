@@ -176,6 +176,25 @@ export const AppointmentModal: React.FC<AppointmentModalProps> = ({
       return;
     }
 
+    // 3. Defensive input validation (length and phone format)
+    const trimmedName = name.trim();
+    if (!trimmedName || trimmedName.length > 60) {
+      setBookingAlert({
+        type: 'error',
+        message: 'Please enter a valid patient name (up to 60 characters).',
+      });
+      return;
+    }
+
+    const phoneDigits = phone.replace(/\D/g, '');
+    if (!phone.trim() || phoneDigits.length < 10 || phoneDigits.length > 13) {
+      setBookingAlert({
+        type: 'error',
+        message: 'Please enter a valid 10-digit mobile number.',
+      });
+      return;
+    }
+
     // Store in localStorage for live Admin Portal sync
     if (typeof window !== 'undefined') {
       try {
@@ -183,8 +202,8 @@ export const AppointmentModal: React.FC<AppointmentModalProps> = ({
         const list = saved ? JSON.parse(saved) : [];
         const newApt = {
           id: `APT-${Date.now().toString().slice(-4)}`,
-          full_name: name.trim() || 'Valued Patient',
-          phone: phone.trim() || '094959 64737',
+          full_name: trimmedName,
+          phone: phone.trim(),
           doctor,
           service,
           branch,
@@ -527,6 +546,7 @@ export const AppointmentModal: React.FC<AppointmentModalProps> = ({
                       <input
                         type="text"
                         required
+                        maxLength={60}
                         placeholder="e.g. Guy Hawkins"
                         value={name}
                         onChange={(e) => setName(e.target.value)}
@@ -562,6 +582,7 @@ export const AppointmentModal: React.FC<AppointmentModalProps> = ({
                       <input
                         type="tel"
                         required
+                        maxLength={20}
                         placeholder="094959 64737"
                         value={phone}
                         onChange={(e) => setPhone(e.target.value)}

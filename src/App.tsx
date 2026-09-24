@@ -12,7 +12,13 @@ import { FooterSection } from './components/FooterSection';
 import { AppointmentModal } from './components/AppointmentModal';
 import { AdminLoginPage } from './components/AdminLoginPage';
 import { AdminPortal } from './components/AdminPortal';
-import { getAdminSession, signOutAdmin, type AdminSession, type AdminUser } from './services/authService';
+import {
+  getAdminSession,
+  signOutAdmin,
+  isAuthorizedAdminUser,
+  type AdminSession,
+  type AdminUser,
+} from './services/authService';
 import { supabase } from './lib/supabase';
 import {
   initSmoothScroll,
@@ -88,16 +94,16 @@ export function App() {
     };
   }, []);
 
-  // Synchronize admin authentication state with Supabase Auth
+  // Synchronize admin authentication state with Supabase Auth (enforcing role = 'admin')
   useEffect(() => {
     if (!supabase) return;
 
     // Check existing active Supabase session
     supabase.auth.getSession().then(({ data: { session } }) => {
-      if (session?.user && session.user.email?.toLowerCase() === 'smiledentos@gmail.com') {
+      if (session?.user && isAuthorizedAdminUser(session.user)) {
         const user: AdminUser = {
           id: session.user.id,
-          email: session.user.email,
+          email: session.user.email || 'smiledentos@gmail.com',
           name: 'Smile Dentos Administrator',
           role: 'admin',
         };
@@ -107,16 +113,18 @@ export function App() {
           expiresAt: (session.expires_at || 0) * 1000,
         };
         setAdminSession(admSession);
+      } else if (session?.user && !isAuthorizedAdminUser(session.user)) {
+        setAdminSession(null);
       }
     });
 
     const {
       data: { subscription },
     } = supabase.auth.onAuthStateChange((_event, session) => {
-      if (session?.user && session.user.email?.toLowerCase() === 'smiledentos@gmail.com') {
+      if (session?.user && isAuthorizedAdminUser(session.user)) {
         const user: AdminUser = {
           id: session.user.id,
-          email: session.user.email,
+          email: session.user.email || 'smiledentos@gmail.com',
           name: 'Smile Dentos Administrator',
           role: 'admin',
         };
@@ -126,7 +134,7 @@ export function App() {
           expiresAt: (session.expires_at || 0) * 1000,
         };
         setAdminSession(admSession);
-      } else if (!session) {
+      } else {
         setAdminSession(null);
       }
     });

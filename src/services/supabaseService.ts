@@ -38,13 +38,25 @@ export interface AppointmentInput {
   message?: string;
 }
 
+const logDevError = (...args: unknown[]) => {
+  if (typeof import.meta !== 'undefined' && import.meta.env?.DEV) {
+    console.error(...args);
+  }
+};
+
+const logDevWarn = (...args: unknown[]) => {
+  if (typeof import.meta !== 'undefined' && import.meta.env?.DEV) {
+    console.warn(...args);
+  }
+};
+
 /**
  * Fetch all branch records directly from Supabase public.branches.
  * Does not filter out inactive branches, returning the actual database state for each.
  */
 export async function getBranches(): Promise<DbBranch[]> {
   if (!isSupabaseConfigured() || !supabase) {
-    console.warn('[Supabase] Client not configured. Returning empty branch array.');
+    logDevWarn('[Supabase] Client not configured. Returning empty branch array.');
     return [];
   }
 
@@ -55,13 +67,13 @@ export async function getBranches(): Promise<DbBranch[]> {
       .order('display_order', { ascending: true });
 
     if (error) {
-      console.error('[Supabase] Error fetching branches:', error.message);
+      logDevError('[Supabase] Error fetching branches:', error.message);
       return [];
     }
 
     return (data as DbBranch[]) || [];
   } catch (err) {
-    console.error('[Supabase] Exception fetching branches:', err);
+    logDevError('[Supabase] Exception fetching branches:', err);
     return [];
   }
 }
@@ -89,12 +101,12 @@ export async function updateBranchAvailability(
       .select();
 
     if (error) {
-      console.error('[Supabase] Error updating branch availability:', error.message);
+      logDevError('[Supabase] Error updating branch availability:', error.message);
       return { success: false, error: error.message };
     }
 
     if (!data || data.length === 0) {
-      console.warn('[Supabase] Update affected 0 rows. Check RLS policies on public.branches.');
+      logDevWarn('[Supabase] Update affected 0 rows. Check RLS policies on public.branches.');
       return {
         success: false,
         error: 'Database update affected 0 rows. Please verify Row-Level Security update policies on public.branches.',
@@ -104,7 +116,7 @@ export async function updateBranchAvailability(
     return { success: true, data: data[0] as DbBranch };
   } catch (err: unknown) {
     const message = err instanceof Error ? err.message : 'Failed to update branch availability.';
-    console.error('[Supabase] Exception updating branch availability:', message);
+    logDevError('[Supabase] Exception updating branch availability:', message);
     return { success: false, error: message };
   }
 }
@@ -114,7 +126,7 @@ export async function updateBranchAvailability(
  */
 export async function getDoctors(): Promise<DbDoctor[]> {
   if (!isSupabaseConfigured() || !supabase) {
-    console.warn('[Supabase] Client not configured. Returning empty doctor array.');
+    logDevWarn('[Supabase] Client not configured. Returning empty doctor array.');
     return [];
   }
 
@@ -125,13 +137,13 @@ export async function getDoctors(): Promise<DbDoctor[]> {
       .order('display_order', { ascending: true });
 
     if (error) {
-      console.error('[Supabase] Error fetching doctors:', error.message);
+      logDevError('[Supabase] Error fetching doctors:', error.message);
       return [];
     }
 
     return (data as DbDoctor[]) || [];
   } catch (err) {
-    console.error('[Supabase] Exception fetching doctors:', err);
+    logDevError('[Supabase] Exception fetching doctors:', err);
     return [];
   }
 }
@@ -159,12 +171,12 @@ export async function updateDoctorAvailability(
       .select();
 
     if (error) {
-      console.error('[Supabase] Error updating doctor availability:', error.message);
+      logDevError('[Supabase] Error updating doctor availability:', error.message);
       return { success: false, error: error.message };
     }
 
     if (!data || data.length === 0) {
-      console.warn('[Supabase] Update affected 0 rows. Check RLS policies on public.doctors.');
+      logDevWarn('[Supabase] Update affected 0 rows. Check RLS policies on public.doctors.');
       return {
         success: false,
         error: 'Database update affected 0 rows. Please verify Row-Level Security update policies on public.doctors.',
@@ -174,7 +186,7 @@ export async function updateDoctorAvailability(
     return { success: true, data: data[0] as DbDoctor };
   } catch (err: unknown) {
     const message = err instanceof Error ? err.message : 'Failed to update doctor availability.';
-    console.error('[Supabase] Exception updating doctor availability:', message);
+    logDevError('[Supabase] Exception updating doctor availability:', message);
     return { success: false, error: message };
   }
 }
@@ -185,12 +197,27 @@ export async function updateDoctorAvailability(
 export async function createAppointment(
   input: AppointmentInput
 ): Promise<{ success: boolean; id?: string; error?: string }> {
-  if (!input.patient_name || !input.patient_name.trim()) {
+  const trimmedName = input.patient_name ? input.patient_name.trim() : '';
+  if (!trimmedName) {
     return { success: false, error: 'Patient name is required.' };
   }
-  if (!input.phone || !input.phone.trim()) {
+  if (trimmedName.length > 60) {
+    return { success: false, error: 'Patient name must not exceed 60 characters.' };
+  }
+
+  const trimmedPhone = input.phone ? input.phone.trim() : '';
+  const phoneDigits = trimmedPhone.replace(/\D/g, '');
+  if (!trimmedPhone) {
     return { success: false, error: 'Phone number is required.' };
   }
+  if (phoneDigits.length < 10 || phoneDigits.length > 13) {
+    return { success: false, error: 'Please provide a valid 10-digit phone number.' };
+  }
+
+  if (input.message && input.message.length > 500) {
+    return { success: false, error: 'Message must not exceed 500 characters.' };
+  }
+
   if (!input.service_id) {
     return { success: false, error: 'Please select a service.' };
   }
@@ -210,13 +237,13 @@ export async function createAppointment(
 
   try {
     const payload: Record<string, unknown> = {
-      patient_name: input.patient_name.trim(),
-      phone: input.phone.trim(),
+      patient_name: trimmedName,
+      phone: trimmedPhone,
       service_id: input.service_id,
       branch_id: input.branch_id,
       preferred_date: input.preferred_date,
       preferred_time: input.preferred_time || '10:00 AM',
-      message: input.message || 'Booked via Website',
+      message: input.message ? input.message.slice(0, 500) : 'Booked via Website',
       status: 'pending',
     };
 
@@ -227,7 +254,7 @@ export async function createAppointment(
     const { error } = await supabase.from('appointments').insert([payload]);
 
     if (error) {
-      console.error('[Supabase] Appointment insert error:', error.message);
+      logDevError('[Supabase] Appointment insert error:', error.message);
       return { success: false, error: error.message };
     }
 

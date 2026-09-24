@@ -16,8 +16,21 @@ export interface AdminSession {
 const STORAGE_KEY = 'smile_dentos_admin_session';
 
 /**
+ * Verifies whether the Supabase user has the required admin role in app_metadata
+ * and matches the designated admin account.
+ */
+export function isAuthorizedAdminUser(
+  user: { app_metadata?: Record<string, unknown>; email?: string | null } | null | undefined
+): boolean {
+  if (!user) return false;
+  const role = (user.app_metadata as Record<string, unknown> | undefined)?.role;
+  const email = user.email?.toLowerCase().trim();
+  return role === 'admin' && email === 'smiledentos@gmail.com';
+}
+
+/**
  * Authenticates the administrator using Supabase Email/Password Authentication.
- * Authorizes the designated smiledentos@gmail.com account.
+ * Enforces role-based authorization (app_metadata.role === 'admin') for smiledentos@gmail.com.
  */
 export async function signInAdmin(
   email: string,
@@ -45,6 +58,12 @@ export async function signInAdmin(
 
   if (!data.user || !data.session) {
     throw new Error('Failed to obtain authenticated session from Supabase.');
+  }
+
+  // Enforce role-based authorization via auth.users.raw_app_meta_data (role === 'admin')
+  if (!isAuthorizedAdminUser(data.user)) {
+    await supabase.auth.signOut();
+    throw new Error('Access denied. Administrator privileges (role: admin) are required.');
   }
 
   const user: AdminUser = {

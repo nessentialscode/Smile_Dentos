@@ -15,16 +15,14 @@ const getEnvVar = (key: string): string => {
 };
 
 export const supabaseUrl =
-  getEnvVar('NEXT_PUBLIC_SUPABASE_URL') ||
   getEnvVar('VITE_SUPABASE_URL') ||
-  'https://jrbupgcftsnxrypxtkts.supabase.co';
+  getEnvVar('NEXT_PUBLIC_SUPABASE_URL');
 
 export const supabaseAnonKey =
-  getEnvVar('NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY') ||
-  getEnvVar('NEXT_PUBLIC_SUPABASE_ANON_KEY') ||
-  getEnvVar('VITE_SUPABASE_PUBLISHABLE_KEY') ||
   getEnvVar('VITE_SUPABASE_ANON_KEY') ||
-  'sb_publishable_fkm4hGkzCXi5baywS2nMuQ_IBZkpULU';
+  getEnvVar('VITE_SUPABASE_PUBLISHABLE_KEY') ||
+  getEnvVar('NEXT_PUBLIC_SUPABASE_ANON_KEY') ||
+  getEnvVar('NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY');
 
 export const isSupabaseConfigured = (): boolean => {
   return (
