@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, CheckCircle2, AlertTriangle, AlertCircle } from 'lucide-react';
 import confetti from 'canvas-confetti';
-import { getDoctors, getBranches } from '../services/supabaseService';
+import { getDoctors, getBranches, createAppointment } from '../services/supabaseService';
 import type { DbDoctor, DbBranch } from '../services/supabaseService';
 
 interface AppointmentModalProps {
@@ -121,6 +121,7 @@ export const AppointmentModal: React.FC<AppointmentModalProps> = ({
   const [service, setService] = useState('Teeth whitening');
   const [date, setDate] = useState(getTodayDateString);
   const [submitted, setSubmitted] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [bookingAlert, setBookingAlert] = useState<{ type: 'error' | 'warning'; message: string } | null>(null);
   const prevIsOpenRef = useRef(false);
 
@@ -135,6 +136,7 @@ export const AppointmentModal: React.FC<AppointmentModalProps> = ({
           : 'Valanchery Main Clinic'
       );
       setSubmitted(false);
+      setIsSubmitting(false);
       setBookingAlert(null);
     }
     prevIsOpenRef.current = isOpen;
@@ -143,8 +145,10 @@ export const AppointmentModal: React.FC<AppointmentModalProps> = ({
   const isSunday = checkIsSunday(date);
   const isDoctorPresent = checkDoctorIsPresent(doctor);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    if (isSubmitting) return;
 
     // 0. Enforce Branch Active: Cannot book inactive branch
     if (!isBranchActive(branch)) {
@@ -195,45 +199,54 @@ export const AppointmentModal: React.FC<AppointmentModalProps> = ({
       return;
     }
 
-    // Store in localStorage for live Admin Portal sync
-    if (typeof window !== 'undefined') {
-      try {
-        const saved = localStorage.getItem('smile_dentos_admin_appointments');
-        const list = saved ? JSON.parse(saved) : [];
-        const newApt = {
-          id: `APT-${Date.now().toString().slice(-4)}`,
-          full_name: trimmedName,
-          phone: phone.trim(),
-          doctor,
-          service,
-          branch,
-          preferred_date: date,
-          preferred_time: '10:00 AM',
-          status: 'pending',
-          notes: 'Direct website booking (In-person Clinic Consultation)',
-          created_at: new Date().toISOString(),
-        };
-        localStorage.setItem('smile_dentos_admin_appointments', JSON.stringify([newApt, ...list]));
-      } catch {
-        // ignore
-      }
-    }
-
-    setSubmitted(true);
+    setIsSubmitting(true);
     setBookingAlert(null);
-    confetti({
-      particleCount: 80,
-      spread: 70,
-      origin: { y: 0.6 },
-      colors: ['#019EA2', '#0138A2', '#38BDF8', '#FFFFFF'],
-    });
 
-    setTimeout(() => {
+    try {
+      const res = await createAppointment({
+        patient_name: trimmedName,
+        phone: phone.trim(),
+        branch_id: branch,
+        service_id: service,
+        preferred_date: date,
+        preferred_time: '10:00 AM',
+        message: `Doctor: ${doctor} | Direct website booking (In-person Clinic Consultation)`,
+      });
+
+      if (!res.success) {
+        setBookingAlert({
+          type: 'error',
+          message:
+            res.error ||
+            'Unable to schedule appointment at this time. Please try again or call 094959 64737 directly.',
+        });
+        setIsSubmitting(false);
+        return;
+      }
+
+      setSubmitted(true);
+      setBookingAlert(null);
+      confetti({
+        particleCount: 80,
+        spread: 70,
+        origin: { y: 0.6 },
+        colors: ['#019EA2', '#0138A2', '#38BDF8', '#FFFFFF'],
+      });
+
       setTimeout(() => {
-        setSubmitted(false);
-        onClose();
-      }, 500);
-    }, 3000);
+        setTimeout(() => {
+          setSubmitted(false);
+          setIsSubmitting(false);
+          onClose();
+        }, 500);
+      }, 3000);
+    } catch {
+      setBookingAlert({
+        type: 'error',
+        message: 'A connection issue occurred. Please check your internet or call 094959 64737 directly.',
+      });
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -789,10 +802,11 @@ export const AppointmentModal: React.FC<AppointmentModalProps> = ({
                   {/* Submit Button */}
                   <button
                     type="submit"
+                    disabled={isSubmitting}
                     style={{
                       marginTop: '0.75rem',
                       width: '100%',
-                      backgroundColor: 'var(--color-brand-500)',
+                      backgroundColor: isSubmitting ? 'var(--color-brand-600)' : 'var(--color-brand-500)',
                       color: '#FFFFFF',
                       padding: '0.95rem',
                       borderRadius: 'var(--radius-pill)',
@@ -801,19 +815,24 @@ export const AppointmentModal: React.FC<AppointmentModalProps> = ({
                       fontWeight: 700,
                       boxShadow: '0 8px 24px rgba(31, 95, 212, 0.35)',
                       transition: 'all 0.2s ease',
-                      cursor: 'pointer',
+                      cursor: isSubmitting ? 'not-allowed' : 'pointer',
                       border: 'none',
+                      opacity: isSubmitting ? 0.75 : 1,
                     }}
                     onMouseEnter={(e) => {
-                      e.currentTarget.style.transform = 'translateY(-2px)';
-                      e.currentTarget.style.backgroundColor = 'var(--color-brand-600)';
+                      if (!isSubmitting) {
+                        e.currentTarget.style.transform = 'translateY(-2px)';
+                        e.currentTarget.style.backgroundColor = 'var(--color-brand-600)';
+                      }
                     }}
                     onMouseLeave={(e) => {
-                      e.currentTarget.style.transform = 'translateY(0)';
-                      e.currentTarget.style.backgroundColor = 'var(--color-brand-500)';
+                      if (!isSubmitting) {
+                        e.currentTarget.style.transform = 'translateY(0)';
+                        e.currentTarget.style.backgroundColor = 'var(--color-brand-500)';
+                      }
                     }}
                   >
-                    Confirm Booking
+                    {isSubmitting ? 'Confirming Booking...' : 'Confirm Booking'}
                   </button>
 
                   <div style={{ textAlign: 'center', marginTop: '0.2rem' }}>

@@ -191,6 +191,65 @@ export async function updateDoctorAvailability(
   }
 }
 
+const UUID_REGEX = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+
+const BRANCH_UUID_MAP: Record<string, string> = {
+  valanchery: '0a19849f-aac8-477e-b951-d7c1e0d55a46',
+  edayoor: 'e0e38ad6-dafd-4049-9aa2-4b49c55208bb',
+};
+
+const SERVICE_UUID_MAP: Record<string, string> = {
+  imaging: 'a68a1e39-237f-4d68-8d89-b1a3a0f2b8e5',
+  digital: 'a68a1e39-237f-4d68-8d89-b1a3a0f2b8e5',
+  cosmetic: '1543d01a-3bf9-4c3f-a9d7-751e24b6e841',
+  endodontics: 'b426c972-e6b1-4906-989a-944bf3bd36ba',
+  root: 'b426c972-e6b1-4906-989a-944bf3bd36ba',
+  pediatric: '956997f4-660b-4297-a1b9-3937776ca6e4',
+  kids: '956997f4-660b-4297-a1b9-3937776ca6e4',
+  orthodontics: 'd6e307ee-324e-43dc-90ed-6de884afcde1',
+  braces: 'd6e307ee-324e-43dc-90ed-6de884afcde1',
+  whitening: 'db7f3c0d-10cd-4642-9ea9-042a04792562',
+  teeth: 'db7f3c0d-10cd-4642-9ea9-042a04792562',
+  tooth: 'db7f3c0d-10cd-4642-9ea9-042a04792562',
+  surgery: 'ef9bede4-24eb-4923-abd1-5b503bb19b82',
+  minor: 'ef9bede4-24eb-4923-abd1-5b503bb19b82',
+  implants: '52f24c3f-51ed-40e5-bdd9-742c4b5bc948',
+  aligner: 'ba7948eb-69ec-453b-81b4-1a769b4031f4',
+  examination: 'a68a1e39-237f-4d68-8d89-b1a3a0f2b8e5',
+};
+
+function resolveBranchUuid(raw: string): string {
+  if (UUID_REGEX.test(raw)) return raw;
+  const lower = raw.toLowerCase();
+  if (lower.includes('edayoor')) return BRANCH_UUID_MAP.edayoor;
+  return BRANCH_UUID_MAP.valanchery;
+}
+
+function resolveServiceUuid(raw: string): string {
+  if (UUID_REGEX.test(raw)) return raw;
+  const lower = raw.toLowerCase();
+  for (const [key, uuid] of Object.entries(SERVICE_UUID_MAP)) {
+    if (lower.includes(key)) return uuid;
+  }
+  return '1543d01a-3bf9-4c3f-a9d7-751e24b6e841'; // Fallback to Cosmetic Dentistry
+}
+
+export type AppointmentStatus = 'pending' | 'confirmed' | 'completed' | 'cancelled';
+
+export interface AdminAppointmentView {
+  id: string;
+  full_name: string;
+  phone: string;
+  doctor: string;
+  service: string;
+  branch: string;
+  preferred_date: string;
+  preferred_time: string;
+  status: AppointmentStatus;
+  notes?: string;
+  created_at: string;
+}
+
 /**
  * Create a new appointment in public.appointments
  */
@@ -228,22 +287,28 @@ export async function createAppointment(
     return { success: false, error: 'Preferred date is required.' };
   }
 
+  if (!isSupabaseConfigured() || !supabase) {
+    return {
+      success: false,
+      error: 'Appointment system is currently not connected to the database. Please contact the clinic directly.',
+    };
+  }
+
   const appointmentId =
     typeof crypto !== 'undefined' && crypto.randomUUID ? crypto.randomUUID() : undefined;
 
-  if (!isSupabaseConfigured() || !supabase) {
-    return { success: true, id: appointmentId };
-  }
-
   try {
+    const branchUuid = resolveBranchUuid(input.branch_id);
+    const serviceUuid = resolveServiceUuid(input.service_id);
+
     const payload: Record<string, unknown> = {
       patient_name: trimmedName,
       phone: trimmedPhone,
-      service_id: input.service_id,
-      branch_id: input.branch_id,
+      service_id: serviceUuid,
+      branch_id: branchUuid,
       preferred_date: input.preferred_date,
       preferred_time: input.preferred_time || '10:00 AM',
-      message: input.message ? input.message.slice(0, 500) : 'Booked via Website',
+      message: input.message ? input.message.slice(0, 500) : 'Direct website booking',
       status: 'pending',
     };
 
@@ -255,12 +320,175 @@ export async function createAppointment(
 
     if (error) {
       logDevError('[Supabase] Appointment insert error:', error.message);
-      return { success: false, error: error.message };
+      return {
+        success: false,
+        error: 'Unable to schedule appointment at this time. Please try again or call 094959 64737.',
+      };
     }
 
     return { success: true, id: appointmentId };
   } catch (err: unknown) {
-    const message = err instanceof Error ? err.message : 'Connection error while saving appointment.';
-    return { success: false, error: message };
+    logDevError('[Supabase] Exception saving appointment:', err);
+    return {
+      success: false,
+      error: 'Connection error while saving appointment. Please verify your connection or call the clinic.',
+    };
   }
 }
+
+/**
+ * Fetch all appointments from Supabase public.appointments for the Admin Portal.
+ * Joins related branches and services for human-readable display.
+ */
+export async function getAdminAppointments(): Promise<AdminAppointmentView[]> {
+  if (!isSupabaseConfigured() || !supabase) {
+    logDevWarn('[Supabase] Client not configured. Cannot fetch appointments.');
+    return [];
+  }
+
+  try {
+    const { data, error } = await supabase
+      .from('appointments')
+      .select('id, patient_name, phone, branch_id, service_id, preferred_date, preferred_time, message, status, created_at, updated_at, branches(name), services(name)')
+      .order('created_at', { ascending: false });
+
+    if (error) {
+      logDevError('[Supabase] Error fetching appointments:', error.message);
+      return [];
+    }
+
+    if (!data) return [];
+
+    return data.map((item) => {
+      let doctor = 'Consultant Specialist';
+      const msg = item.message || '';
+      const docMatch = msg.match(/Doctor:\s*([^|]+)/i);
+      if (docMatch && docMatch[1]) {
+        doctor = docMatch[1].trim();
+      }
+
+      const branchName =
+        (item.branches as { name?: string } | null)?.name ||
+        (item.branch_id === 'e0e38ad6-dafd-4049-9aa2-4b49c55208bb'
+          ? 'Edayoor Branch'
+          : 'Valanchery Main Clinic');
+
+      const serviceName =
+        (item.services as { name?: string } | null)?.name || 'General Consultation';
+
+      return {
+        id: item.id,
+        full_name: item.patient_name || 'Valued Patient',
+        phone: item.phone || '',
+        doctor,
+        service: serviceName,
+        branch: branchName,
+        preferred_date: item.preferred_date || '',
+        preferred_time: item.preferred_time || '10:00 AM',
+        status: (item.status as AppointmentStatus) || 'pending',
+        notes: item.message || '',
+        created_at: item.created_at || new Date().toISOString(),
+      };
+    });
+  } catch (err: unknown) {
+    logDevError('[Supabase] Exception fetching admin appointments:', err);
+    return [];
+  }
+}
+
+/**
+ * Fetch a single appointment by ID.
+ */
+export async function getAppointmentById(id: string): Promise<AdminAppointmentView | null> {
+  if (!isSupabaseConfigured() || !supabase) return null;
+
+  try {
+    const { data, error } = await supabase
+      .from('appointments')
+      .select('id, patient_name, phone, branch_id, service_id, preferred_date, preferred_time, message, status, created_at, updated_at, branches(name), services(name)')
+      .eq('id', id)
+      .single();
+
+    if (error || !data) return null;
+
+    let doctor = 'Consultant Specialist';
+    const msg = data.message || '';
+    const docMatch = msg.match(/Doctor:\s*([^|]+)/i);
+    if (docMatch && docMatch[1]) doctor = docMatch[1].trim();
+
+    return {
+      id: data.id,
+      full_name: data.patient_name || 'Valued Patient',
+      phone: data.phone || '',
+      doctor,
+      service: (data.services as { name?: string } | null)?.name || 'General Consultation',
+      branch: (data.branches as { name?: string } | null)?.name || 'Valanchery Main Clinic',
+      preferred_date: data.preferred_date || '',
+      preferred_time: data.preferred_time || '10:00 AM',
+      status: (data.status as AppointmentStatus) || 'pending',
+      notes: data.message || '',
+      created_at: data.created_at || new Date().toISOString(),
+    };
+  } catch {
+    return null;
+  }
+}
+
+/**
+ * Fetch appointments filtered by branch UUID.
+ */
+export async function getAppointmentsByBranch(branchId: string): Promise<AdminAppointmentView[]> {
+  const all = await getAdminAppointments();
+  const targetUuid = resolveBranchUuid(branchId);
+  return all.filter((a) => a.branch.toLowerCase().includes(branchId.toLowerCase()) || targetUuid);
+}
+
+/**
+ * Fetch appointments filtered by status.
+ */
+export async function getAppointmentsByStatus(status: AppointmentStatus): Promise<AdminAppointmentView[]> {
+  const all = await getAdminAppointments();
+  return all.filter((a) => a.status === status);
+}
+
+/**
+ * Update appointment status in Supabase public.appointments
+ */
+export async function updateAppointmentStatus(
+  id: string,
+  status: AppointmentStatus
+): Promise<{ success: boolean; error?: string }> {
+  if (!isSupabaseConfigured() || !supabase) {
+    return { success: false, error: 'Database service is not configured.' };
+  }
+
+  try {
+    const { data, error } = await supabase
+      .from('appointments')
+      .update({
+        status,
+        updated_at: new Date().toISOString(),
+      })
+      .eq('id', id)
+      .select();
+
+    if (error) {
+      logDevError('[Supabase] Error updating appointment status:', error.message);
+      return { success: false, error: 'Database error updating appointment status.' };
+    }
+
+    if (!data || data.length === 0) {
+      logDevWarn('[Supabase] Update affected 0 rows. Check RLS policies on public.appointments.');
+      return {
+        success: false,
+        error: 'Database update affected 0 rows. Verify update permissions for authenticated admin.',
+      };
+    }
+
+    return { success: true };
+  } catch (err: unknown) {
+    logDevError('[Supabase] Exception updating appointment status:', err);
+    return { success: false, error: 'Connection error updating appointment status.' };
+  }
+}
+

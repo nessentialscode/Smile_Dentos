@@ -25,10 +25,12 @@ import {
   updateBranchAvailability,
   getDoctors,
   updateDoctorAvailability,
+  getAdminAppointments,
+  updateAppointmentStatus,
 } from '../services/supabaseService';
-import type { DbDoctor } from '../services/supabaseService';
+import type { DbDoctor, AppointmentStatus } from '../services/supabaseService';
 
-export type AppointmentStatus = 'pending' | 'confirmed' | 'completed' | 'cancelled';
+export type { AppointmentStatus };
 
 export interface Appointment {
   id: string;
@@ -236,31 +238,6 @@ const defaultAppointments: Appointment[] = [
 ];
 
 
-const normalizeStoredAppointments = (data: unknown): Appointment[] => {
-  if (!Array.isArray(data) || data.length === 0) return defaultAppointments;
-  return data.map((item: Record<string, unknown>, idx: number) => {
-    const rawStatus = String(item.status || 'pending').toLowerCase();
-    const validStatus: AppointmentStatus =
-      rawStatus === 'confirmed' || rawStatus === 'completed' || rawStatus === 'cancelled'
-        ? (rawStatus as AppointmentStatus)
-        : 'pending';
-
-    return {
-      id: String(item.id || `APT-${101 + idx}`),
-      full_name: String(item.full_name || item.patientName || item.name || 'Patient'),
-      phone: String(item.phone || '094959 64737'),
-      doctor: String(item.doctor || item.doctorName || 'Dr. Sarah Lee'),
-      service: String(item.service || 'General Dental Care'),
-      branch: String(item.branch || 'Valanchery Main Clinic'),
-      preferred_date: String(item.preferred_date || item.date || '2026-09-20'),
-      preferred_time: String(item.preferred_time || item.time || '10:00 AM'),
-      status: validStatus,
-      notes: String(item.notes || ''),
-      created_at: String(item.created_at || new Date().toISOString()),
-    };
-  });
-};
-
 interface AdminPortalProps {
   adminEmail?: string;
   onLogout: () => void;
@@ -272,26 +249,25 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
   onLogout,
   onBackToSite,
 }) => {
-  const [appointments, setAppointments] = useState<Appointment[]>(() => {
-    if (typeof window !== 'undefined') {
-      const saved = localStorage.getItem('smile_dentos_admin_appointments');
-      if (saved) {
-        try {
-          return normalizeStoredAppointments(JSON.parse(saved));
-        } catch {
-          // ignore
-        }
-      }
-    }
-    return defaultAppointments;
-  });
-
+  const [appointments, setAppointments] = useState<Appointment[]>(defaultAppointments);
   const [branches, setBranches] = useState<ClinicBranch[]>(defaultBranches);
   const [doctors, setDoctors] = useState<DoctorRecord[]>(defaultDoctors);
 
   const refreshFromSupabase = async () => {
     try {
-      const [dbBranches, dbDoctors] = await Promise.all([getBranches(), getDoctors()]);
+      const [dbBranches, dbDoctors, dbAppointments] = await Promise.all([
+        getBranches(),
+        getDoctors(),
+        getAdminAppointments(),
+      ]);
+
+      if (dbAppointments && Array.isArray(dbAppointments)) {
+        // If Supabase returned records, or an empty array from a live connection, set appointments
+        if (dbAppointments.length > 0) {
+          setAppointments(dbAppointments);
+        }
+      }
+
       if (dbBranches && dbBranches.length > 0) {
         setBranches((prev) =>
           prev.map((b) => {
@@ -366,16 +342,6 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
   }, []);
-
-  // Persistence
-  // Persistence for appointments only
-  useEffect(() => {
-    try {
-      localStorage.setItem('smile_dentos_admin_appointments', JSON.stringify(appointments));
-    } catch {
-      // ignore
-    }
-  }, [appointments]);
 
   // Helper for today's date in YYYY-MM-DD
   const getTodayDateString = (): string => {
@@ -505,11 +471,18 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
     }
   };
 
-  const handleUpdateStatus = (apptId: string, newStatus: AppointmentStatus) => {
+  const handleUpdateStatus = async (apptId: string, newStatus: AppointmentStatus) => {
+    const prevAppointments = appointments;
     setAppointments((prev) =>
       prev.map((a) => (a.id === apptId ? { ...a, status: newStatus } : a))
     );
     setStatusConfirmModal(null);
+
+    const res = await updateAppointmentStatus(apptId, newStatus);
+    if (!res.success) {
+      setAppointments(prevAppointments);
+      alert(res.error || 'Failed to update appointment status in database.');
+    }
   };
 
   const getStatusBadge = (status: AppointmentStatus) => {
@@ -709,9 +682,10 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
 
             <button
               type="button"
-              onClick={() => {
+              onClick={async () => {
                 setLoading(true);
-                setTimeout(() => setLoading(false), 300);
+                await refreshFromSupabase();
+                setLoading(false);
               }}
               title="Refresh dataset"
               style={{
