@@ -83,7 +83,8 @@ const initialDoctors: Doctor[] = [
     id: 'bhagya-r',
     name: 'Dr. BHAGYA.R',
     specialty: 'Lady Dental Surgeon',
-    image: '/images/doctor_sarah_lee.jpg',
+    image: '/images/doctor_bhagya_r.jpg',
+    imagePosition: 'center',
     bg: '#F6C844', // Golden Yellow
     bio: 'Specializing in compassionate family dentistry, gentle periodontal therapy, preventive gum care, and personalized smile restoration.',
     status: 'Present',
@@ -130,8 +131,9 @@ const initialDoctors: Doctor[] = [
     id: 'jabir-kottammal',
     name: 'Dr. JABIR KOTTAMMAL',
     specialty: 'Oral & Maxillofacial Surgeon',
-    image: '/images/doctor_bradley_parker.jpg',
-    bg: '#E879A8', // Warm Rose / Terracotta
+    image: '/images/doctor_jabir_kottammal.jpg',
+    imagePosition: 'center',
+    bg: '#F6C844', // Golden Yellow
     bio: 'Senior maxillofacial surgeon specializing in complex wisdom tooth impactions, surgical extractions, and bone grafting.',
     status: 'Present',
     degreeTitle: 'BDS, MDS',
