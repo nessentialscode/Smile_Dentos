@@ -120,7 +120,6 @@ interface ServicesSectionProps {
 
 export const ServicesSection: React.FC<ServicesSectionProps> = ({
   showAllServices: externalShowAll,
-  onToggleShowAllServices,
 }) => {
   const isShowAll = !!externalShowAll;
 

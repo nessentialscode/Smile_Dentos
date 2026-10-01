@@ -4,7 +4,6 @@ import {
   MapPin,
   Phone,
   Clock,
-  ExternalLink,
   Star,
   Globe,
   Compass,
