@@ -2,9 +2,10 @@ import Lenis from 'lenis';
 
 let lenisInstance: Lenis | null = null;
 let rafId: number | null = null;
+let anchorClickListener: ((e: MouseEvent) => void) | null = null;
 
 // Smooth cubic/exponential easing curve for uniform, fluid scrolling momentum
-export const SMOOTH_SCROLL_EASING = (t: number) =>
+const SMOOTH_SCROLL_EASING = (t: number) =>
   Math.min(1, 1.001 - Math.pow(2, -10 * t));
 
 /**
@@ -41,40 +42,38 @@ export function initSmoothScroll(): Lenis {
 
   // Intercept all in-page anchor links (#hero, #services, #branches, etc.)
   // so that clicks glide smoothly to the target at the exact same pace
-  const handleAnchorClick = (e: MouseEvent) => {
-    const target = e.target as HTMLElement | null;
-    const anchor = target?.closest('a[href*="#"]') as HTMLAnchorElement | null;
-    if (!anchor) return;
+  if (!anchorClickListener) {
+    anchorClickListener = (e: MouseEvent) => {
+      const target = e.target as HTMLElement | null;
+      const anchor = target?.closest('a[href*="#"]') as HTMLAnchorElement | null;
+      if (!anchor) return;
 
-    const href = anchor.getAttribute('href');
-    if (!href || href === '#' || href.startsWith('tel:') || href.startsWith('mailto:')) return;
+      const href = anchor.getAttribute('href');
+      if (!href || href === '#' || href.startsWith('tel:') || href.startsWith('mailto:')) return;
 
-    const hashIndex = href.indexOf('#');
-    if (hashIndex === -1) return;
-    const hash = href.slice(hashIndex);
-    if (!hash || hash === '#') return;
+      const hashIndex = href.indexOf('#');
+      if (hashIndex === -1) return;
+      const hash = href.slice(hashIndex);
+      if (!hash || hash === '#') return;
 
-    const targetElement = document.querySelector(hash);
-    if (targetElement) {
-      e.preventDefault();
-      lenisInstance?.scrollTo(targetElement as HTMLElement, {
-        offset: -75, // Navbar clearance
-        duration: 1.2,
-        easing: SMOOTH_SCROLL_EASING,
-      });
+      const targetElement = document.querySelector(hash);
+      if (targetElement) {
+        e.preventDefault();
+        lenisInstance?.scrollTo(targetElement as HTMLElement, {
+          offset: -75, // Navbar clearance
+          duration: 1.2,
+          easing: SMOOTH_SCROLL_EASING,
+        });
 
-      if (window.history.pushState) {
-        window.history.pushState(null, '', hash);
+        if (window.history.pushState) {
+          window.history.pushState(null, '', hash);
+        }
       }
-    }
-  };
+    };
 
-  document.addEventListener('click', handleAnchorClick);
+    document.addEventListener('click', anchorClickListener);
+  }
 
-  return lenisInstance;
-}
-
-export function getSmoothScroll(): Lenis | null {
   return lenisInstance;
 }
 
@@ -113,6 +112,10 @@ export function destroySmoothScroll() {
   if (rafId !== null) {
     cancelAnimationFrame(rafId);
     rafId = null;
+  }
+  if (anchorClickListener) {
+    document.removeEventListener('click', anchorClickListener);
+    anchorClickListener = null;
   }
   if (lenisInstance) {
     lenisInstance.destroy();

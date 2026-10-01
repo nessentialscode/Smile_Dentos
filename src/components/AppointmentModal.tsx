@@ -124,10 +124,15 @@ export const AppointmentModal: React.FC<AppointmentModalProps> = ({
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [bookingAlert, setBookingAlert] = useState<{ type: 'error' | 'warning'; message: string } | null>(null);
   const prevIsOpenRef = useRef(false);
+  const autoCloseTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   // Sync state whenever modal opens or external doctor/branch changes
   useEffect(() => {
     if (isOpen && !prevIsOpenRef.current) {
+      if (autoCloseTimerRef.current) {
+        clearTimeout(autoCloseTimerRef.current);
+        autoCloseTimerRef.current = null;
+      }
       setDate(getTodayDateString());
       setDoctorOverride(selectedDoctor || 'Dr. ATHIRA.S');
       setBranchOverride(
@@ -141,6 +146,14 @@ export const AppointmentModal: React.FC<AppointmentModalProps> = ({
     }
     prevIsOpenRef.current = isOpen;
   }, [isOpen, selectedDoctor, selectedBranch]);
+
+  useEffect(() => {
+    return () => {
+      if (autoCloseTimerRef.current) {
+        clearTimeout(autoCloseTimerRef.current);
+      }
+    };
+  }, []);
 
   const isSunday = checkIsSunday(date);
   const isDoctorPresent = checkDoctorIsPresent(doctor);
@@ -233,13 +246,12 @@ export const AppointmentModal: React.FC<AppointmentModalProps> = ({
         colors: ['#019EA2', '#0138A2', '#38BDF8', '#FFFFFF'],
       });
 
-      setTimeout(() => {
-        setTimeout(() => {
-          setSubmitted(false);
-          setIsSubmitting(false);
-          onClose();
-        }, 500);
-      }, 3000);
+      autoCloseTimerRef.current = setTimeout(() => {
+        setSubmitted(false);
+        setIsSubmitting(false);
+        onClose();
+        autoCloseTimerRef.current = null;
+      }, 3500);
     } catch {
       setBookingAlert({
         type: 'error',
@@ -247,6 +259,14 @@ export const AppointmentModal: React.FC<AppointmentModalProps> = ({
       });
       setIsSubmitting(false);
     }
+  };
+
+  const handleClose = () => {
+    if (autoCloseTimerRef.current) {
+      clearTimeout(autoCloseTimerRef.current);
+      autoCloseTimerRef.current = null;
+    }
+    onClose();
   };
 
   return (
@@ -268,7 +288,7 @@ export const AppointmentModal: React.FC<AppointmentModalProps> = ({
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            onClick={onClose}
+            onClick={handleClose}
             style={{
               position: 'absolute',
               inset: 0,
@@ -340,7 +360,7 @@ export const AppointmentModal: React.FC<AppointmentModalProps> = ({
               </div>
 
               <button
-                onClick={onClose}
+                onClick={handleClose}
                 aria-label="Close modal"
                 style={{
                   width: '36px',

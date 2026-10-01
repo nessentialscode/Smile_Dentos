@@ -28,23 +28,10 @@ import {
   getAdminAppointments,
   updateAppointmentStatus,
 } from '../services/supabaseService';
-import type { DbDoctor, AppointmentStatus } from '../services/supabaseService';
+import type { DbDoctor, AppointmentStatus, AdminAppointmentView } from '../services/supabaseService';
 
 export type { AppointmentStatus };
-
-export interface Appointment {
-  id: string;
-  full_name: string;
-  phone: string;
-  doctor: string;
-  service: string;
-  branch: string;
-  preferred_date: string;
-  preferred_time: string;
-  status: AppointmentStatus;
-  notes?: string;
-  created_at: string;
-}
+export type Appointment = AdminAppointmentView;
 
 export interface DoctorRecord {
   id: string;
@@ -309,7 +296,66 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
   };
 
   useEffect(() => {
-    refreshFromSupabase();
+    let isMounted = true;
+    const initData = async () => {
+      try {
+        const [dbBranches, dbDoctors, dbAppointments] = await Promise.all([
+          getBranches(),
+          getDoctors(),
+          getAdminAppointments(),
+        ]);
+        if (!isMounted) return;
+
+        if (dbAppointments && Array.isArray(dbAppointments) && dbAppointments.length > 0) {
+          setAppointments(dbAppointments);
+        }
+
+        if (dbBranches && dbBranches.length > 0) {
+          setBranches((prev) =>
+            prev.map((b) => {
+              const match = dbBranches.find(
+                (db) =>
+                  db.id === b.id ||
+                  (b.id.includes('valanchery') && db.id === '0a19849f-aac8-477e-b951-d7c1e0d55a46') ||
+                  (b.id.includes('edayoor') && db.id === 'e0e38ad6-dafd-4049-9aa2-4b49c55208bb') ||
+                  (b.name.toLowerCase().includes('valanchery') && db.name.toLowerCase().includes('valanchery')) ||
+                  (b.name.toLowerCase().includes('edayoor') && db.name.toLowerCase().includes('edayoor'))
+              );
+              if (!match) return b;
+              return {
+                ...b,
+                id: match.id,
+                name: match.name || b.name,
+                location: match.address || b.location,
+                is_active: match.is_active,
+              };
+            })
+          );
+        }
+
+        if (dbDoctors && dbDoctors.length > 0) {
+          setDoctors((prev) =>
+            prev.map((d) => {
+              const match = matchDoctorWithDb(d.name, dbDoctors);
+              if (!match) return d;
+              return {
+                ...d,
+                id: match.id,
+                is_present: match.is_active,
+              };
+            })
+          );
+        }
+      } catch (err) {
+        console.error('[Admin] Error refreshing availability from Supabase:', err);
+      }
+    };
+
+    void initData();
+
+    return () => {
+      isMounted = false;
+    };
   }, []);
 
   const [loading, setLoading] = useState(false);

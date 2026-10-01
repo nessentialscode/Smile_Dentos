@@ -397,61 +397,6 @@ export async function getAdminAppointments(): Promise<AdminAppointmentView[]> {
 }
 
 /**
- * Fetch a single appointment by ID.
- */
-export async function getAppointmentById(id: string): Promise<AdminAppointmentView | null> {
-  if (!isSupabaseConfigured() || !supabase) return null;
-
-  try {
-    const { data, error } = await supabase
-      .from('appointments')
-      .select('id, patient_name, phone, branch_id, service_id, preferred_date, preferred_time, message, status, created_at, updated_at, branches(name), services(name)')
-      .eq('id', id)
-      .single();
-
-    if (error || !data) return null;
-
-    let doctor = 'Consultant Specialist';
-    const msg = data.message || '';
-    const docMatch = msg.match(/Doctor:\s*([^|]+)/i);
-    if (docMatch && docMatch[1]) doctor = docMatch[1].trim();
-
-    return {
-      id: data.id,
-      full_name: data.patient_name || 'Valued Patient',
-      phone: data.phone || '',
-      doctor,
-      service: (data.services as { name?: string } | null)?.name || 'General Consultation',
-      branch: (data.branches as { name?: string } | null)?.name || 'Valanchery Main Clinic',
-      preferred_date: data.preferred_date || '',
-      preferred_time: data.preferred_time || '10:00 AM',
-      status: (data.status as AppointmentStatus) || 'pending',
-      notes: data.message || '',
-      created_at: data.created_at || new Date().toISOString(),
-    };
-  } catch {
-    return null;
-  }
-}
-
-/**
- * Fetch appointments filtered by branch UUID.
- */
-export async function getAppointmentsByBranch(branchId: string): Promise<AdminAppointmentView[]> {
-  const all = await getAdminAppointments();
-  const targetUuid = resolveBranchUuid(branchId);
-  return all.filter((a) => a.branch.toLowerCase().includes(branchId.toLowerCase()) || targetUuid);
-}
-
-/**
- * Fetch appointments filtered by status.
- */
-export async function getAppointmentsByStatus(status: AppointmentStatus): Promise<AdminAppointmentView[]> {
-  const all = await getAdminAppointments();
-  return all.filter((a) => a.status === status);
-}
-
-/**
  * Update appointment status in Supabase public.appointments
  */
 export async function updateAppointmentStatus(

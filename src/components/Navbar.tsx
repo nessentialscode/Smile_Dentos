@@ -419,24 +419,6 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenBooking, onOpenAdmin }) =>
             display: flex !important;
           }
         }
-        @media (max-width: 680px) {
-          .desktop-status-pill {
-            display: none !important;
-          }
-          .floating-quick-bar {
-            left: 50% !important;
-            transform: translateX(-50%) !important;
-            bottom: calc(14px + env(safe-area-inset-bottom, 0px)) !important;
-            width: calc(100% - 32px) !important;
-            max-width: 360px !important;
-            justify-content: center !important;
-          }
-          .floating-quick-bar button {
-            width: 100% !important;
-            justify-content: center !important;
-            padding: 0.75rem 1.4rem !important;
-          }
-        }
       `}</style>
     </>
   );
