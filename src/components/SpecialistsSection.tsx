@@ -8,6 +8,9 @@ import {
   Users,
   ChevronLeft,
   ChevronRight,
+  X,
+  CheckCircle2,
+  Calendar,
 } from 'lucide-react';
 import { getDoctors, getBranches } from '../services/supabaseService';
 import type { DbDoctor, DbBranch } from '../services/supabaseService';
@@ -20,6 +23,8 @@ export interface Doctor {
   imagePosition?: string;
   bg: string;
   bio: string;
+  fullBio?: string[];
+  areasOfCare?: string[];
   status: 'Present' | 'Absent';
   degreeTitle: string;
   degreeSub: string;
@@ -42,7 +47,9 @@ const matchDoctorWithDb = (uiName: string, dbDoctors: DbDoctor[]): DbDoctor | un
       (normUI.includes('haris') && normDB.includes('haris')) ||
       (normUI.includes('shanaha') && normDB.includes('shanaha')) ||
       (normUI.includes('bhagy') && normDB.includes('bhagiya')) ||
-      (normUI.includes('vipin') && normDB.includes('vipin'))
+      (normUI.includes('vipin') && normDB.includes('vipin')) ||
+      (normUI.includes('lijeesh') && normDB.includes('lijeesh')) ||
+      (normUI.includes('ayisha') && normDB.includes('ayisha'))
     );
   });
 };
@@ -52,9 +59,19 @@ const initialDoctors: Doctor[] = [
     id: 'athira-s',
     name: 'Dr. ATHIRA.S',
     specialty: 'Chief Dental Surgeon',
-    image: '/images/doctor_john_smith.jpg',
+    image: '/images/doctor_athira_s.jpg',
     bg: '#EE9564', // Warm Peach / Orange
     bio: 'Chief Dental Surgeon specializing in advanced smile rehabilitation, comprehensive dental care, and modern clinical dentistry.',
+    fullBio: [
+      'Dr. Athira.S is the Chief Dental Surgeon at Smile Dentos Family Dental Clinic, leading the clinical team with exceptional dedication to comprehensive family dentistry, gentle restorative care, and precision diagnosis.',
+      'With over a decade of clinical experience in advanced restorative dentistry and smile design, she ensures every patient receives compassionate, individualized, and pain-free dental care.'
+    ],
+    areasOfCare: [
+      'Advanced Smile Rehabilitation',
+      'Comprehensive Family Dental Care',
+      'Gentle Restorative & Cosmetic Care',
+      'Digital Dental Diagnostics & Planning'
+    ],
     status: 'Present',
     degreeTitle: 'BDS',
     degreeSub: '(Chief Surgeon)',
@@ -70,7 +87,19 @@ const initialDoctors: Doctor[] = [
     image: '/images/doctor_lijeesh_kadambil.jpg',
     imagePosition: 'center',
     bg: '#C5AEE3', // Soft Lilac / Purple
-    bio: 'Highly experienced dental surgeon specializing in aesthetic dentistry, smile correction, root canal treatment, and precision loupes-assisted care.',
+    bio: 'Highly experienced dental surgeon with expertise in aesthetic dentistry, smile correction, root canal treatment, surgical extractions, and loupes-assisted precision care.',
+    fullBio: [
+      'Dr. Lijeesh Kadambil is a highly experienced dental surgeon with expertise in aesthetic dentistry, smile correction, root canal treatment, and surgical extractions, along with a wide range of advanced and technology-driven dental treatments.',
+      'His practice emphasises precision and clinical excellence, incorporating loupes-assisted dentistry and modern dental technologies to enhance treatment accuracy and outcomes.',
+      'With 11 years of clinical experience and a commitment to continuous advancement, he provides comprehensive, personalised dental care while maintaining high standards of professionalism and patient satisfaction.'
+    ],
+    areasOfCare: [
+      'Aesthetic Dentistry & Smile Correction',
+      'Precision Root Canal Treatment',
+      'Surgical Extractions & Minor Oral Surgery',
+      'Loupes-Assisted Precision Dentistry',
+      'Modern Technology-Driven Dental Treatments'
+    ],
     status: 'Present',
     degreeTitle: 'BDS',
     degreeSub: '(Dental Surgery)',
@@ -87,6 +116,16 @@ const initialDoctors: Doctor[] = [
     imagePosition: 'center',
     bg: '#F6C844', // Golden Yellow
     bio: 'Specializing in compassionate family dentistry, gentle periodontal therapy, preventive gum care, and personalized smile restoration.',
+    fullBio: [
+      'Dr. Bhagya.R is a dedicated Lady Dental Surgeon at Smile Dentos, specializing in gentle and compassionate family dentistry.',
+      'Her clinical practice focuses on pain-free preventive therapy, personalized tooth restorations, and ensuring patient comfort, especially for children and anxious patients.'
+    ],
+    areasOfCare: [
+      'Gentle Family Dentistry',
+      'Preventive Dental & Gum Care',
+      'Aesthetic Tooth Colored Restorations',
+      'Comprehensive Patient Counseling'
+    ],
     status: 'Present',
     degreeTitle: 'BDS',
     degreeSub: '(Lady Dental Surgeon)',
@@ -97,12 +136,25 @@ const initialDoctors: Doctor[] = [
   },
   {
     id: 'ayisha-nizmiya',
-    name: 'Dr. AYISHA NIZMIYA',
-    specialty: 'Orthodontist | Invisalign® Provider',
+    name: 'Dr. AYISHA',
+    specialty: 'Orthodontist | Invisalign® Certified Provider',
     image: '/images/doctor_ayisha_nizmiya.jpg',
     imagePosition: 'center',
     bg: '#9EA8B4', // Studio Grey
-    bio: 'Dedicated Orthodontist and Invisalign® Certified Provider offering personalized clear aligners, modern braces, and comprehensive smile alignment.',
+    bio: 'Dedicated Orthodontist committed to helping patients achieve healthy, well-aligned, and confident smiles with modern clear-aligners and personalized orthodontic care.',
+    fullBio: [
+      'Dr. Ayisha is a dedicated Orthodontist committed to helping patients achieve healthy, well-aligned, and confident smiles. With a patient-centered approach, she provides personalized orthodontic care for children, teenagers, and adults.',
+      'As an Invisalign® Certified Provider, Dr. Ayisha offers modern clear-aligner solutions for patients seeking a discreet and comfortable way to improve tooth alignment and their smile. Each treatment plan is carefully customized based on the patient’s dental needs, facial aesthetics, and treatment goals.',
+      'Her areas of orthodontic care include conventional braces, clear/ceramic braces, Invisalign® clear aligners, early orthodontic treatment, and comprehensive smile alignment.',
+      'At every stage of treatment, Dr. Ayisha focuses on clear communication, careful treatment planning, and comfortable patient care—helping every patient move towards a healthier and more confident smile.'
+    ],
+    areasOfCare: [
+      'Conventional Braces',
+      'Clear & Ceramic Braces',
+      'Invisalign® Clear Aligners',
+      'Early Orthodontic Treatment',
+      'Comprehensive Smile Alignment'
+    ],
     status: 'Present',
     degreeTitle: 'BDS, MDS',
     degreeSub: '(Invisalign® Cert.)',
@@ -118,7 +170,21 @@ const initialDoctors: Doctor[] = [
     image: '/images/doctor_shanahas.jpg',
     imagePosition: 'center',
     bg: '#A5DAA8', // Light Pastel Green
-    bio: 'Dedicated Orthodontist specializing in bite correction, crooked teeth alignment, fixed orthodontics, and aesthetic smile solutions.',
+    bio: 'Dedicated Orthodontist specializing in the diagnosis and treatment of malaligned teeth and bite problems, delivering comfortable, effective, and predictable results.',
+    fullBio: [
+      'Dr. Shanahas is a dedicated Orthodontist at Smile Dentos, committed to creating healthy, confident, and beautifully aligned smiles. With a patient-centred approach, Dr. Shanahas provides comprehensive orthodontic care tailored to the individual needs of each patient.',
+      'Specialising in the diagnosis and treatment of malaligned teeth and bite problems, Dr. Shanahas focuses on delivering comfortable, effective, and predictable orthodontic results. Treatment options are carefully planned based on each patient’s age, dental condition, aesthetic goals, and long-term oral health.',
+      'From children and teenagers to adults, Dr. Shanahas provides personalised orthodontic solutions while ensuring that every patient feels comfortable and well informed throughout their treatment journey.',
+      'At Smile Dentos, Dr. Shanahas believes that orthodontic treatment is not just about straightening teeth—it is about creating a healthy, functional, and confident smile that lasts.'
+    ],
+    areasOfCare: [
+      'Orthodontic consultation and treatment planning',
+      'Correction of crooked and crowded teeth',
+      'Bite correction',
+      'Fixed orthodontic treatment',
+      'Aesthetic orthodontic options',
+      'Retainers and post-treatment smile maintenance'
+    ],
     status: 'Absent',
     degreeTitle: 'BDS, MDS',
     degreeSub: '(Orthodontics)',
@@ -135,6 +201,16 @@ const initialDoctors: Doctor[] = [
     imagePosition: 'center',
     bg: '#F6C844', // Golden Yellow
     bio: 'Senior maxillofacial surgeon specializing in complex wisdom tooth impactions, surgical extractions, and bone grafting.',
+    fullBio: [
+      'Dr. Jabir Kottammal is a Senior Oral & Maxillofacial Surgeon specializing in complex wisdom tooth impactions, surgical extractions, cyst enucleations, and facial bone grafting.',
+      'With extensive surgical mastery, he ensures precision, sterile operating protocols, and smooth post-operative recovery for all complex dental surgeries.'
+    ],
+    areasOfCare: [
+      'Wisdom Tooth Impactions',
+      'Complex Surgical Extractions',
+      'Bone Grafting & Pre-Prosthetic Surgery',
+      'Maxillofacial Trauma & Cysts'
+    ],
     status: 'Present',
     degreeTitle: 'BDS, MDS',
     degreeSub: '(Oral Surgery)',
@@ -145,12 +221,24 @@ const initialDoctors: Doctor[] = [
   },
   {
     id: 'muhammad-haris',
-    name: 'Dr. MOHAMMED HARIS',
+    name: 'Dr. MOHAMED HARIS PM',
     specialty: 'Consultant Periodontist',
     image: '/images/doctor_muhammad_haris.jpg',
     imagePosition: 'center',
     bg: '#38BDF8', // Crisp Cyan Blue
-    bio: 'Consultant periodontist focused on advanced gum treatments, regenerative periodontal therapies, and dental implant care.',
+    bio: 'Experienced Periodontist specialising in the diagnosis, prevention, and management of gum and periodontal conditions with meticulous evidence-based care.',
+    fullBio: [
+      'Dr. Mohamed Haris PM is an experienced Periodontist specialising in the diagnosis, prevention, and management of gum and periodontal conditions.',
+      'His clinical expertise includes flap surgery, root planing, and advanced periodontal surgical and preventive treatments, with a strong focus on preserving gum health and supporting long-term oral health.',
+      'His meticulous, evidence-based approach ensures comprehensive and personalised periodontal care.'
+    ],
+    areasOfCare: [
+      'Diagnosis, prevention & management of gum conditions',
+      'Periodontal flap surgery',
+      'Root planing & deep subgingival scaling',
+      'Advanced periodontal surgical & preventive treatments',
+      'Long-term oral health & gum tissue preservation'
+    ],
     status: 'Absent',
     degreeTitle: 'BDS, MDS',
     degreeSub: '(Periodontology)',
@@ -162,14 +250,26 @@ const initialDoctors: Doctor[] = [
   {
     id: 'vipin-das',
     name: 'Dr. VIPIN DAS',
-    specialty: 'Oral & Maxillofacial Surgeon',
+    specialty: 'MDS | Oral & Maxillofacial Surgeon',
     image: '/images/doctor_vipin_das.jpg',
     imagePosition: 'center',
     bg: '#8EA7E9', // Soft Light Periwinkle
-    bio: 'Experienced Oral & Maxillofacial Surgeon specializing in impacted tooth removal, complex extractions, and advanced mouth & jaw surgery.',
+    bio: 'Experienced Oral and Maxillofacial Surgeon with 10+ years experience in the diagnosis and surgical management of conditions involving the mouth, jaws, and face.',
+    fullBio: [
+      'Dr. Vipin Das is an experienced Oral and Maxillofacial Surgeon with more than 10 years of clinical experience in the diagnosis and surgical management of conditions involving the mouth, jaws, face, and associated structures.',
+      'With expertise in oral surgical procedures, impacted tooth removal, complex extractions, and maxillofacial conditions, he combines advanced surgical skills with a meticulous and patient-focused approach.',
+      'His commitment to precision, safety, and compassionate care ensures that every patient receives personalized treatment and a comfortable clinical experience.'
+    ],
+    areasOfCare: [
+      'Impacted tooth removal',
+      'Complex surgical extractions',
+      'Advanced oral surgical procedures',
+      'Maxillofacial conditions of mouth, jaws & face',
+      'Meticulous patient-focused surgical safety'
+    ],
     status: 'Present',
     degreeTitle: 'BDS, MDS',
-    degreeSub: '(Maxillofacial)',
+    degreeSub: '(Oral & Maxillofacial)',
     experienceTitle: '10+ Years',
     experienceSub: 'Experience',
     patientsTitle: '2,900+',
@@ -190,6 +290,7 @@ export const SpecialistsSection: React.FC<SpecialistsSectionProps> = ({
 }) => {
   const [doctors, setDoctors] = useState<Doctor[]>(initialDoctors);
   const [branchList, setBranchList] = useState<DbBranch[]>([]);
+  const [selectedProfileDoctor, setSelectedProfileDoctor] = useState<Doctor | null>(null);
 
   useEffect(() => {
     let isMounted = true;
@@ -1232,15 +1333,7 @@ export const SpecialistsSection: React.FC<SpecialistsSectionProps> = ({
                               type="button"
                               onClick={(e) => {
                                 e.stopPropagation();
-                                if (onOpenBooking) {
-                                  onOpenBooking(doc.name);
-                                } else {
-                                  const contactSection =
-                                    document.getElementById('branches');
-                                  contactSection?.scrollIntoView({
-                                    behavior: 'smooth',
-                                  });
-                                }
+                                setSelectedProfileDoctor(doc);
                               }}
                               style={{
                                 width: '100%',
@@ -1602,15 +1695,7 @@ export const SpecialistsSection: React.FC<SpecialistsSectionProps> = ({
                         type="button"
                         onClick={(e) => {
                           e.stopPropagation();
-                          if (onOpenBooking) {
-                            onOpenBooking(doc.name);
-                          } else {
-                            const contactSection =
-                              document.getElementById('branches');
-                            contactSection?.scrollIntoView({
-                              behavior: 'smooth',
-                            });
-                          }
+                          setSelectedProfileDoctor(doc);
                         }}
                         style={{
                           width: '100%',
@@ -1653,6 +1738,331 @@ export const SpecialistsSection: React.FC<SpecialistsSectionProps> = ({
             </AnimatePresence>
           )}
         </div>
+
+        {/* Full Doctor Profile Modal */}
+        <AnimatePresence>
+          {selectedProfileDoctor && (
+            <motion.div
+              key="doctor-profile-modal"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              style={{
+                position: 'fixed',
+                inset: 0,
+                zIndex: 9999,
+                backgroundColor: 'rgba(10, 23, 35, 0.82)',
+                backdropFilter: 'blur(10px)',
+                WebkitBackdropFilter: 'blur(10px)',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                padding: '1.25rem',
+              }}
+              onClick={() => setSelectedProfileDoctor(null)}
+            >
+              <motion.div
+                initial={{ scale: 0.94, opacity: 0, y: 16 }}
+                animate={{ scale: 1, opacity: 1, y: 0 }}
+                exit={{ scale: 0.94, opacity: 0, y: 16 }}
+                transition={{ duration: 0.28, ease: [0.16, 1, 0.3, 1] }}
+                style={{
+                  backgroundColor: '#FFFFFF',
+                  borderRadius: '28px',
+                  maxWidth: '620px',
+                  width: '100%',
+                  maxHeight: '90vh',
+                  overflowY: 'auto',
+                  boxShadow: '0 25px 60px rgba(0, 0, 0, 0.28)',
+                  border: '1.5px solid var(--color-neutral-200)',
+                  position: 'relative',
+                  display: 'flex',
+                  flexDirection: 'column',
+                }}
+                onClick={(e) => e.stopPropagation()}
+              >
+                {/* Header Banner with doctor's thematic background color */}
+                <div
+                  style={{
+                    backgroundColor: selectedProfileDoctor.bg,
+                    padding: '2rem 1.5rem 1.5rem 1.5rem',
+                    borderTopLeftRadius: '26px',
+                    borderTopRightRadius: '26px',
+                    position: 'relative',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '1.25rem',
+                  }}
+                >
+                  {/* Close Button */}
+                  <button
+                    type="button"
+                    onClick={() => setSelectedProfileDoctor(null)}
+                    aria-label="Close Profile"
+                    style={{
+                      position: 'absolute',
+                      top: '14px',
+                      right: '14px',
+                      backgroundColor: 'rgba(255, 255, 255, 0.4)',
+                      border: 'none',
+                      borderRadius: '50%',
+                      width: '34px',
+                      height: '34px',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      color: '#0F172A',
+                      cursor: 'pointer',
+                      transition: 'background-color 0.2s',
+                    }}
+                    onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.7)')}
+                    onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.4)')}
+                  >
+                    <X size={18} />
+                  </button>
+
+                  {/* Avatar Circle */}
+                  <div
+                    style={{
+                      width: '96px',
+                      height: '96px',
+                      borderRadius: '50%',
+                      backgroundColor: selectedProfileDoctor.bg,
+                      border: '3.5px solid #FFFFFF',
+                      boxShadow: '0 8px 20px rgba(0,0,0,0.15)',
+                      overflow: 'hidden',
+                      flexShrink: 0,
+                    }}
+                  >
+                    <img
+                      src={selectedProfileDoctor.image}
+                      alt={selectedProfileDoctor.name}
+                      style={{
+                        width: '100%',
+                        height: '100%',
+                        objectFit: 'cover',
+                        objectPosition: selectedProfileDoctor.imagePosition || 'center',
+                      }}
+                    />
+                  </div>
+
+                  {/* Doctor Title in Header */}
+                  <div style={{ color: '#0F172A' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '4px' }}>
+                      <span
+                        style={{
+                          backgroundColor: '#FFFFFF',
+                          color: selectedProfileDoctor.status === 'Present' ? '#15803D' : '#DC2626',
+                          fontSize: '0.68rem',
+                          fontWeight: 700,
+                          padding: '2px 8px',
+                          borderRadius: '9999px',
+                          display: 'inline-flex',
+                          alignItems: 'center',
+                          gap: '4px',
+                        }}
+                      >
+                        <span
+                          style={{
+                            width: '6px',
+                            height: '6px',
+                            borderRadius: '50%',
+                            backgroundColor: selectedProfileDoctor.status === 'Present' ? '#16A34A' : '#EF4444',
+                          }}
+                        />
+                        <span>{selectedProfileDoctor.status}</span>
+                      </span>
+                    </div>
+                    <h3
+                      style={{
+                        margin: '0 0 2px 0',
+                        fontSize: '1.35rem',
+                        fontWeight: 700,
+                        fontFamily: 'var(--font-display)',
+                        color: '#0F172A',
+                      }}
+                    >
+                      {selectedProfileDoctor.name}
+                    </h3>
+                    <p
+                      style={{
+                        margin: 0,
+                        fontSize: '0.86rem',
+                        fontWeight: 600,
+                        color: 'rgba(15, 23, 42, 0.85)',
+                        fontFamily: 'var(--font-main)',
+                      }}
+                    >
+                      {selectedProfileDoctor.specialty}
+                    </p>
+                  </div>
+                </div>
+
+                {/* Modal Body */}
+                <div style={{ padding: '1.5rem', display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
+                  {/* 3-Column Stats */}
+                  <div
+                    style={{
+                      display: 'grid',
+                      gridTemplateColumns: 'repeat(3, 1fr)',
+                      gap: '0.5rem',
+                      backgroundColor: '#F8FAFC',
+                      border: '1px solid #E2E8F0',
+                      borderRadius: '16px',
+                      padding: '0.85rem 0.5rem',
+                      textAlign: 'center',
+                    }}
+                  >
+                    <div>
+                      <span style={{ display: 'block', fontSize: '0.82rem', fontWeight: 700, color: '#0F172A' }}>
+                        {selectedProfileDoctor.degreeTitle}
+                      </span>
+                      <span style={{ fontSize: '0.7rem', color: '#64748B' }}>
+                        {selectedProfileDoctor.degreeSub}
+                      </span>
+                    </div>
+                    <div style={{ borderLeft: '1px solid #E2E8F0', borderRight: '1px solid #E2E8F0' }}>
+                      <span style={{ display: 'block', fontSize: '0.82rem', fontWeight: 700, color: '#0F172A' }}>
+                        {selectedProfileDoctor.experienceTitle}
+                      </span>
+                      <span style={{ fontSize: '0.7rem', color: '#64748B' }}>
+                        {selectedProfileDoctor.experienceSub}
+                      </span>
+                    </div>
+                    <div>
+                      <span style={{ display: 'block', fontSize: '0.82rem', fontWeight: 700, color: '#0F172A' }}>
+                        {selectedProfileDoctor.patientsTitle}
+                      </span>
+                      <span style={{ fontSize: '0.7rem', color: '#64748B' }}>
+                        {selectedProfileDoctor.patientsSub}
+                      </span>
+                    </div>
+                  </div>
+
+                  {/* Biography Paragraphs */}
+                  <div>
+                    <h4
+                      style={{
+                        fontSize: '0.78rem',
+                        fontWeight: 800,
+                        textTransform: 'uppercase',
+                        letterSpacing: '0.08em',
+                        color: 'var(--color-brand-600)',
+                        margin: '0 0 0.55rem 0',
+                      }}
+                    >
+                      Clinical Biography
+                    </h4>
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '0.55rem' }}>
+                      {(selectedProfileDoctor.fullBio || [selectedProfileDoctor.bio]).map((para, pIdx) => (
+                        <p
+                          key={pIdx}
+                          style={{
+                            margin: 0,
+                            fontSize: '0.88rem',
+                            lineHeight: 1.55,
+                            color: '#334155',
+                            fontFamily: 'var(--font-main)',
+                          }}
+                        >
+                          {para}
+                        </p>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Areas of Care if present */}
+                  {selectedProfileDoctor.areasOfCare && selectedProfileDoctor.areasOfCare.length > 0 && (
+                    <div>
+                      <h4
+                        style={{
+                          fontSize: '0.78rem',
+                          fontWeight: 800,
+                          textTransform: 'uppercase',
+                          letterSpacing: '0.08em',
+                          color: 'var(--color-brand-600)',
+                          margin: '0 0 0.55rem 0',
+                        }}
+                      >
+                        Areas of Clinical Care
+                      </h4>
+                      <ul
+                        style={{
+                          listStyle: 'none',
+                          padding: 0,
+                          margin: 0,
+                          display: 'grid',
+                          gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))',
+                          gap: '0.45rem',
+                        }}
+                      >
+                        {selectedProfileDoctor.areasOfCare.map((area, aIdx) => (
+                          <li
+                            key={aIdx}
+                            style={{
+                              display: 'flex',
+                              alignItems: 'center',
+                              gap: '7px',
+                              fontSize: '0.82rem',
+                              color: '#1E293B',
+                              backgroundColor: '#F1F5F9',
+                              padding: '6px 10px',
+                              borderRadius: '8px',
+                            }}
+                          >
+                            <CheckCircle2 size={14} color="#1677D2" style={{ flexShrink: 0 }} />
+                            <span>{area}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
+
+                  {/* Bottom Appointment Button */}
+                  <button
+                    type="button"
+                    onClick={() => {
+                      const docName = selectedProfileDoctor.name;
+                      setSelectedProfileDoctor(null);
+                      if (onOpenBooking) {
+                        onOpenBooking(docName);
+                      }
+                    }}
+                    style={{
+                      backgroundColor: 'var(--color-brand-500)',
+                      color: '#FFFFFF',
+                      fontFamily: 'var(--font-main)',
+                      fontSize: '0.92rem',
+                      fontWeight: 700,
+                      padding: '0.85rem 1.4rem',
+                      borderRadius: 'var(--radius-pill)',
+                      border: 'none',
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      gap: '8px',
+                      cursor: 'pointer',
+                      boxShadow: '0 6px 18px rgba(22, 119, 210, 0.35)',
+                      transition: 'background-color 0.2s, transform 0.2s',
+                      marginTop: '0.5rem',
+                    }}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.backgroundColor = 'var(--color-brand-600)';
+                      e.currentTarget.style.transform = 'translateY(-1px)';
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.backgroundColor = 'var(--color-brand-500)';
+                      e.currentTarget.style.transform = 'translateY(0)';
+                    }}
+                  >
+                    <Calendar size={17} />
+                    <span>Book Appointment with {selectedProfileDoctor.name}</span>
+                  </button>
+                </div>
+              </motion.div>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </section>
 
       {/* Bottom Bar: Clean surface */}

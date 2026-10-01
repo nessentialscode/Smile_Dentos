@@ -1,6 +1,21 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { MapPin, Phone, Clock, ExternalLink, Calendar } from 'lucide-react';
+import {
+  MapPin,
+  Phone,
+  Clock,
+  ExternalLink,
+  Star,
+  Globe,
+  Compass,
+  Camera,
+  MessageCircle,
+  X,
+  ChevronLeft,
+  ChevronRight,
+  Building2,
+  Quote,
+} from 'lucide-react';
 import { getBranches } from '../services/supabaseService';
 
 interface BranchesSectionProps {
@@ -10,66 +25,157 @@ interface BranchesSectionProps {
 const VALANCHERY_UUID = '0a19849f-aac8-477e-b951-d7c1e0d55a46';
 const EDAYOOR_UUID = 'e0e38ad6-dafd-4049-9aa2-4b49c55208bb';
 
-interface Branch {
+interface GalleryPhoto {
+  url: string;
+  title: string;
+  caption: string;
+}
+
+interface BranchCardData {
   id: string;
   dbId: string;
+  tag: string;
   name: string;
   shortName: string;
   badge: string;
-  address: string;
-  city: string;
-  pincode: string;
+  landmark: string;
+  status: 'OPEN' | 'CLOSED' | 'Opened' | 'Closed';
+  rating: number;
+  reviewsCount: number;
+  addressLine1: string;
+  addressLine2: string;
   hours: string;
-  openDays: string;
   phone: string;
   phoneDisplay: string;
+  whatsappNumber: string;
   googleMapsUrl: string;
   image: string;
-  status: 'OPEN' | 'CLOSED' | 'Opened' | 'Closed';
+  photoCountLabel: string;
+  facilities: string[];
+  quote: string;
+  bookingParam: string;
+  gallery: GalleryPhoto[];
 }
 
-const initialBranches: Branch[] = [
+const initialBranchesData: BranchCardData[] = [
   {
     id: 'valanchery',
     dbId: VALANCHERY_UUID,
-    name: 'Valanchery Main Clinic',
+    tag: 'VALANCHERY',
+    name: 'Smile Dentos — Valanchery Clinic',
     shortName: 'Valanchery',
-    badge: 'Multi-Specialty Center',
+    badge: 'Flagship Clinic',
+    landmark: 'Located at: Opposite Hamad Lab & OBG Clinic',
     status: 'OPEN',
-    address: 'Perinthalmanna Road, opposite Hamad Lab & OBG Clinic',
-    city: 'Valanchery, Malappuram, Kerala',
-    pincode: '676552',
-    hours: '10:00 AM – 6:30 PM',
-    openDays: 'Monday – Saturday (Sunday Closed)',
+    rating: 4.9,
+    reviewsCount: 32,
+    addressLine1: 'Perinthalmanna Road, opposite Hamad Lab & OBG Clinic',
+    addressLine2: 'Main Road, Valanchery, Kerala 676552',
+    hours: 'Mon – Sat: 10:00 AM – 6:30 PM (Sunday: Closed)',
     phone: '09495964737',
-    phoneDisplay: '094959 64737',
+    phoneDisplay: '+91 94959 64737',
+    whatsappNumber: '919495964737',
     googleMapsUrl:
       'https://maps.google.com/maps?vet=10CAAQoqAOahcKEwjQvq_-tO-WAxUAAAAAHQAAAAAQBQ..i&pvq=Cg0vZy8xMXk4NGczOHdfIicKIXNtaWxlIGRlbnRvcyBmYW1pbHkgZGVudGFsIGNsaW5pYxACGAM&lqi=CiFzbWlsZSBkZW50b3MgZmFtaWx5IGRlbnRhbCBjbGluaWNI_8aGx6C9gIAIWjcQABABEAIQAxAEGAAYARgCGAMYBCIhc21pbGUgZGVudG9zIGZhbWlseSBkZW50YWwgY2xpbmljkgEHZGVudGlzdA&fvr=1&cs=1&um=1&ie=UTF-8&fb=1&gl=in&sa=X&ftid=0x3ba7b70c7574ba2b:0x724a06ff017fd89b',
     image: '/images/branch_valanchery.jpg',
+    photoCountLabel: '+12 Photos',
+    facilities: [
+      'Digital 3D Dental Imaging & OPG',
+      'Sterile Implant Operating Room',
+      'Painless Laser Dentistry & Whitening',
+      'Child-Friendly Specialized Dental Corner',
+    ],
+    quote: 'Very professional dental clinic in Valanchery. Zero pain during treatment.',
+    bookingParam: 'Valanchery Main Clinic',
+    gallery: [
+      {
+        url: '/images/branch_valanchery.jpg',
+        title: 'Valanchery Main Reception & Exterior',
+        caption: 'Comfortable waiting lounge and exterior access on Perinthalmanna Road.',
+      },
+      {
+        url: '/images/service_digital_imaging.jpg',
+        title: 'Digital 3D Dental Diagnostics Suite',
+        caption: 'Ultra-low radiation high definition panoramic dental imaging.',
+      },
+      {
+        url: '/images/service_implants.jpg',
+        title: 'Sterile Surgical Operatory',
+        caption: 'Dedicated aseptic theater for dental implants and complex surgeries.',
+      },
+      {
+        url: '/images/service_whitening.jpg',
+        title: 'Cosmetic & Laser Dental Suite',
+        caption: 'Advanced diode lasers and clinical teeth whitening systems.',
+      },
+      {
+        url: '/images/who_kids.jpg',
+        title: 'Pediatric Care Dental Room',
+        caption: 'Gentle, anxiety-free dental experience designed specifically for kids.',
+      },
+    ],
   },
   {
     id: 'edayoor',
     dbId: EDAYOOR_UUID,
-    name: 'Edayoor / Mavandiyoor Branch',
+    tag: 'EDAYOOR',
+    name: 'Smile Dentos — Edayoor Clinic',
     shortName: 'Edayoor',
-    badge: 'Multi-Speciality Suite',
-    status: 'CLOSED',
-    address: 'Madathil Complex, opposite Kerala Gramin Bank',
-    city: 'Edayur, Malappuram, Kerala',
-    pincode: '676552',
-    hours: '9:30 AM – 6:00 PM',
-    openDays: 'Monday – Saturday (Sunday Closed)',
+    badge: 'Madathil Complex Branch',
+    landmark: 'Located in: Madathil Complex, near Gramin Bank',
+    status: 'OPEN',
+    rating: 4.9,
+    reviewsCount: 16,
+    addressLine1: 'Madathil Complex, opposite Kerala Gramin Bank',
+    addressLine2: 'Mavandiyoor, Edayur, Kerala 676552',
+    hours: 'Mon – Sat: 9:30 AM – 6:00 PM (Sunday: Closed)',
     phone: '07514044867',
-    phoneDisplay: '07514 044 867',
+    phoneDisplay: '+91 75140 44867',
+    whatsappNumber: '917514044867',
     googleMapsUrl:
       'https://www.google.com/maps/search/?api=1&query=Smile+Dentos+Dental+Clinic+Madathil+Complex+Edayur+Kerala+676552',
     image: '/images/branch_edayoor.jpg',
+    photoCountLabel: '+8 Photos',
+    facilities: [
+      'Located in Madathil Complex (opp. Gramin Bank)',
+      'Multispeciality Dental Surgery & Care',
+      'Advanced Root Canal & Tooth Restorations',
+      'Comprehensive Digital Dental Diagnostics',
+    ],
+    quote: 'Very good service, experienced doctors and extremely hygienic clinic.',
+    bookingParam: 'Edayoor Branch',
+    gallery: [
+      {
+        url: '/images/branch_edayoor.jpg',
+        title: 'Edayoor Clinic Facility & Lounge',
+        caption: 'Modern clinical rooms in Madathil Complex, Mavandiyoor.',
+      },
+      {
+        url: '/images/service_endodontics.jpg',
+        title: 'Rotary Endodontics & Operatory',
+        caption: 'Painless single-visit microscopic root canal therapy.',
+      },
+      {
+        url: '/images/service_orthodontics.jpg',
+        title: 'Orthodontic & Invisalign Suite',
+        caption: 'Digital aligner scans and smile alignment treatments.',
+      },
+      {
+        url: '/images/service_surgery.jpg',
+        title: 'Consultation & Oral Surgery Suite',
+        caption: 'State-of-the-art diagnostic and surgical treatment units.',
+      },
+    ],
   },
 ];
 
 export const BranchesSection: React.FC<BranchesSectionProps> = ({ onOpenBooking }) => {
-  const [branches, setBranches] = useState<Branch[]>(initialBranches);
-  const [activeBranchId, setActiveBranchId] = useState<string>('valanchery');
+  const [branches, setBranches] = useState<BranchCardData[]>(initialBranchesData);
+  const [activeGallery, setActiveGallery] = useState<{
+    branchName: string;
+    photos: GalleryPhoto[];
+    currentIndex: number;
+  } | null>(null);
 
   useEffect(() => {
     let isMounted = true;
@@ -86,16 +192,24 @@ export const BranchesSection: React.FC<BranchesSectionProps> = ({ onOpenBooking 
               (branch.id === 'edayoor' && db.name.toLowerCase().includes('edayoor'))
           );
           if (!match) return branch;
-          const cleanPhone = match.phone ? match.phone.replace(/\D/g, '') : '';
-          const phoneFormatted = cleanPhone.length === 10
-            ? `0${cleanPhone.slice(0, 5)} ${cleanPhone.slice(5)}`
-            : match.phone || branch.phoneDisplay;
+          const rawDigits = match.phone ? match.phone.replace(/\D/g, '') : '';
+          let tenDigits = rawDigits;
+          if (tenDigits.startsWith('0') && tenDigits.length === 11) {
+            tenDigits = tenDigits.slice(1);
+          } else if (tenDigits.startsWith('91') && tenDigits.length === 12) {
+            tenDigits = tenDigits.slice(2);
+          }
+          const phoneFormatted =
+            tenDigits.length === 10
+              ? `+91 ${tenDigits.slice(0, 5)} ${tenDigits.slice(5)}`
+              : match.phone || branch.phoneDisplay;
           return {
             ...branch,
             dbId: match.id,
             status: match.is_active ? 'OPEN' : 'CLOSED',
-            phone: match.phone ? cleanPhone : branch.phone,
-            phoneDisplay: match.phone ? phoneFormatted : branch.phoneDisplay,
+            phone: rawDigits || branch.phone,
+            phoneDisplay: phoneFormatted,
+            whatsappNumber: tenDigits.length === 10 ? `91${tenDigits}` : rawDigits || branch.whatsappNumber,
           };
         })
       );
@@ -105,22 +219,50 @@ export const BranchesSection: React.FC<BranchesSectionProps> = ({ onOpenBooking 
     };
   }, []);
 
-  const activeBranch = branches.find((b) => b.id === activeBranchId) || branches[0];
+  const openBranchGallery = (branch: BranchCardData, startIndex: number = 0) => {
+    setActiveGallery({
+      branchName: branch.name,
+      photos: branch.gallery,
+      currentIndex: startIndex,
+    });
+  };
+
+  const nextGalleryPhoto = () => {
+    if (!activeGallery) return;
+    setActiveGallery((prev) => {
+      if (!prev) return null;
+      return {
+        ...prev,
+        currentIndex: (prev.currentIndex + 1) % prev.photos.length,
+      };
+    });
+  };
+
+  const prevGalleryPhoto = () => {
+    if (!activeGallery) return;
+    setActiveGallery((prev) => {
+      if (!prev) return null;
+      return {
+        ...prev,
+        currentIndex: (prev.currentIndex - 1 + prev.photos.length) % prev.photos.length,
+      };
+    });
+  };
 
   return (
     <section
       id="branches"
       style={{
-        backgroundColor: '#FFFFFF',
-        color: 'var(--color-neutral-900)',
-        paddingTop: 'clamp(5.8rem, 7.8vw, 8.5rem)',
-        paddingBottom: 'clamp(4.5rem, 7vw, 7rem)',
+        backgroundColor: '#F8FAFC',
+        color: '#0F172A',
+        paddingTop: 'clamp(4.5rem, 6.5vw, 6.5rem)',
+        paddingBottom: 'clamp(4.5rem, 6.5vw, 6.5rem)',
         position: 'relative',
         overflow: 'hidden',
-        scrollMarginTop: '90px',
+        scrollMarginTop: '80px',
       }}
     >
-      <div className="container">
+      <div className="container" style={{ maxWidth: '1280px', margin: '0 auto', padding: '0 1.25rem' }}>
         {/* Section Header */}
         <div
           style={{
@@ -128,7 +270,7 @@ export const BranchesSection: React.FC<BranchesSectionProps> = ({ onOpenBooking 
             flexDirection: 'column',
             alignItems: 'center',
             textAlign: 'center',
-            marginBottom: 'clamp(2rem, 3.5vw, 3rem)',
+            marginBottom: 'clamp(2.5rem, 4vw, 3.5rem)',
           }}
         >
           {/* Eyebrow */}
@@ -136,12 +278,14 @@ export const BranchesSection: React.FC<BranchesSectionProps> = ({ onOpenBooking 
             style={{
               fontFamily: 'var(--font-main)',
               fontSize: '0.85rem',
-              fontWeight: 700,
+              fontWeight: 800,
               letterSpacing: '0.14em',
               textTransform: 'uppercase',
               color: 'var(--color-brand-600)',
-              marginBottom: '0.65rem',
-              display: 'inline-block',
+              marginBottom: '0.6rem',
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '6px',
             }}
           >
             OUR LOCATIONS
@@ -151,653 +295,930 @@ export const BranchesSection: React.FC<BranchesSectionProps> = ({ onOpenBooking 
           <h2
             style={{
               fontFamily: 'var(--font-display)',
-              fontSize: 'clamp(2.4rem, 4.5vw, 3.8rem)',
+              fontSize: 'clamp(2.1rem, 3.8vw, 3.2rem)',
               fontWeight: 700,
               letterSpacing: '-0.025em',
-              lineHeight: 1.15,
-              color: 'var(--color-neutral-900)',
-              margin: '0 0 1.75rem 0',
+              lineHeight: 1.2,
+              color: '#0F172A',
+              margin: '0 0 0.85rem 0',
             }}
           >
-            Visit Our Branches
+            Visit Our Clinical Branches
           </h2>
 
-          {/* Refined Branch Selector (Unified Semi-Circle Pill) */}
-          <div
-            role="tablist"
-            aria-label="Clinic Branches"
-            className="branch-switcher-container"
+          <p
             style={{
-              display: 'inline-flex',
-              alignItems: 'center',
-              backgroundColor: '#F1F5F9',
-              padding: '6px',
-              borderRadius: '9999px',
-              border: '1px solid #E2E8F0',
-              boxShadow: '0 2px 10px rgba(0, 0, 0, 0.04)',
-              gap: '6px',
-              position: 'relative',
-              maxWidth: '100%',
+              fontFamily: 'var(--font-main)',
+              fontSize: 'clamp(0.95rem, 1.1vw, 1.1rem)',
+              color: '#64748B',
+              maxWidth: '680px',
+              margin: 0,
+              lineHeight: 1.6,
             }}
           >
-            {branches.map((branch) => {
-              const isActive = branch.id === activeBranchId;
-              return (
-                <button
-                  key={branch.id}
-                  role="tab"
-                  aria-selected={isActive}
-                  onClick={() => setActiveBranchId(branch.id)}
-                  className="branch-switcher-btn"
+            Two fully-equipped dental centers across Malappuram providing seamless digital diagnostics,
+            painless surgeries, and gentle dental care.
+          </p>
+        </div>
+
+        {/* Two-Card Branches Grid: Both branches represented side-by-side simultaneously */}
+        <div
+          className="branches-two-card-grid"
+          style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(2, minmax(0, 1fr))',
+            gap: 'clamp(1.5rem, 2.5vw, 2.25rem)',
+            alignItems: 'stretch',
+          }}
+        >
+          {branches.map((branch, index) => {
+            const isOpened = branch.status === 'OPEN' || branch.status === 'Opened';
+            return (
+              <motion.article
+                key={branch.id}
+                initial={{ opacity: 0, y: 24 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: '-50px' }}
+                transition={{ duration: 0.5, delay: index * 0.15 }}
+                className="branch-highlight-card"
+                style={{
+                  background: 'linear-gradient(168deg, #3B82F6 0%, #2563EB 50%, #1D4ED8 100%)',
+                  borderRadius: '28px',
+                  padding: 'clamp(1.5rem, 2.5vw, 2.25rem)',
+                  color: '#FFFFFF',
+                  position: 'relative',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  boxShadow: '0 20px 45px -10px rgba(37, 99, 235, 0.38), 0 8px 20px rgba(0, 0, 0, 0.08)',
+                  border: '1px solid rgba(255, 255, 255, 0.22)',
+                  overflow: 'hidden',
+                }}
+              >
+                {/* Subtle decorative background glow */}
+                <div
+                  aria-hidden="true"
                   style={{
-                    position: 'relative',
-                    display: 'inline-flex',
+                    position: 'absolute',
+                    top: '-15%',
+                    right: '-15%',
+                    width: '320px',
+                    height: '320px',
+                    borderRadius: '50%',
+                    background: 'radial-gradient(circle, rgba(255, 255, 255, 0.16) 0%, rgba(255, 255, 255, 0) 70%)',
+                    pointerEvents: 'none',
+                  }}
+                />
+
+                {/* 1. Header Bar: Yellow Tag on Left, Opened Status Pill on Right */}
+                <div
+                  style={{
+                    display: 'flex',
                     alignItems: 'center',
-                    gap: '0.65rem',
-                    padding: '0.65rem 1.4rem',
-                    borderRadius: '9999px',
-                    backgroundColor: isActive ? 'var(--color-brand-500)' : 'transparent',
-                    color: isActive ? '#FFFFFF' : 'var(--color-neutral-600)',
-                    fontFamily: 'var(--font-main)',
-                    fontSize: 'clamp(0.85rem, 1.05vw, 0.95rem)',
-                    fontWeight: 700,
-                    letterSpacing: '0.04em',
-                    textTransform: 'uppercase',
-                    cursor: 'pointer',
-                    transition: 'all 0.25s ease',
-                    border: 'none',
-                    boxShadow: isActive ? '0 4px 14px rgba(0, 56, 162, 0.35)' : 'none',
-                  }}
-                  onMouseEnter={(e) => {
-                    if (!isActive) e.currentTarget.style.color = 'var(--color-neutral-900)';
-                  }}
-                  onMouseLeave={(e) => {
-                    if (!isActive) e.currentTarget.style.color = 'var(--color-neutral-600)';
+                    justifyContent: 'space-between',
+                    marginBottom: '1rem',
+                    gap: '0.75rem',
                   }}
                 >
-                  <MapPin size={15} color={isActive ? '#FFFFFF' : 'var(--color-brand-500)'} style={{ flexShrink: 0 }} />
-                  <span>{branch.shortName}</span>
+                  {/* Tag Pill: [ PONNANI ] style */}
                   <span
-                    className="branch-status-pill"
                     style={{
+                      backgroundColor: '#FACC15',
+                      color: '#0F172A',
+                      fontFamily: 'var(--font-main)',
+                      fontSize: '0.76rem',
+                      fontWeight: 800,
+                      letterSpacing: '0.08em',
+                      padding: '4px 12px',
+                      borderRadius: '8px',
                       display: 'inline-flex',
                       alignItems: 'center',
-                      gap: '4px',
-                      padding: '2px 7px',
-                      borderRadius: '9999px',
-                      fontSize: '0.62rem',
-                      fontWeight: 700,
-                      letterSpacing: '0.04em',
+                      boxShadow: '0 2px 6px rgba(0, 0, 0, 0.12)',
+                    }}
+                  >
+                    [ {branch.tag} ]
+                  </span>
+
+                  {/* Status Pill: ● OPENED */}
+                  <span
+                    style={{
+                      backgroundColor: '#FFFFFF',
+                      color: isOpened ? '#15803D' : '#DC2626',
+                      fontFamily: 'var(--font-main)',
+                      fontSize: '0.72rem',
+                      fontWeight: 800,
+                      letterSpacing: '0.06em',
                       textTransform: 'uppercase',
-                      backgroundColor: isActive
-                        ? 'rgba(255, 255, 255, 0.22)'
-                        : branch.status === 'OPEN' || branch.status === 'Opened'
-                        ? 'rgba(22, 163, 74, 0.12)'
-                        : 'rgba(239, 68, 68, 0.12)',
-                      border: isActive
-                        ? '1px solid rgba(255, 255, 255, 0.35)'
-                        : branch.status === 'OPEN' || branch.status === 'Opened'
-                        ? '1px solid rgba(22, 163, 74, 0.35)'
-                        : '1px solid rgba(239, 68, 68, 0.35)',
-                      color: isActive
-                        ? '#FFFFFF'
-                        : branch.status === 'OPEN' || branch.status === 'Opened'
-                        ? '#15803D'
-                        : '#DC2626',
-                      lineHeight: 1.2,
+                      padding: '4px 12px',
+                      borderRadius: '9999px',
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      gap: '6px',
+                      boxShadow: '0 2px 8px rgba(0, 0, 0, 0.08)',
                     }}
                   >
                     <span
-                      className="branch-status-dot"
                       style={{
-                        width: '6px',
-                        height: '6px',
+                        width: '7px',
+                        height: '7px',
                         borderRadius: '50%',
-                        backgroundColor:
-                          branch.status === 'OPEN' || branch.status === 'Opened' ? '#16A34A' : '#EF4444',
-                        boxShadow:
-                          branch.status === 'OPEN' || branch.status === 'Opened'
-                            ? '0 0 6px rgba(22, 163, 74, 0.5)'
-                            : '0 0 6px rgba(239, 68, 68, 0.5)',
-                        flexShrink: 0,
+                        backgroundColor: isOpened ? '#16A34A' : '#EF4444',
+                        boxShadow: isOpened
+                          ? '0 0 8px rgba(22, 163, 74, 0.6)'
+                          : '0 0 8px rgba(239, 68, 68, 0.6)',
+                        display: 'inline-block',
                       }}
                     />
-                    <span className="branch-status-text">
-                      {branch.status === 'OPEN' || branch.status === 'Opened' ? 'OPEN' : 'CLOSED'}
-                    </span>
+                    <span>{isOpened ? 'OPENED' : 'CLOSED'}</span>
                   </span>
-                </button>
-              );
-            })}
-          </div>
-        </div>
+                </div>
 
-        {/* Main Showcase Composition: Large Dominant Clinic Photograph + Editorial Information */}
-        <div
-          className="branch-showcase-composition"
-          style={{
-            display: 'grid',
-            gridTemplateColumns: 'minmax(0, 1.25fr) minmax(0, 0.95fr)',
-            gap: 'clamp(2rem, 4vw, 4.5rem)',
-            alignItems: 'center',
-          }}
-        >
-          {/* Dominant Clinic Photograph (Occupies ~60% visual attention) */}
-          <div
-            style={{
-              position: 'relative',
-              borderRadius: '28px',
-              overflow: 'hidden',
-              aspectRatio: '16 / 10',
-              boxShadow: '0 20px 50px rgba(0, 0, 0, 0.1)',
-              backgroundColor: 'var(--color-neutral-100)',
-              border: '1.5px solid var(--color-neutral-200)',
-            }}
-          >
-            <AnimatePresence mode="wait">
-              <motion.img
-                key={activeBranch.id}
-                src={`${activeBranch.image}?v=3`}
-                alt={activeBranch.name}
-                initial={{ opacity: 0, scale: 1.02 }}
-                animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0, scale: 0.98 }}
-                transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
-                style={{
-                  width: '100%',
-                  height: '100%',
-                  objectFit: 'cover',
-                  objectPosition: activeBranch.id === 'valanchery' ? 'center 42%' : 'center 48%',
-                  display: 'block',
-                }}
-              />
-            </AnimatePresence>
-
-            {/* Subtle Floating Branch Suite Tag */}
-            <div
-              style={{
-                position: 'absolute',
-                bottom: '1.25rem',
-                left: '1.25rem',
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: '8px',
-                backgroundColor: 'rgba(255, 255, 255, 0.94)',
-                backdropFilter: 'blur(12px)',
-                WebkitBackdropFilter: 'blur(12px)',
-                color: 'var(--color-neutral-900)',
-                padding: '0.45rem 1rem',
-                borderRadius: 'var(--radius-pill)',
-                fontSize: '0.8rem',
-                fontFamily: 'var(--font-main)',
-                fontWeight: 600,
-                border: '1px solid var(--color-neutral-200)',
-                boxShadow: '0 4px 16px rgba(0, 0, 0, 0.08)',
-              }}
-            >
-              <span
-                style={{
-                  width: '8px',
-                  height: '8px',
-                  borderRadius: '50%',
-                  backgroundColor: 'var(--color-teal-500)',
-                  display: 'inline-block',
-                  boxShadow: '0 0 8px rgba(1, 158, 162, 0.5)',
-                }}
-              />
-              <span>{activeBranch.badge}</span>
-            </div>
-          </div>
-
-          {/* Unified Branch Information Composition (Editorial & Airy) */}
-          <AnimatePresence mode="wait">
-            <motion.div
-              key={activeBranch.id}
-              initial={{ opacity: 0, y: 16 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -16 }}
-              transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
-              style={{
-                display: 'flex',
-                flexDirection: 'column',
-              }}
-            >
-              {/* Branch Name & Status Small Bar */}
-              <div
-                style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '0.85rem',
-                  marginBottom: '1.75rem',
-                  flexWrap: 'wrap',
-                }}
-              >
+                {/* 2. Clinic Title */}
                 <h3
                   style={{
                     fontFamily: 'var(--font-display)',
-                    fontSize: 'clamp(1.9rem, 2.8vw, 2.75rem)',
-                    fontWeight: 700,
-                    letterSpacing: '-0.025em',
-                    lineHeight: 1.2,
-                    color: 'var(--color-neutral-900)',
-                    margin: 0,
+                    fontSize: 'clamp(1.45rem, 2.1vw, 1.85rem)',
+                    fontWeight: 600,
+                    letterSpacing: '-0.02em',
+                    lineHeight: 1.25,
+                    color: '#FFFFFF',
+                    margin: '0 0 0.85rem 0',
                   }}
                 >
-                  {activeBranch.name}
+                  {branch.name}
                 </h3>
-                <span
+
+                {/* 3. Rating & Category Badges Row */}
+                <div
                   style={{
-                    display: 'inline-flex',
+                    display: 'flex',
                     alignItems: 'center',
-                    gap: '5px',
-                    padding: '3px 10px',
-                    borderRadius: '9999px',
-                    fontSize: '0.72rem',
-                    fontWeight: 700,
-                    letterSpacing: '0.04em',
-                    textTransform: 'uppercase',
-                    backgroundColor:
-                      activeBranch.status === 'OPEN' || activeBranch.status === 'Opened'
-                        ? 'rgba(22, 163, 74, 0.12)'
-                        : 'rgba(239, 68, 68, 0.12)',
-                    border:
-                      activeBranch.status === 'OPEN' || activeBranch.status === 'Opened'
-                        ? '1px solid rgba(22, 163, 74, 0.35)'
-                        : '1px solid rgba(239, 68, 68, 0.35)',
-                    color:
-                      activeBranch.status === 'OPEN' || activeBranch.status === 'Opened'
-                        ? '#15803D'
-                        : '#DC2626',
+                    gap: '0.65rem',
+                    flexWrap: 'wrap',
+                    marginBottom: '0.75rem',
+                  }}
+                >
+                  {/* Rating Badge: ★ 4.9 (32) */}
+                  <span
+                    style={{
+                      backgroundColor: 'rgba(255, 255, 255, 0.16)',
+                      border: '1px solid rgba(255, 255, 255, 0.25)',
+                      backdropFilter: 'blur(8px)',
+                      color: '#FFFFFF',
+                      fontSize: '0.76rem',
+                      fontWeight: 700,
+                      padding: '4px 10px',
+                      borderRadius: '9999px',
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      gap: '4px',
+                    }}
+                  >
+                    <Star size={13} fill="#FACC15" color="#FACC15" />
+                    <span>
+                      {branch.rating} ({branch.reviewsCount})
+                    </span>
+                  </span>
+
+                  {/* Clinic Tier Badge */}
+                  <span
+                    style={{
+                      backgroundColor: 'rgba(255, 255, 255, 0.16)',
+                      border: '1px solid rgba(255, 255, 255, 0.25)',
+                      backdropFilter: 'blur(8px)',
+                      color: '#FFFFFF',
+                      fontSize: '0.76rem',
+                      fontWeight: 600,
+                      padding: '4px 12px',
+                      borderRadius: '9999px',
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                    }}
+                  >
+                    {branch.badge}
+                  </span>
+                </div>
+
+                {/* 4. Located Landmark Capsule */}
+                <div
+                  style={{
+                    marginBottom: '0.75rem',
                   }}
                 >
                   <span
                     style={{
-                      width: '6px',
-                      height: '6px',
-                      borderRadius: '50%',
-                      backgroundColor:
-                        activeBranch.status === 'OPEN' || activeBranch.status === 'Opened'
-                          ? '#16A34A'
-                          : '#EF4444',
-                      boxShadow:
-                        activeBranch.status === 'OPEN' || activeBranch.status === 'Opened'
-                          ? '0 0 6px rgba(22, 163, 74, 0.4)'
-                          : '0 0 6px rgba(239, 68, 68, 0.4)',
+                      backgroundColor: 'rgba(255, 255, 255, 0.14)',
+                      border: '1px solid rgba(255, 255, 255, 0.2)',
+                      color: 'rgba(255, 255, 255, 0.95)',
+                      fontSize: '0.78rem',
+                      fontWeight: 500,
+                      padding: '4px 12px',
+                      borderRadius: '9999px',
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      gap: '6px',
+                      maxWidth: '100%',
+                      lineHeight: 1.3,
+                    }}
+                  >
+                    <Building2 size={13} style={{ flexShrink: 0, opacity: 0.9 }} />
+                    <span style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                      {branch.landmark}
+                    </span>
+                  </span>
+                </div>
+
+                {/* 5. Quick Action Pills: Website, Directions, Photos */}
+                <div
+                  style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '0.5rem',
+                    flexWrap: 'wrap',
+                    marginBottom: '1.15rem',
+                  }}
+                >
+                  {/* Website */}
+                  <a
+                    href="#top"
+                    style={{
+                      backgroundColor: 'rgba(255, 255, 255, 0.16)',
+                      border: '1px solid rgba(255, 255, 255, 0.24)',
+                      color: '#FFFFFF',
+                      fontSize: '0.75rem',
+                      fontWeight: 600,
+                      padding: '4px 11px',
+                      borderRadius: '9999px',
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      gap: '5px',
+                      textDecoration: 'none',
+                      transition: 'background-color 0.2s ease, transform 0.2s ease',
+                      cursor: 'pointer',
+                    }}
+                    onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.28)')}
+                    onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.16)')}
+                  >
+                    <Globe size={13} />
+                    <span>Website</span>
+                  </a>
+
+                  {/* Directions */}
+                  <a
+                    href={branch.googleMapsUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    style={{
+                      backgroundColor: 'rgba(255, 255, 255, 0.16)',
+                      border: '1px solid rgba(255, 255, 255, 0.24)',
+                      color: '#FFFFFF',
+                      fontSize: '0.75rem',
+                      fontWeight: 600,
+                      padding: '4px 11px',
+                      borderRadius: '9999px',
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      gap: '5px',
+                      textDecoration: 'none',
+                      transition: 'background-color 0.2s ease, transform 0.2s ease',
+                    }}
+                    onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.28)')}
+                    onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.16)')}
+                  >
+                    <Compass size={13} />
+                    <span>Directions</span>
+                  </a>
+
+                  {/* +Photos */}
+                  <button
+                    type="button"
+                    onClick={() => openBranchGallery(branch, 0)}
+                    style={{
+                      backgroundColor: 'rgba(255, 255, 255, 0.16)',
+                      border: '1px solid rgba(255, 255, 255, 0.24)',
+                      color: '#FFFFFF',
+                      fontSize: '0.75rem',
+                      fontWeight: 600,
+                      padding: '4px 11px',
+                      borderRadius: '9999px',
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      gap: '5px',
+                      cursor: 'pointer',
+                      transition: 'background-color 0.2s ease, transform 0.2s ease',
+                    }}
+                    onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.28)')}
+                    onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.16)')}
+                  >
+                    <Camera size={13} />
+                    <span>{branch.photoCountLabel}</span>
+                  </button>
+                </div>
+
+                {/* 6. Clinic Image Feature Card (Requested: "Like in the Image but add Image of Clinics also") */}
+                <div
+                  className="clinic-image-container"
+                  onClick={() => openBranchGallery(branch, 0)}
+                  style={{
+                    position: 'relative',
+                    width: '100%',
+                    height: '190px',
+                    borderRadius: '16px',
+                    overflow: 'hidden',
+                    marginBottom: '1.25rem',
+                    border: '1.5px solid rgba(255, 255, 255, 0.3)',
+                    boxShadow: '0 8px 24px rgba(0, 0, 0, 0.16)',
+                    cursor: 'pointer',
+                    backgroundColor: 'rgba(0, 0, 0, 0.2)',
+                  }}
+                  title="Click to view clinic gallery"
+                >
+                  <img
+                    src={`${branch.image}?v=4`}
+                    alt={branch.name}
+                    style={{
+                      width: '100%',
+                      height: '100%',
+                      objectFit: 'cover',
+                      display: 'block',
+                      transition: 'transform 0.4s ease',
+                    }}
+                    onMouseEnter={(e) => (e.currentTarget.style.transform = 'scale(1.04)')}
+                    onMouseLeave={(e) => (e.currentTarget.style.transform = 'scale(1)')}
+                  />
+
+                  {/* Gradient vignette for text contrast */}
+                  <div
+                    style={{
+                      position: 'absolute',
+                      inset: 0,
+                      background: 'linear-gradient(to top, rgba(15, 23, 42, 0.72) 0%, rgba(15, 23, 42, 0.1) 50%, transparent 100%)',
+                      pointerEvents: 'none',
                     }}
                   />
-                  {activeBranch.status === 'OPEN' || activeBranch.status === 'Opened' ? 'OPEN' : 'CLOSED'}
-                </span>
-              </div>
 
-              {/* Clinic Details Grid */}
-              <div
-                className="clinic-details-grid"
-                style={{
-                  display: 'grid',
-                  gridTemplateColumns: 'repeat(2, 1fr)',
-                  gap: '0.9rem',
-                  marginBottom: '2.2rem',
-                }}
-              >
-                {/* Location Card (Spanning 2 columns) */}
-                <div
-                  style={{
-                    gridColumn: 'span 2',
-                    display: 'flex',
-                    alignItems: 'flex-start',
-                    gap: '0.9rem',
-                    backgroundColor: '#F8FAFC',
-                    border: '1px solid #E2E8F0',
-                    borderRadius: '16px',
-                    padding: '1.05rem 1.2rem',
-                    transition: 'border-color 0.2s ease, box-shadow 0.2s ease',
-                  }}
-                >
+                  {/* Clinic badge overlay */}
                   <div
                     style={{
+                      position: 'absolute',
+                      bottom: '10px',
+                      left: '12px',
+                      right: '12px',
                       display: 'flex',
                       alignItems: 'center',
-                      justifyContent: 'center',
-                      width: '40px',
-                      height: '40px',
-                      borderRadius: '12px',
-                      backgroundColor: 'rgba(0, 56, 162, 0.08)',
-                      color: 'var(--color-brand-500)',
-                      flexShrink: 0,
-                      marginTop: '2px',
+                      justifyContent: 'space-between',
+                      pointerEvents: 'none',
                     }}
                   >
-                    <MapPin size={20} />
-                  </div>
-                  <div>
                     <span
                       style={{
-                        display: 'block',
-                        fontFamily: 'var(--font-main)',
-                        fontSize: '0.74rem',
-                        fontWeight: 700,
-                        color: 'var(--color-brand-600)',
-                        textTransform: 'uppercase',
-                        letterSpacing: '0.06em',
-                        marginBottom: '3px',
-                      }}
-                    >
-                      Clinic Location
-                    </span>
-                    <p
-                      style={{
-                        fontFamily: 'var(--font-main)',
-                        fontSize: '0.98rem',
-                        color: 'var(--color-neutral-900)',
+                        backgroundColor: 'rgba(15, 23, 42, 0.65)',
+                        backdropFilter: 'blur(8px)',
+                        color: '#FFFFFF',
+                        fontSize: '0.72rem',
                         fontWeight: 600,
-                        lineHeight: 1.4,
-                        margin: 0,
+                        padding: '3px 8px',
+                        borderRadius: '6px',
+                        border: '1px solid rgba(255, 255, 255, 0.2)',
                       }}
                     >
-                      {activeBranch.address}
-                    </p>
-                    <p
+                      {branch.shortName} Dental Center
+                    </span>
+
+                    <span
                       style={{
-                        fontFamily: 'var(--font-main)',
-                        fontSize: '0.86rem',
-                        color: 'var(--color-neutral-600)',
-                        margin: '0.25rem 0 0 0',
+                        backgroundColor: 'rgba(255, 255, 255, 0.92)',
+                        color: '#0F172A',
+                        fontSize: '0.7rem',
+                        fontWeight: 700,
+                        padding: '3px 9px',
+                        borderRadius: '9999px',
+                        display: 'inline-flex',
+                        alignItems: 'center',
+                        gap: '4px',
+                        boxShadow: '0 2px 6px rgba(0,0,0,0.2)',
                       }}
                     >
-                      {activeBranch.city} — {activeBranch.pincode}
-                    </p>
+                      <Camera size={12} color="#0F172A" />
+                      <span>Tour Clinic</span>
+                    </span>
                   </div>
                 </div>
 
-                {/* Working Hours Card */}
+                {/* 7. Address & Working Hours Block */}
                 <div
                   style={{
                     display: 'flex',
-                    alignItems: 'flex-start',
-                    gap: '0.85rem',
-                    backgroundColor: '#F8FAFC',
-                    border: '1px solid #E2E8F0',
-                    borderRadius: '16px',
-                    padding: '1.05rem 1.15rem',
+                    flexDirection: 'column',
+                    gap: '0.65rem',
+                    marginBottom: '1.25rem',
                   }}
                 >
+                  {/* Address Row with Yellow Map Pin */}
+                  <div
+                    style={{
+                      display: 'flex',
+                      alignItems: 'flex-start',
+                      gap: '0.65rem',
+                    }}
+                  >
+                    <MapPin size={17} color="#FDE047" style={{ flexShrink: 0, marginTop: '2px' }} />
+                    <div style={{ lineHeight: 1.35 }}>
+                      <p
+                        style={{
+                          margin: 0,
+                          fontSize: '0.84rem',
+                          fontWeight: 600,
+                          color: '#FFFFFF',
+                        }}
+                      >
+                        {branch.addressLine1}
+                      </p>
+                      <p
+                        style={{
+                          margin: '2px 0 0 0',
+                          fontSize: '0.78rem',
+                          color: 'rgba(255, 255, 255, 0.8)',
+                        }}
+                      >
+                        {branch.addressLine2}
+                      </p>
+                    </div>
+                  </div>
+
+                  {/* Hours Row with Yellow Clock */}
                   <div
                     style={{
                       display: 'flex',
                       alignItems: 'center',
-                      justifyContent: 'center',
-                      width: '40px',
-                      height: '40px',
-                      borderRadius: '12px',
-                      backgroundColor: 'rgba(0, 56, 162, 0.08)',
-                      color: 'var(--color-brand-500)',
-                      flexShrink: 0,
-                      marginTop: '2px',
+                      gap: '0.65rem',
                     }}
                   >
-                    <Clock size={20} />
-                  </div>
-                  <div>
-                    <span
-                      style={{
-                        display: 'block',
-                        fontFamily: 'var(--font-main)',
-                        fontSize: '0.74rem',
-                        fontWeight: 700,
-                        color: 'var(--color-brand-600)',
-                        textTransform: 'uppercase',
-                        letterSpacing: '0.06em',
-                        marginBottom: '3px',
-                      }}
-                    >
-                      Opening Hours
-                    </span>
+                    <Clock size={17} color="#FDE047" style={{ flexShrink: 0 }} />
                     <p
                       style={{
-                        fontFamily: 'var(--font-main)',
-                        fontSize: '0.98rem',
-                        color: 'var(--color-neutral-900)',
-                        fontWeight: 700,
-                        lineHeight: 1.4,
                         margin: 0,
-                      }}
-                    >
-                      {activeBranch.hours}
-                    </p>
-                    <p
-                      style={{
-                        fontFamily: 'var(--font-main)',
                         fontSize: '0.82rem',
-                        color: 'var(--color-neutral-600)',
-                        margin: '0.2rem 0 0 0',
+                        color: '#FFFFFF',
+                        fontWeight: 500,
+                        display: 'inline-flex',
+                        alignItems: 'center',
+                        gap: '6px',
+                        flexWrap: 'wrap',
                       }}
                     >
-                      {activeBranch.openDays}
+                      <span
+                        style={{
+                          width: '6px',
+                          height: '6px',
+                          borderRadius: '50%',
+                          backgroundColor: '#22C55E',
+                          display: 'inline-block',
+                        }}
+                      />
+                      <span>{branch.hours}</span>
                     </p>
                   </div>
                 </div>
 
-                {/* Contact Phone Card */}
-                <a
-                  href={`tel:${activeBranch.phone}`}
+                {/* 8. Clinic Facilities & Services */}
+                <div
                   style={{
-                    display: 'flex',
-                    alignItems: 'flex-start',
-                    gap: '0.85rem',
-                    backgroundColor: '#F8FAFC',
-                    border: '1px solid #E2E8F0',
-                    borderRadius: '16px',
-                    padding: '1.05rem 1.15rem',
-                    textDecoration: 'none',
-                    transition: 'border-color 0.2s ease, background-color 0.2s ease, transform 0.2s ease',
-                  }}
-                  onMouseEnter={(e) => {
-                    e.currentTarget.style.borderColor = 'var(--color-brand-500)';
-                    e.currentTarget.style.backgroundColor = 'rgba(0, 56, 162, 0.03)';
-                    e.currentTarget.style.transform = 'translateY(-2px)';
-                  }}
-                  onMouseLeave={(e) => {
-                    e.currentTarget.style.borderColor = '#E2E8F0';
-                    e.currentTarget.style.backgroundColor = '#F8FAFC';
-                    e.currentTarget.style.transform = 'translateY(0)';
+                    marginBottom: '1.25rem',
                   }}
                 >
-                  <div
+                  <h4
                     style={{
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      width: '40px',
-                      height: '40px',
-                      borderRadius: '12px',
-                      backgroundColor: 'rgba(0, 56, 162, 0.08)',
-                      color: 'var(--color-brand-500)',
-                      flexShrink: 0,
-                      marginTop: '2px',
+                      margin: '0 0 0.55rem 0',
+                      fontSize: '0.72rem',
+                      fontWeight: 800,
+                      letterSpacing: '0.08em',
+                      textTransform: 'uppercase',
+                      color: 'rgba(255, 255, 255, 0.82)',
+                      fontFamily: 'var(--font-main)',
                     }}
                   >
-                    <Phone size={20} />
-                  </div>
-                  <div>
-                    <span
-                      style={{
-                        display: 'block',
-                        fontFamily: 'var(--font-main)',
-                        fontSize: '0.74rem',
-                        fontWeight: 700,
-                        color: 'var(--color-brand-600)',
-                        textTransform: 'uppercase',
-                        letterSpacing: '0.06em',
-                        marginBottom: '3px',
-                      }}
-                    >
-                      Direct Phone
-                    </span>
-                    <p
-                      style={{
-                        fontFamily: 'var(--font-main)',
-                        fontSize: '1rem',
-                        color: 'var(--color-brand-600)',
-                        fontWeight: 700,
-                        lineHeight: 1.4,
-                        margin: 0,
-                      }}
-                    >
-                      {activeBranch.phoneDisplay}
-                    </p>
-                    <p
-                      style={{
-                        fontFamily: 'var(--font-main)',
-                        fontSize: '0.82rem',
-                        color: 'var(--color-neutral-600)',
-                        margin: '0.2rem 0 0 0',
-                      }}
-                    >
-                      Inquiries & booking
-                    </p>
-                  </div>
-                </a>
-              </div>
+                    CLINIC FACILITIES & SERVICES
+                  </h4>
 
-              {/* Action Buttons: Book at This Branch + Get Directions */}
+                  <ul
+                    style={{
+                      listStyle: 'none',
+                      padding: 0,
+                      margin: 0,
+                      display: 'flex',
+                      flexDirection: 'column',
+                      gap: '0.35rem',
+                    }}
+                  >
+                    {branch.facilities.map((facility, i) => (
+                      <li
+                        key={i}
+                        style={{
+                          fontSize: '0.82rem',
+                          color: '#FFFFFF',
+                          display: 'flex',
+                          alignItems: 'center',
+                          gap: '0.55rem',
+                          lineHeight: 1.35,
+                        }}
+                      >
+                        <span
+                          style={{
+                            width: '5px',
+                            height: '5px',
+                            borderRadius: '50%',
+                            backgroundColor: '#FACC15',
+                            flexShrink: 0,
+                          }}
+                        />
+                        <span>{facility}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+
+                {/* 9. Testimonial Quote Box */}
+                <div
+                  style={{
+                    backgroundColor: 'rgba(255, 255, 255, 0.12)',
+                    border: '1px solid rgba(255, 255, 255, 0.2)',
+                    borderRadius: '12px',
+                    padding: '0.75rem 0.95rem',
+                    marginBottom: '1.35rem',
+                    display: 'flex',
+                    alignItems: 'flex-start',
+                    gap: '0.55rem',
+                  }}
+                >
+                  <Quote
+                    size={16}
+                    color="#FDE047"
+                    style={{ flexShrink: 0, marginTop: '2px', opacity: 0.9 }}
+                  />
+                  <p
+                    style={{
+                      margin: 0,
+                      fontSize: '0.8rem',
+                      fontStyle: 'italic',
+                      lineHeight: 1.4,
+                      color: 'rgba(255, 255, 255, 0.95)',
+                    }}
+                  >
+                    "{branch.quote}"
+                  </p>
+                </div>
+
+                {/* 10. Bottom Action Buttons */}
+                <div
+                  style={{
+                    marginTop: 'auto',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    gap: '0.65rem',
+                  }}
+                >
+                  {/* Primary Full Width White Button: Book [Branch] Appointment ↗ */}
+                  <button
+                    type="button"
+                    onClick={() => onOpenBooking(branch.bookingParam)}
+                    style={{
+                      width: '100%',
+                      backgroundColor: '#FFFFFF',
+                      color: '#0F172A',
+                      fontFamily: 'var(--font-main)',
+                      fontSize: '0.92rem',
+                      fontWeight: 700,
+                      padding: '0.82rem 1.25rem',
+                      borderRadius: '9999px',
+                      border: 'none',
+                      cursor: 'pointer',
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      gap: '6px',
+                      boxShadow: '0 4px 14px rgba(0, 0, 0, 0.12)',
+                      transition: 'transform 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease',
+                    }}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.transform = 'translateY(-2px)';
+                      e.currentTarget.style.boxShadow = '0 8px 20px rgba(0, 0, 0, 0.2)';
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.transform = 'translateY(0)';
+                      e.currentTarget.style.boxShadow = '0 4px 14px rgba(0, 0, 0, 0.12)';
+                    }}
+                  >
+                    <span>Book {branch.shortName} Appointment</span>
+                    <span style={{ fontSize: '1.05rem', lineHeight: 1 }}>↗</span>
+                  </button>
+
+                  {/* Sub Action Buttons: Call & WhatsApp */}
+                  <div
+                    style={{
+                      display: 'grid',
+                      gridTemplateColumns: 'repeat(2, 1fr)',
+                      gap: '0.65rem',
+                    }}
+                  >
+                    {/* Call Button */}
+                    <a
+                      href={`tel:${branch.phone}`}
+                      style={{
+                        backgroundColor: 'rgba(255, 255, 255, 0.16)',
+                        border: '1px solid rgba(255, 255, 255, 0.25)',
+                        color: '#FFFFFF',
+                        fontFamily: 'var(--font-main)',
+                        fontSize: '0.78rem',
+                        fontWeight: 600,
+                        padding: '0.65rem 0.5rem',
+                        borderRadius: '9999px',
+                        display: 'inline-flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        gap: '6px',
+                        textDecoration: 'none',
+                        transition: 'background-color 0.2s ease, transform 0.2s ease',
+                      }}
+                      onMouseEnter={(e) => {
+                        e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.26)';
+                        e.currentTarget.style.transform = 'translateY(-1px)';
+                      }}
+                      onMouseLeave={(e) => {
+                        e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.16)';
+                        e.currentTarget.style.transform = 'translateY(0)';
+                      }}
+                    >
+                      <Phone size={13} />
+                      <span style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                        Call {branch.phoneDisplay}
+                      </span>
+                    </a>
+
+                    {/* WhatsApp Button */}
+                    <a
+                      href={`https://wa.me/${branch.whatsappNumber}?text=Hi%20Smile%20Dentos%2C%20I%20would%20like%20to%20inquire%20about%20${encodeURIComponent(
+                        branch.shortName
+                      )}%20Clinic.`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      style={{
+                        backgroundColor: '#22C55E',
+                        color: '#FFFFFF',
+                        fontFamily: 'var(--font-main)',
+                        fontSize: '0.78rem',
+                        fontWeight: 700,
+                        padding: '0.65rem 0.5rem',
+                        borderRadius: '9999px',
+                        display: 'inline-flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        gap: '6px',
+                        textDecoration: 'none',
+                        boxShadow: '0 4px 12px rgba(34, 197, 94, 0.3)',
+                        transition: 'background-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease',
+                      }}
+                      onMouseEnter={(e) => {
+                        e.currentTarget.style.backgroundColor = '#16A34A';
+                        e.currentTarget.style.transform = 'translateY(-1px)';
+                        e.currentTarget.style.boxShadow = '0 6px 16px rgba(34, 197, 94, 0.45)';
+                      }}
+                      onMouseLeave={(e) => {
+                        e.currentTarget.style.backgroundColor = '#22C55E';
+                        e.currentTarget.style.transform = 'translateY(0)';
+                        e.currentTarget.style.boxShadow = '0 4px 12px rgba(34, 197, 94, 0.3)';
+                      }}
+                    >
+                      <MessageCircle size={14} />
+                      <span>WhatsApp</span>
+                    </a>
+                  </div>
+                </div>
+              </motion.article>
+            );
+          })}
+        </div>
+      </div>
+
+      {/* Interactive Clinic Photo Lightbox / Gallery Modal */}
+      <AnimatePresence>
+        {activeGallery && (
+          <motion.div
+            key="clinic-gallery-modal"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            style={{
+              position: 'fixed',
+              inset: 0,
+              zIndex: 9999,
+              backgroundColor: 'rgba(10, 23, 35, 0.88)',
+              backdropFilter: 'blur(12px)',
+              WebkitBackdropFilter: 'blur(12px)',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              padding: '1.25rem',
+            }}
+            onClick={() => setActiveGallery(null)}
+          >
+            <motion.div
+              initial={{ scale: 0.92, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.92, opacity: 0 }}
+              transition={{ duration: 0.25 }}
+              style={{
+                backgroundColor: '#1E293B',
+                color: '#FFFFFF',
+                borderRadius: '24px',
+                maxWidth: '850px',
+                width: '100%',
+                overflow: 'hidden',
+                boxShadow: '0 25px 60px rgba(0, 0, 0, 0.5)',
+                border: '1px solid rgba(255, 255, 255, 0.15)',
+                position: 'relative',
+              }}
+              onClick={(e) => e.stopPropagation()}
+            >
+              {/* Modal Top Bar */}
               <div
                 style={{
                   display: 'flex',
                   alignItems: 'center',
-                  gap: '1rem',
-                  flexWrap: 'wrap',
+                  justifyContent: 'space-between',
+                  padding: '1.1rem 1.4rem',
+                  borderBottom: '1px solid rgba(255, 255, 255, 0.1)',
                 }}
-                className="branch-cta-row"
               >
-                {/* Primary CTA */}
-                <button
-                  onClick={() => onOpenBooking(activeBranch.name)}
-                  style={{
-                    display: 'inline-flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    gap: '8px',
-                    backgroundColor: 'var(--color-brand-500)',
-                    color: '#FFFFFF',
-                    padding: '0.95rem 1.85rem',
-                    borderRadius: 'var(--radius-pill)',
-                    fontFamily: 'var(--font-main)',
-                    fontSize: '0.95rem',
-                    fontWeight: 700,
-                    letterSpacing: '0.01em',
-                    boxShadow: '0 8px 24px rgba(22, 119, 210, 0.28)',
-                    cursor: 'pointer',
-                    border: 'none',
-                    transition: 'transform 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease',
-                  }}
-                  onMouseEnter={(e) => {
-                    e.currentTarget.style.transform = 'translateY(-2px)';
-                    e.currentTarget.style.backgroundColor = 'var(--color-brand-600)';
-                    e.currentTarget.style.boxShadow = '0 12px 28px rgba(22, 119, 210, 0.4)';
-                  }}
-                  onMouseLeave={(e) => {
-                    e.currentTarget.style.transform = 'translateY(0)';
-                    e.currentTarget.style.backgroundColor = 'var(--color-brand-500)';
-                    e.currentTarget.style.boxShadow = '0 8px 24px rgba(22, 119, 210, 0.28)';
-                  }}
-                >
-                  <Calendar size={17} />
-                  <span>Book at This Branch</span>
-                </button>
+                <div>
+                  <h4 style={{ margin: 0, fontSize: '1.05rem', fontWeight: 700, color: '#FFFFFF' }}>
+                    {activeGallery.branchName}
+                  </h4>
+                  <span style={{ fontSize: '0.78rem', color: '#94A3B8' }}>
+                    Photo {activeGallery.currentIndex + 1} of {activeGallery.photos.length}
+                  </span>
+                </div>
 
-                {/* Secondary CTA */}
-                <a
-                  href={activeBranch.googleMapsUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
+                <button
+                  type="button"
+                  onClick={() => setActiveGallery(null)}
                   style={{
-                    display: 'inline-flex',
+                    backgroundColor: 'rgba(255, 255, 255, 0.1)',
+                    border: 'none',
+                    borderRadius: '50%',
+                    width: '36px',
+                    height: '36px',
+                    display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
+                    color: '#FFFFFF',
+                    cursor: 'pointer',
+                    transition: 'background-color 0.2s',
+                  }}
+                  onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.25)')}
+                  onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.1)')}
+                >
+                  <X size={20} />
+                </button>
+              </div>
+
+              {/* Photo Display Stage */}
+              <div
+                style={{
+                  position: 'relative',
+                  width: '100%',
+                  aspectRatio: '16 / 10',
+                  backgroundColor: '#0F172A',
+                  overflow: 'hidden',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                }}
+              >
+                <img
+                  src={activeGallery.photos[activeGallery.currentIndex].url}
+                  alt={activeGallery.photos[activeGallery.currentIndex].title}
+                  style={{
+                    width: '100%',
+                    height: '100%',
+                    objectFit: 'cover',
+                  }}
+                />
+
+                {/* Left/Right Navigation Buttons */}
+                {activeGallery.photos.length > 1 && (
+                  <>
+                    <button
+                      type="button"
+                      onClick={prevGalleryPhoto}
+                      style={{
+                        position: 'absolute',
+                        left: '12px',
+                        top: '50%',
+                        transform: 'translateY(-50%)',
+                        backgroundColor: 'rgba(15, 23, 42, 0.65)',
+                        backdropFilter: 'blur(6px)',
+                        border: '1px solid rgba(255, 255, 255, 0.2)',
+                        borderRadius: '50%',
+                        width: '42px',
+                        height: '42px',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        color: '#FFFFFF',
+                        cursor: 'pointer',
+                      }}
+                    >
+                      <ChevronLeft size={22} />
+                    </button>
+
+                    <button
+                      type="button"
+                      onClick={nextGalleryPhoto}
+                      style={{
+                        position: 'absolute',
+                        right: '12px',
+                        top: '50%',
+                        transform: 'translateY(-50%)',
+                        backgroundColor: 'rgba(15, 23, 42, 0.65)',
+                        backdropFilter: 'blur(6px)',
+                        border: '1px solid rgba(255, 255, 255, 0.2)',
+                        borderRadius: '50%',
+                        width: '42px',
+                        height: '42px',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        color: '#FFFFFF',
+                        cursor: 'pointer',
+                      }}
+                    >
+                      <ChevronRight size={22} />
+                    </button>
+                  </>
+                )}
+              </div>
+
+              {/* Caption & Thumbnails Bar */}
+              <div style={{ padding: '1rem 1.4rem' }}>
+                <p style={{ margin: 0, fontWeight: 600, fontSize: '0.92rem', color: '#FFFFFF' }}>
+                  {activeGallery.photos[activeGallery.currentIndex].title}
+                </p>
+                <p style={{ margin: '3px 0 0.85rem 0', fontSize: '0.8rem', color: '#94A3B8' }}>
+                  {activeGallery.photos[activeGallery.currentIndex].caption}
+                </p>
+
+                {/* Thumbnail strip */}
+                <div
+                  style={{
+                    display: 'flex',
                     gap: '8px',
-                    backgroundColor: 'var(--color-brand-50)',
-                    color: 'var(--color-brand-600)',
-                    padding: '0.92rem 1.6rem',
-                    borderRadius: 'var(--radius-pill)',
-                    fontFamily: 'var(--font-main)',
-                    fontSize: '0.95rem',
-                    fontWeight: 600,
-                    border: '1.5px solid var(--color-brand-200)',
-                    textDecoration: 'none',
-                    transition: 'all 0.2s ease',
-                  }}
-                  onMouseEnter={(e) => {
-                    e.currentTarget.style.borderColor = 'var(--color-brand-500)';
-                    e.currentTarget.style.backgroundColor = 'var(--color-brand-100)';
-                  }}
-                  onMouseLeave={(e) => {
-                    e.currentTarget.style.borderColor = 'var(--color-brand-200)';
-                    e.currentTarget.style.backgroundColor = 'var(--color-brand-50)';
+                    overflowX: 'auto',
+                    paddingBottom: '4px',
                   }}
                 >
-                  <span>Get Directions</span>
-                  <ExternalLink size={16} />
-                </a>
+                  {activeGallery.photos.map((photo, pIdx) => {
+                    const isSelected = pIdx === activeGallery.currentIndex;
+                    return (
+                      <button
+                        key={pIdx}
+                        type="button"
+                        onClick={() =>
+                          setActiveGallery((prev) => (prev ? { ...prev, currentIndex: pIdx } : null))
+                        }
+                        style={{
+                          width: '64px',
+                          height: '44px',
+                          borderRadius: '8px',
+                          overflow: 'hidden',
+                          border: isSelected ? '2px solid #38BDF8' : '1px solid rgba(255, 255, 255, 0.2)',
+                          opacity: isSelected ? 1 : 0.6,
+                          padding: 0,
+                          cursor: 'pointer',
+                          flexShrink: 0,
+                          backgroundColor: '#0F172A',
+                        }}
+                      >
+                        <img
+                          src={photo.url}
+                          alt={photo.title}
+                          style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                        />
+                      </button>
+                    );
+                  })}
+                </div>
               </div>
             </motion.div>
-          </AnimatePresence>
-        </div>
-      </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       <style>{`
-        @media (max-width: 960px) {
-          .branch-showcase-composition {
+        @media (max-width: 900px) {
+          .branches-two-card-grid {
             grid-template-columns: 1fr !important;
-            gap: 2.25rem !important;
-          }
-        }
-        @media (max-width: 640px) {
-          .branch-switcher-container {
-            width: 100% !important;
-            max-width: 350px !important;
-            padding: 4px !important;
-            gap: 4px !important;
-            box-sizing: border-box !important;
-          }
-          .branch-switcher-btn {
-            flex: 1 1 0 !important;
-            padding: 0.55rem 0.6rem !important;
-            font-size: 0.8rem !important;
-            letter-spacing: 0.02em !important;
-            gap: 0.32rem !important;
-            justify-content: center !important;
-          }
-          .branch-status-text {
-            display: none !important;
-          }
-          .branch-status-pill {
-            padding: 0 !important;
-            background: transparent !important;
-            border: none !important;
-            gap: 0 !important;
-          }
-          .branch-status-dot {
-            width: 7px !important;
-            height: 7px !important;
-          }
-        }
-        @media (max-width: 580px) {
-          .clinic-details-grid {
-            grid-template-columns: 1fr !important;
-          }
-          .clinic-details-grid > * {
-            grid-column: span 1 !important;
-          }
-        }
-        @media (max-width: 520px) {
-          .branch-cta-row {
-            flex-direction: column !important;
-            align-items: stretch !important;
-          }
-          .branch-cta-row button,
-          .branch-cta-row a {
-            width: 100% !important;
-            justify-content: center !important;
+            max-width: 600px;
+            margin: 0 auto;
           }
         }
       `}</style>
