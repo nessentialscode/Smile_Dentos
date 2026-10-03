@@ -207,17 +207,16 @@ export function App() {
         {/* Frames 03-04: Transform Your Smile */}
         <TransformSection onOpenBooking={() => handleOpenBooking()} />
 
-        {/* Frames 05-08: Our Services Interactive Accordion */}
+        {/* Frames 05-08: Our Services Interactive Cards Grid */}
         <ServicesSection
           showAllServices={showAllServices}
           onToggleShowAllServices={() => setShowAllServices((prev) => !prev)}
+          onOpenBooking={handleOpenBooking}
         />
 
         {/* Frames 09-11: Our Specialist Wave & Carousel */}
         <SpecialistsSection
           onOpenBooking={(doctorName) => handleOpenBooking(undefined, doctorName)}
-          showAllServices={showAllServices}
-          onToggleShowAllServices={() => setShowAllServices((prev) => !prev)}
         />
 
         {/* Clinic Branches Section (Valanchery & Edayoor) */}

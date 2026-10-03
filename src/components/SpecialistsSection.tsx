@@ -279,14 +279,10 @@ const initialDoctors: Doctor[] = [
 
 interface SpecialistsSectionProps {
   onOpenBooking?: (doctorName?: string) => void;
-  showAllServices?: boolean;
-  onToggleShowAllServices?: () => void;
 }
 
 export const SpecialistsSection: React.FC<SpecialistsSectionProps> = ({
   onOpenBooking,
-  showAllServices,
-  onToggleShowAllServices,
 }) => {
   const [doctors, setDoctors] = useState<Doctor[]>(initialDoctors);
   const [branchList, setBranchList] = useState<DbBranch[]>([]);
@@ -573,52 +569,7 @@ export const SpecialistsSection: React.FC<SpecialistsSectionProps> = ({
             />
           </svg>
 
-          {/* Apex Concentric Circular Badge: +See All / –See Less */}
-          <div
-            style={{
-              position: 'absolute',
-              top: '70.3%',
-              left: '50%',
-              transform: 'translate(-50%, -50%)',
-              zIndex: 30,
-            }}
-          >
-            <button
-              type="button"
-              onClick={onToggleShowAllServices}
-              aria-label={showAllServices ? 'Show fewer services' : 'See all services'}
-              style={{
-                display: 'inline-flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                width: 'clamp(62px, 7vw, 76px)',
-                height: 'clamp(62px, 7vw, 76px)',
-                borderRadius: '50%',
-                backgroundColor: '#D7F846',
-                color: '#5E2614',
-                fontFamily: 'var(--font-main)',
-                fontSize: 'clamp(0.72rem, 1.05vw, 0.82rem)',
-                fontWeight: 700,
-                boxShadow: '0 6px 20px rgba(215, 248, 70, 0.4)',
-                border: '2.5px solid #D7F846',
-                outline: '2.5px solid rgba(215, 248, 70, 0.65)',
-                outlineOffset: '3px',
-                cursor: 'pointer',
-                transition: 'transform 0.25s ease, box-shadow 0.25s ease',
-                whiteSpace: 'nowrap',
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.transform = 'scale(1.08)';
-                e.currentTarget.style.boxShadow = '0 10px 24px rgba(215, 248, 70, 0.6)';
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.transform = 'scale(1)';
-                e.currentTarget.style.boxShadow = '0 6px 20px rgba(215, 248, 70, 0.4)';
-              }}
-            >
-              {showAllServices ? '–See Less' : '+See All'}
-            </button>
-          </div>
+          {/* Curving Wave Divider (Inverted Crescent: Arching Upward at Sides, Dipping in Center) */}
         </div>
 
         {/* Section Header: Title & Outline Arrows */}
