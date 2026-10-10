@@ -86,7 +86,8 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenBooking, onOpenAdmin }) =>
               style={{
                 display: 'flex',
                 alignItems: 'center',
-                gap: 'clamp(1.15rem, 1.7vw, 2rem)',
+                gap: 'clamp(0.35rem, 0.6vw, 0.7rem)',
+                flexWrap: 'nowrap',
               }}
             >
               {navLinks.map((link) => (
@@ -94,25 +95,35 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenBooking, onOpenAdmin }) =>
                   key={link.name}
                   href={link.href}
                   style={{
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    padding: '0.52rem clamp(0.75rem, 0.9vw, 1.15rem)',
+                    borderRadius: 'var(--radius-pill)',
+                    backgroundColor: 'var(--color-teal-500)',
+                    border: 'none',
+                    color: '#FFFFFF',
                     fontFamily: 'var(--font-main)',
-                    fontSize: 'clamp(0.82rem, 0.88vw, 0.92rem)',
-                    fontWeight: 600,
-                    letterSpacing: '0.12em',
-                    color: 'var(--color-neutral-700)',
+                    fontSize: 'clamp(0.76rem, 0.8vw, 0.82rem)',
+                    fontWeight: 700,
+                    letterSpacing: '0.05em',
                     textDecoration: 'none',
-                    transition: 'color 0.2s ease, transform 0.2s ease',
-                    padding: '4px 0',
+                    boxShadow: '0 4px 14px rgba(1, 158, 162, 0.35)',
+                    transition: 'all 0.2s ease',
+                    whiteSpace: 'nowrap',
                   }}
                   onMouseEnter={(e) => {
-                    e.currentTarget.style.color = 'var(--color-brand-500)';
-                    e.currentTarget.style.transform = 'translateY(-1px)';
+                    e.currentTarget.style.backgroundColor = 'var(--color-teal-600)';
+                    e.currentTarget.style.transform = 'translateY(-2px)';
+                    e.currentTarget.style.boxShadow = '0 6px 18px rgba(1, 158, 162, 0.45)';
                   }}
                   onMouseLeave={(e) => {
-                    e.currentTarget.style.color = 'var(--color-neutral-700)';
+                    e.currentTarget.style.backgroundColor = 'var(--color-teal-500)';
                     e.currentTarget.style.transform = 'translateY(0)';
+                    e.currentTarget.style.boxShadow = '0 4px 14px rgba(1, 158, 162, 0.35)';
                   }}
                 >
-                  {link.name}
+                  <span style={{ color: '#FFFFFF' }}>{link.name}</span>
                 </a>
               ))}
 
@@ -122,18 +133,19 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenBooking, onOpenAdmin }) =>
                   display: 'inline-flex',
                   alignItems: 'center',
                   gap: '0.5rem',
-                  padding: '0.52rem 1.15rem',
+                  padding: '0.52rem clamp(0.85rem, 1vw, 1.15rem)',
                   borderRadius: 'var(--radius-pill)',
                   backgroundColor: 'var(--color-teal-500)',
                   border: 'none',
                   color: '#FFFFFF',
                   fontFamily: 'var(--font-main)',
-                  fontSize: '0.82rem',
+                  fontSize: 'clamp(0.76rem, 0.8vw, 0.82rem)',
                   fontWeight: 700,
                   letterSpacing: '0.04em',
                   textDecoration: 'none',
                   boxShadow: '0 4px 14px rgba(1, 158, 162, 0.35)',
                   transition: 'all 0.2s ease',
+                  whiteSpace: 'nowrap',
                 }}
                 onMouseEnter={(e) => {
                   e.currentTarget.style.backgroundColor = 'var(--color-teal-600)';
@@ -411,7 +423,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenBooking, onOpenAdmin }) =>
       </AnimatePresence>
 
       <style>{`
-        @media (max-width: 860px) {
+        @media (max-width: 1080px) {
           .desktop-nav {
             display: none !important;
           }

@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ArrowRight, ChevronDown, ChevronUp } from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
 
 export interface ServiceItem {
   id: string;
@@ -238,19 +238,9 @@ interface ServicesSectionProps {
 
 export const ServicesSection: React.FC<ServicesSectionProps> = ({
   showAllServices: externalShowAll,
-  onToggleShowAllServices,
   onOpenBooking,
 }) => {
-  const [internalShowAll, setInternalShowAll] = useState(false);
-  const isShowAll = externalShowAll !== undefined ? externalShowAll : internalShowAll;
-
-  const handleToggle = () => {
-    if (onToggleShowAllServices) {
-      onToggleShowAllServices();
-    } else {
-      setInternalShowAll((prev) => !prev);
-    }
-  };
+  const isShowAll = Boolean(externalShowAll);
 
   const renderServiceCard = (service: ServiceItem, index: number) => {
     return (
@@ -476,7 +466,7 @@ export const ServicesSection: React.FC<ServicesSectionProps> = ({
         backgroundColor: '#F8FAFC',
         color: '#0A2540',
         paddingTop: 'clamp(4rem, 6.5vw, 6.5rem)',
-        paddingBottom: 'clamp(3.5rem, 5.5vw, 5.5rem)',
+        paddingBottom: 'clamp(2rem, 3.5vw, 3.5rem)',
         position: 'relative',
         overflow: 'hidden',
       }}
@@ -584,50 +574,6 @@ export const ServicesSection: React.FC<ServicesSectionProps> = ({
             </motion.div>
           )}
         </AnimatePresence>
-
-        {/* Centered 'See All Services' Pill Button */}
-        <div
-          style={{
-            display: 'flex',
-            justifyContent: 'center',
-            marginTop: 'clamp(2.5rem, 4vw, 3.5rem)',
-          }}
-        >
-          <button
-            type="button"
-            onClick={handleToggle}
-            aria-expanded={isShowAll}
-            aria-label={isShowAll ? 'Show fewer services' : 'See all dental services'}
-            style={{
-              display: 'inline-flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              gap: '8px',
-              background: 'linear-gradient(135deg, #08B9C3 0%, #06A0A9 100%)',
-              color: '#FFFFFF',
-              fontFamily: 'var(--font-main, sans-serif)',
-              fontSize: '0.98rem',
-              fontWeight: 600,
-              padding: '13px 30px',
-              borderRadius: '9999px',
-              border: 'none',
-              cursor: 'pointer',
-              boxShadow: '0 8px 24px -4px rgba(8, 185, 195, 0.4)',
-              transition: 'all 0.25s cubic-bezier(0.16, 1, 0.3, 1)',
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.transform = 'translateY(-2px)';
-              e.currentTarget.style.boxShadow = '0 12px 28px -4px rgba(8, 185, 195, 0.55)';
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.transform = 'translateY(0)';
-              e.currentTarget.style.boxShadow = '0 8px 24px -4px rgba(8, 185, 195, 0.4)';
-            }}
-          >
-            <span>{isShowAll ? 'See Less' : 'See All Services'}</span>
-            {isShowAll ? <ChevronUp size={18} /> : <ChevronDown size={18} />}
-          </button>
-        </div>
       </div>
 
       {/* Responsive Styles & Hover Micro-interactions */}

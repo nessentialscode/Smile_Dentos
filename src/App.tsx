@@ -217,6 +217,8 @@ export function App() {
         {/* Frames 09-11: Our Specialist Wave & Carousel */}
         <SpecialistsSection
           onOpenBooking={(doctorName) => handleOpenBooking(undefined, doctorName)}
+          showAllServices={showAllServices}
+          onToggleShowAllServices={() => setShowAllServices((prev) => !prev)}
         />
 
         {/* Clinic Branches Section (Valanchery & Edayoor) */}
