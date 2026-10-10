@@ -9,6 +9,7 @@ export interface ServiceItem {
   description: string;
   tags: string;
   image: string;
+  imagePosition?: string;
   iconType: 'tooth' | 'braces' | 'sparkles' | 'family' | 'digital';
 }
 
@@ -122,7 +123,8 @@ const initialServices: ServiceItem[] = [
     category: 'IMPLANTOLOGY',
     description: 'State-of-the-art titanium restorations providing permanent, natural-feeling tooth replacements.',
     tags: 'Titanium • Permanent • Predictable',
-    image: '/images/service_implants.jpg',
+    image: '/images/service_implants.png',
+    imagePosition: 'center 40%',
     iconType: 'tooth',
   },
   {
@@ -131,7 +133,8 @@ const initialServices: ServiceItem[] = [
     category: 'ENDODONTICS',
     description: 'Advanced microscope-enhanced therapy to eliminate infection and preserve your natural tooth.',
     tags: 'Painless • Safe • Tooth Saving',
-    image: '/images/service_endodontics.jpg',
+    image: '/images/service_endodontics.png',
+    imagePosition: 'center 38%',
     iconType: 'tooth',
   },
   {
@@ -140,7 +143,8 @@ const initialServices: ServiceItem[] = [
     category: 'ORTHODONTICS',
     description: 'Straighten your smile with modern, comfortable and discreet clear aligner solutions.',
     tags: 'Modern • Comfortable • Predictable',
-    image: '/images/service_orthodontics.jpg',
+    image: '/images/service_orthodontics.png',
+    imagePosition: 'center center',
     iconType: 'braces',
   },
   {
@@ -149,7 +153,8 @@ const initialServices: ServiceItem[] = [
     category: 'COSMETIC DENTISTRY',
     description: 'Brighter, whiter smiles with safe, high-efficacy professional laser treatments.',
     tags: 'Safe • Effective • Long-lasting',
-    image: '/images/service_whitening.jpg',
+    image: '/images/service_whitening.png',
+    imagePosition: 'center center',
     iconType: 'sparkles',
   },
   {
@@ -158,7 +163,8 @@ const initialServices: ServiceItem[] = [
     category: 'RESTORATIVE DENTISTRY',
     description: 'Natural-looking restorations and porcelain veneers for a confident, beautiful smile.',
     tags: 'Strong • Natural • Long-lasting',
-    image: '/images/service_cosmetic_dentistry.jpg',
+    image: '/images/service_cosmetic_dentistry.png',
+    imagePosition: 'center 55%',
     iconType: 'tooth',
   },
   {
@@ -167,7 +173,8 @@ const initialServices: ServiceItem[] = [
     category: 'FAMILY DENTISTRY',
     description: 'Complete oral wellness care and gentle checkups for every stage of life.',
     tags: 'Checkups • Cleanings • Protection',
-    image: '/images/service_preventive.jpg',
+    image: '/images/service_preventive_family.jpg',
+    imagePosition: 'center 25%',
     iconType: 'family',
   },
 ];
@@ -180,7 +187,8 @@ const additionalServices: ServiceItem[] = [
     category: 'PERIODONTICS',
     description: 'Specialized gum treatments including deep ultrasonic scaling and regenerative gum health protection.',
     tags: 'Healthy Gums • Deep Care • Protection',
-    image: '/images/service_periodontal.jpg',
+    image: '/images/service_periodontal.png',
+    imagePosition: 'center center',
     iconType: 'tooth',
   },
   {
@@ -189,7 +197,8 @@ const additionalServices: ServiceItem[] = [
     category: 'ORAL SURGERY',
     description: 'Gentle surgical care for wisdom teeth extractions, cysts, and precision procedures.',
     tags: 'Gentle • Precise • Quick Healing',
-    image: '/images/service_surgery.jpg',
+    image: '/images/service_surgery.png',
+    imagePosition: 'center center',
     iconType: 'sparkles',
   },
   {
@@ -216,7 +225,8 @@ const additionalServices: ServiceItem[] = [
     category: 'PEDIATRIC DENTISTRY',
     description: 'Child-friendly, anxiety-free dentistry focusing on painless preventive treatments and healthy habits.',
     tags: 'Gentle • Fun • Fear-Free',
-    image: '/images/service_pediatric.jpg',
+    image: '/images/service_pediatric.png',
+    imagePosition: 'center 25%',
     iconType: 'family',
   },
   {
@@ -225,7 +235,8 @@ const additionalServices: ServiceItem[] = [
     category: 'ORAL MEDICINE',
     description: 'Specialist diagnostic screening and biopsy procedures for comprehensive oral mucosal health.',
     tags: 'Accurate • Early Detection • Safe',
-    image: '/images/service_mucosal_pathology.jpg',
+    image: '/images/service_mucosal_pathology.png',
+    imagePosition: 'center center',
     iconType: 'digital',
   },
 ];
@@ -284,6 +295,7 @@ export const ServicesSection: React.FC<ServicesSectionProps> = ({
               width: '100%',
               height: '100%',
               objectFit: 'cover',
+              objectPosition: service.imagePosition || 'center',
               display: 'block',
               transition: 'transform 0.45s cubic-bezier(0.16, 1, 0.3, 1)',
             }}
