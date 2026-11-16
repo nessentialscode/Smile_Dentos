@@ -55,6 +55,7 @@ export const FooterSection: React.FC<FooterSectionProps> = ({ onOpenBooking }) =
             viewport={{ once: true }}
             transition={{ duration: 0.6, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
             onClick={onOpenBooking}
+            className="footer-cta-btn"
             style={{
               backgroundColor: 'var(--color-teal-500)',
               color: '#FFFFFF',
@@ -406,6 +407,20 @@ export const FooterSection: React.FC<FooterSectionProps> = ({ onOpenBooking }) =
       </div>
 
       <style>{`
+        @media (min-width: 769px) {
+          #footer {
+            background-color: var(--brand-navy, #273F5F) !important;
+          }
+          .footer-cta-btn {
+            background-color: #16AC8F !important;
+            box-shadow: 0 10px 30px rgba(22, 172, 143, 0.35) !important;
+          }
+          .footer-cta-btn:hover {
+            background-color: #128C74 !important;
+            box-shadow: 0 16px 40px rgba(22, 172, 143, 0.45) !important;
+          }
+        }
+
         @media (max-width: 900px) {
           .footer-directory-grid {
             grid-template-columns: 1fr 1fr !important;

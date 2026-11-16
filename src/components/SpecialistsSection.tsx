@@ -568,6 +568,7 @@ export const SpecialistsSection: React.FC<SpecialistsSectionProps> = ({
             }}
           >
             <path
+              className="specialists-wave-path"
               d="M0,0 L1440,0 L1440,15 C1080,145 360,145 0,15 Z"
               fill="#F8FAFC"
             />
@@ -587,6 +588,7 @@ export const SpecialistsSection: React.FC<SpecialistsSectionProps> = ({
               type="button"
               onClick={onToggleShowAllServices}
               aria-label={showAllServices ? 'Show fewer services' : 'See all services'}
+              className="specialists-see-all-btn"
               style={{
                 display: 'inline-flex',
                 alignItems: 'center',
@@ -651,6 +653,7 @@ export const SpecialistsSection: React.FC<SpecialistsSectionProps> = ({
                 }}
               >
                 <span
+                  className="specialists-eyebrow-text"
                   style={{
                     fontFamily: 'var(--font-main)',
                     fontSize: '0.8rem',
@@ -663,6 +666,7 @@ export const SpecialistsSection: React.FC<SpecialistsSectionProps> = ({
                   MEET OUR EXPERTS
                 </span>
                 <span
+                  className="specialists-eyebrow-line"
                   style={{
                     width: '32px',
                     height: '3px',
@@ -674,6 +678,7 @@ export const SpecialistsSection: React.FC<SpecialistsSectionProps> = ({
               </div>
 
               <h2
+                className="specialists-main-title"
                 style={{
                   fontFamily: 'var(--font-display)',
                   fontSize: 'clamp(2.4rem, 4.8vw, 4.2rem)',
@@ -2269,6 +2274,47 @@ export const SpecialistsSection: React.FC<SpecialistsSectionProps> = ({
           </div>
         </div>
       </div>
+
+      <style>{`
+        @media (min-width: 769px) {
+          #specialists {
+            background-color: var(--brand-mint-light, #BACECA) !important;
+          }
+          .specialists-wave-path {
+            fill: var(--services-bg-mint, #E8F2EF) !important;
+          }
+          .specialists-see-all-btn {
+            background-color: #16AC8F !important;
+            border-color: #16AC8F !important;
+            outline-color: rgba(22, 172, 143, 0.4) !important;
+            color: #FFFFFF !important;
+            box-shadow: 0 6px 20px rgba(22, 172, 143, 0.35) !important;
+          }
+          .specialists-see-all-btn:hover {
+            background-color: #128C74 !important;
+            border-color: #128C74 !important;
+            box-shadow: 0 10px 24px rgba(22, 172, 143, 0.5) !important;
+          }
+          .specialists-eyebrow-text {
+            color: #16AC8F !important;
+          }
+          .specialists-eyebrow-line {
+            background-color: #16AC8F !important;
+          }
+          .specialists-main-title {
+            color: #273F5F !important;
+          }
+          .specialist-nav-btn {
+            border-color: #16AC8F !important;
+            color: #16AC8F !important;
+            background-color: #FFFFFF !important;
+          }
+          .specialist-nav-btn:hover {
+            background-color: #16AC8F !important;
+            color: #FFFFFF !important;
+          }
+        }
+      `}</style>
     </div>
   );
 };

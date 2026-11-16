@@ -170,6 +170,7 @@ export const ReviewsSection: React.FC = () => {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: '-60px' }}
                 transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+                className="reviews-main-title"
                 style={{
                   fontFamily: 'var(--font-display)',
                   fontSize: 'clamp(2.1rem, 5vw, 4.4rem)',
@@ -183,7 +184,7 @@ export const ReviewsSection: React.FC = () => {
               </motion.h2>
             </div>
 
-            <p style={{ margin: 0, fontFamily: 'var(--font-main)', fontSize: '0.92rem', color: 'var(--color-neutral-600)' }}>
+            <p className="reviews-sub-desc" style={{ margin: 0, fontFamily: 'var(--font-main)', fontSize: '0.92rem', color: 'var(--color-neutral-600)' }}>
               100% 5-Star rated patient experiences at Smile Dentos, Valanchery
             </p>
           </div>
@@ -194,6 +195,7 @@ export const ReviewsSection: React.FC = () => {
               href={GOOGLE_MAPS_REVIEWS_URL}
               target="_blank"
               rel="noreferrer"
+              className="reviews-rate-link"
               style={{
                 display: 'inline-flex',
                 alignItems: 'center',
@@ -230,6 +232,7 @@ export const ReviewsSection: React.FC = () => {
               <button
                 onClick={handlePrev}
                 aria-label="Previous Reviews"
+                className="reviews-nav-btn"
                 style={{
                   width: '44px',
                   height: '44px',
@@ -260,6 +263,7 @@ export const ReviewsSection: React.FC = () => {
               <button
                 onClick={handleNext}
                 aria-label="Next Reviews"
+                className="reviews-nav-btn"
                 style={{
                   width: '44px',
                   height: '44px',
@@ -308,6 +312,7 @@ export const ReviewsSection: React.FC = () => {
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, scale: 0.96 }}
                 transition={{ duration: 0.55, delay: idx * 0.08, ease: [0.16, 1, 0.3, 1] }}
+                className="review-card-item"
                 style={{
                   backgroundColor: 'var(--color-neutral-0)',
                   borderRadius: 'var(--radius-card)',
@@ -332,6 +337,7 @@ export const ReviewsSection: React.FC = () => {
                 <div>
                   {/* Category Pill Tag */}
                   <div
+                    className="review-category-pill"
                     style={{
                       display: 'inline-block',
                       backgroundColor: rev.categoryBg,
@@ -350,6 +356,7 @@ export const ReviewsSection: React.FC = () => {
 
                   {/* Lead Quote */}
                   <h3
+                    className="review-lead-quote"
                     style={{
                       fontFamily: 'var(--font-display)',
                       fontSize: 'clamp(1.15rem, 1.5vw, 1.5rem)',
@@ -366,6 +373,7 @@ export const ReviewsSection: React.FC = () => {
 
                   {/* Body Copy */}
                   <p
+                    className="review-body-text"
                     style={{
                       fontFamily: 'var(--font-main)',
                       fontSize: 'clamp(0.88rem, 1.05vw, 1rem)',
@@ -380,6 +388,7 @@ export const ReviewsSection: React.FC = () => {
 
                 {/* Bottom Row: Author & 5 Stars */}
                 <div
+                  className="review-bottom-row"
                   style={{
                     display: 'flex',
                     alignItems: 'center',
@@ -391,6 +400,7 @@ export const ReviewsSection: React.FC = () => {
                 >
                   <div style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
                     <span
+                      className="review-author-name"
                       style={{
                         fontFamily: 'var(--font-main)',
                         fontSize: '0.92rem',
@@ -419,6 +429,60 @@ export const ReviewsSection: React.FC = () => {
       </div>
 
       <style>{`
+        @media (min-width: 769px) {
+          #reviews {
+            background-color: var(--surface-secondary, #F5F6F4) !important;
+          }
+          .reviews-main-title {
+            color: #273F5F !important;
+          }
+          .reviews-sub-desc {
+            color: #4A6375 !important;
+          }
+          .reviews-rate-link {
+            border-color: #16AC8F !important;
+            color: #16AC8F !important;
+          }
+          .reviews-rate-link:hover {
+            background-color: #16AC8F !important;
+            color: #FFFFFF !important;
+          }
+          .reviews-nav-btn {
+            border-color: #16AC8F !important;
+            color: #16AC8F !important;
+          }
+          .reviews-nav-btn:hover {
+            background-color: #16AC8F !important;
+            color: #FFFFFF !important;
+          }
+          .review-card-item {
+            background-color: #FFFFFF !important;
+            border: 1px solid #E1E2DB !important;
+            box-shadow: 0 10px 30px rgba(39, 63, 95, 0.06) !important;
+          }
+          .review-card-item:hover {
+            box-shadow: 0 16px 40px rgba(22, 172, 143, 0.12) !important;
+            border-color: #BACECA !important;
+          }
+          .review-category-pill {
+            background-color: #E8F2EF !important;
+            border-color: #BACECA !important;
+            color: #273F5F !important;
+          }
+          .review-lead-quote {
+            color: #273F5F !important;
+          }
+          .review-body-text {
+            color: #4A6375 !important;
+          }
+          .review-bottom-row {
+            border-top-color: #E1E2DB !important;
+          }
+          .review-author-name {
+            color: #273F5F !important;
+          }
+        }
+
         @media (max-width: 640px) {
           .reviews-header-row {
             flex-direction: column;

@@ -257,8 +257,8 @@ export function App() {
                 display: 'inline-flex',
                 alignItems: 'center',
                 gap: '0.55rem',
-                backgroundColor: '#D7F846',
-                color: '#5E2614',
+                backgroundColor: isMobile ? '#D7F846' : '#16AC8F',
+                color: isMobile ? '#5E2614' : '#FFFFFF',
                 fontFamily: 'var(--font-main)',
                 fontSize: 'clamp(0.78rem, 0.95vw, 0.84rem)',
                 fontWeight: 800,
@@ -268,18 +268,24 @@ export function App() {
                 borderRadius: 'var(--radius-pill)',
                 border: '2px solid rgba(255, 255, 255, 0.75)',
                 cursor: 'pointer',
-                boxShadow: '0 8px 24px rgba(0, 0, 0, 0.18), 0 0 16px rgba(215, 248, 70, 0.4)',
+                boxShadow: isMobile
+                  ? '0 8px 24px rgba(0, 0, 0, 0.18), 0 0 16px rgba(215, 248, 70, 0.4)'
+                  : '0 8px 24px rgba(0, 0, 0, 0.18), 0 0 16px rgba(22, 172, 143, 0.45)',
                 backdropFilter: 'blur(10px)',
                 WebkitBackdropFilter: 'blur(10px)',
                 transition: 'background-color 0.2s ease, box-shadow 0.2s ease',
               }}
               onMouseEnter={(e) => {
-                e.currentTarget.style.backgroundColor = '#E2FA65';
-                e.currentTarget.style.boxShadow = '0 12px 30px rgba(0, 0, 0, 0.22), 0 0 22px rgba(215, 248, 70, 0.6)';
+                e.currentTarget.style.backgroundColor = isMobile ? '#E2FA65' : '#128C74';
+                e.currentTarget.style.boxShadow = isMobile
+                  ? '0 12px 30px rgba(0, 0, 0, 0.22), 0 0 22px rgba(215, 248, 70, 0.6)'
+                  : '0 12px 30px rgba(0, 0, 0, 0.22), 0 0 22px rgba(22, 172, 143, 0.65)';
               }}
               onMouseLeave={(e) => {
-                e.currentTarget.style.backgroundColor = '#D7F846';
-                e.currentTarget.style.boxShadow = '0 8px 24px rgba(0, 0, 0, 0.18), 0 0 16px rgba(215, 248, 70, 0.4)';
+                e.currentTarget.style.backgroundColor = isMobile ? '#D7F846' : '#16AC8F';
+                e.currentTarget.style.boxShadow = isMobile
+                  ? '0 8px 24px rgba(0, 0, 0, 0.18), 0 0 16px rgba(215, 248, 70, 0.4)'
+                  : '0 8px 24px rgba(0, 0, 0, 0.18), 0 0 16px rgba(22, 172, 143, 0.45)';
               }}
             >
               <Calendar size={17} strokeWidth={2.4} />

@@ -25,6 +25,7 @@ export const TransformSection: React.FC<TransformSectionProps> = ({ onOpenBookin
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: '-60px' }}
             transition={{ duration: 0.85, ease: [0.16, 1, 0.3, 1] }}
+            className="transform-title"
             style={{
               fontFamily: 'var(--font-display)',
               fontSize: 'clamp(2.1rem, 5.8vw, 5.6rem)',
@@ -41,6 +42,7 @@ export const TransformSection: React.FC<TransformSectionProps> = ({ onOpenBookin
             <br />
             {/* Starburst + with State-of-the */}
             <span
+              className="transform-starburst"
               style={{
                 display: 'inline-flex',
                 alignItems: 'center',
@@ -70,7 +72,7 @@ export const TransformSection: React.FC<TransformSectionProps> = ({ onOpenBookin
             <span>with State-of-the</span>
             <br />
             <span>art </span>
-            <span style={{ color: 'var(--color-teal-300)' }}>Dental Care</span>
+            <span className="transform-highlight" style={{ color: 'var(--color-teal-300)' }}>Dental Care</span>
             {/* Inline Horizontal Capsule Aligner Pill (Strictly matching Frame 04) */}
             <span
               style={{
@@ -126,6 +128,7 @@ export const TransformSection: React.FC<TransformSectionProps> = ({ onOpenBookin
             }}
           >
             <p
+              className="transform-desc"
               style={{
                 fontFamily: 'var(--font-main)',
                 fontSize: 'clamp(0.95rem, 1.2vw, 1.12rem)',
@@ -140,6 +143,7 @@ export const TransformSection: React.FC<TransformSectionProps> = ({ onOpenBookin
 
             {/* Location & Timings highlight */}
             <div
+              className="transform-location"
               style={{
                 display: 'flex',
                 alignItems: 'center',
@@ -149,12 +153,13 @@ export const TransformSection: React.FC<TransformSectionProps> = ({ onOpenBookin
                 fontFamily: 'var(--font-main)',
               }}
             >
-              <span style={{ color: 'var(--color-teal-300)' }}>📍</span>
+              <span className="transform-location-icon" style={{ color: 'var(--color-teal-300)' }}>📍</span>
               <span>Opposite Hamad Lab & OBG Clinic, Kolamangalam, Valanchery</span>
             </div>
 
             {/* Separator Line */}
             <div
+              className="transform-separator"
               style={{
                 width: '100%',
                 height: '1px',
@@ -176,6 +181,7 @@ export const TransformSection: React.FC<TransformSectionProps> = ({ onOpenBookin
               >
                 <button
                   onClick={onOpenBooking}
+                  className="transform-call-label"
                   style={{
                     fontFamily: 'var(--font-main)',
                     fontSize: '0.9rem',
@@ -194,6 +200,7 @@ export const TransformSection: React.FC<TransformSectionProps> = ({ onOpenBookin
                   Call Clinic Directly
                 </button>
                 <span
+                  className="transform-hours-pill"
                   style={{
                     fontSize: '0.75rem',
                     color: '#FFFFFF',
@@ -209,6 +216,7 @@ export const TransformSection: React.FC<TransformSectionProps> = ({ onOpenBookin
               </div>
               <a
                 href="tel:09495964737"
+                className="transform-phone-link"
                 style={{
                   fontFamily: 'var(--font-display)',
                   fontSize: 'clamp(1.7rem, 4.5vw, 2.5rem)',
@@ -232,6 +240,50 @@ export const TransformSection: React.FC<TransformSectionProps> = ({ onOpenBookin
       </div>
 
       <style>{`
+        @media (min-width: 769px) {
+          #about {
+            background-color: var(--surface-secondary, #F5F6F4) !important;
+          }
+          .transform-title {
+            color: #273F5F !important;
+          }
+          .transform-starburst {
+            color: #16AC8F !important;
+          }
+          .transform-highlight {
+            color: #16AC8F !important;
+          }
+          .transform-desc {
+            color: #4A6375 !important;
+          }
+          .transform-location {
+            color: #273F5F !important;
+          }
+          .transform-location-icon {
+            color: #16AC8F !important;
+          }
+          .transform-separator {
+            background-color: #E1E2DB !important;
+          }
+          .transform-call-label {
+            color: #4A6375 !important;
+          }
+          .transform-call-label:hover {
+            color: #16AC8F !important;
+          }
+          .transform-hours-pill {
+            background-color: #E8F2EF !important;
+            border-color: #BACECA !important;
+            color: #273F5F !important;
+          }
+          .transform-phone-link {
+            color: #273F5F !important;
+          }
+          .transform-phone-link:hover {
+            color: #16AC8F !important;
+          }
+        }
+
         @media (max-width: 860px) {
           .transform-grid {
             grid-template-columns: 1fr !important;

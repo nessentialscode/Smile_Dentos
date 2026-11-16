@@ -876,6 +876,16 @@ export const AppointmentModal: React.FC<AppointmentModalProps> = ({
             </div>
 
             <style>{`
+              @media (min-width: 769px) {
+                input, select, textarea {
+                  background-color: #F8FAF9 !important;
+                  border-color: #BACECA !important;
+                }
+                input:focus, select:focus, textarea:focus {
+                  border-color: #16AC8F !important;
+                  box-shadow: 0 0 0 3px rgba(22, 172, 143, 0.18) !important;
+                }
+              }
               @media (max-width: 500px) {
                 .modal-two-col {
                   grid-template-columns: 1fr !important;

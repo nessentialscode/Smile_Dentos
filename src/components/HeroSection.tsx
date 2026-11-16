@@ -83,7 +83,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onOpenBooking }) => {
               }}
             >
               Gentle<br />
-              <span className="hero-title-line2" style={{ whiteSpace: 'nowrap' }}>Dental <span style={{ color: 'var(--color-teal-500)' }}>Clinic</span></span>
+              <span className="hero-title-line2" style={{ whiteSpace: 'nowrap' }}>Dental <span className="hero-highlight-word" style={{ color: 'var(--color-teal-500)' }}>Clinic</span></span>
             </h1>
           </motion.div>
 
@@ -116,6 +116,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onOpenBooking }) => {
 
             {/* Editorial Paragraph */}
             <p
+              className="hero-editorial-p"
               style={{
                 fontFamily: 'var(--font-main)',
                 fontSize: 'clamp(0.92rem, 1.2vw, 1.05rem)',
@@ -129,6 +130,94 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onOpenBooking }) => {
             >
               Smile Dentos Family Dental Clinic is dedicated to exceptional oral health in Valanchery. Providing gentle treatments, experienced doctors, and state-of-the-art care.
             </p>
+
+            {/* Desktop Action Buttons (Matching Reference Image 1) */}
+            <div
+              className="hero-desktop-cta"
+              style={{
+                display: 'none',
+                alignItems: 'center',
+                gap: '0.85rem',
+                width: '100%',
+                marginTop: '0.4rem',
+              }}
+            >
+              <button
+                type="button"
+                onClick={onOpenBooking}
+                aria-label="Book Appointment"
+                style={{
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  gap: '0.5rem',
+                  backgroundColor: '#16AC8F',
+                  color: '#FFFFFF',
+                  padding: '0.78rem 1.4rem',
+                  borderRadius: 'var(--radius-pill)',
+                  fontWeight: 700,
+                  fontSize: '0.88rem',
+                  fontFamily: 'var(--font-main)',
+                  letterSpacing: '0.03em',
+                  boxShadow: '0 6px 20px rgba(22, 172, 143, 0.35)',
+                  cursor: 'pointer',
+                  border: 'none',
+                  transition: 'background-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease',
+                  whiteSpace: 'nowrap',
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.backgroundColor = '#128C74';
+                  e.currentTarget.style.transform = 'translateY(-2px)';
+                  e.currentTarget.style.boxShadow = '0 8px 24px rgba(22, 172, 143, 0.45)';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.backgroundColor = '#16AC8F';
+                  e.currentTarget.style.transform = 'translateY(0)';
+                  e.currentTarget.style.boxShadow = '0 6px 20px rgba(22, 172, 143, 0.35)';
+                }}
+              >
+                <Calendar size={16} strokeWidth={2.4} />
+                <span>Book Appointment</span>
+              </button>
+
+              <a
+                href="https://wa.me/919495964737?text=Hello%20Smile%20Dentos%2C%20I%20would%20like%20to%20inquire%20about%20an%20appointment."
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Contact on WhatsApp"
+                style={{
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  gap: '0.5rem',
+                  backgroundColor: '#FFFFFF',
+                  color: '#16AC8F',
+                  padding: '0.78rem 1.25rem',
+                  borderRadius: 'var(--radius-pill)',
+                  fontWeight: 700,
+                  fontSize: '0.88rem',
+                  fontFamily: 'var(--font-main)',
+                  letterSpacing: '0.02em',
+                  boxShadow: '0 4px 14px rgba(0, 0, 0, 0.06)',
+                  cursor: 'pointer',
+                  textDecoration: 'none',
+                  border: '1.5px solid #16AC8F',
+                  transition: 'all 0.2s ease',
+                  whiteSpace: 'nowrap',
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.backgroundColor = 'rgba(22, 172, 143, 0.08)';
+                  e.currentTarget.style.transform = 'translateY(-2px)';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.backgroundColor = '#FFFFFF';
+                  e.currentTarget.style.transform = 'translateY(0)';
+                }}
+              >
+                <WhatsAppIcon size={16} color="#16AC8F" />
+                <span>WhatsApp Us</span>
+              </a>
+            </div>
 
             {/* Direct Mobile/Tablet Action Buttons */}
             <div className="hero-mobile-cta" style={{ display: 'none', gap: '0.75rem', width: '100%', marginTop: '0.35rem' }}>
@@ -203,6 +292,24 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onOpenBooking }) => {
       </div>
 
       <style>{`
+        @media (min-width: 769px) {
+          #hero {
+            background: linear-gradient(135deg, #FFFFFF 0%, #F5F6F4 40%, rgba(232, 242, 239, 0.6) 100%) !important;
+          }
+          .hero-main-title {
+            color: #273F5F !important;
+          }
+          .hero-highlight-word {
+            color: #16AC8F !important;
+          }
+          .hero-editorial-p {
+            color: #273F5F !important;
+          }
+          .hero-desktop-cta {
+            display: flex !important;
+          }
+        }
+
         @media (max-width: 768px) {
           #hero {
             padding-bottom: clamp(1.5rem, 5vw, 2.25rem) !important;

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, Phone, MapPin } from 'lucide-react';
+import { X, Phone, MapPin, Calendar } from 'lucide-react';
 import { WhatsAppIcon } from './WhatsAppIcon';
 
 interface NavbarProps {
@@ -80,86 +80,133 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenBooking, onOpenAdmin }) =>
               />
             </a>
 
-            {/* Desktop Nav Links + Phone quick pill */}
+            {/* Desktop Nav Links + Appointment CTA + Phone (Styled according to Official Brand System & Ref Image 1) */}
             <nav
               className="desktop-nav"
               style={{
                 display: 'flex',
                 alignItems: 'center',
-                gap: 'clamp(0.35rem, 0.6vw, 0.7rem)',
+                gap: 'clamp(0.45rem, 0.8vw, 1.15rem)',
                 flexWrap: 'nowrap',
               }}
             >
-              {navLinks.map((link) => (
-                <a
-                  key={link.name}
-                  href={link.href}
-                  style={{
-                    display: 'inline-flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    padding: '0.52rem clamp(0.75rem, 0.9vw, 1.15rem)',
-                    borderRadius: 'var(--radius-pill)',
-                    backgroundColor: 'var(--color-teal-500)',
-                    border: 'none',
-                    color: '#FFFFFF',
-                    fontFamily: 'var(--font-main)',
-                    fontSize: 'clamp(0.76rem, 0.8vw, 0.82rem)',
-                    fontWeight: 700,
-                    letterSpacing: '0.05em',
-                    textDecoration: 'none',
-                    boxShadow: '0 4px 14px rgba(1, 158, 162, 0.35)',
-                    transition: 'all 0.2s ease',
-                    whiteSpace: 'nowrap',
-                  }}
-                  onMouseEnter={(e) => {
-                    e.currentTarget.style.backgroundColor = 'var(--color-teal-600)';
-                    e.currentTarget.style.transform = 'translateY(-2px)';
-                    e.currentTarget.style.boxShadow = '0 6px 18px rgba(1, 158, 162, 0.45)';
-                  }}
-                  onMouseLeave={(e) => {
-                    e.currentTarget.style.backgroundColor = 'var(--color-teal-500)';
-                    e.currentTarget.style.transform = 'translateY(0)';
-                    e.currentTarget.style.boxShadow = '0 4px 14px rgba(1, 158, 162, 0.35)';
-                  }}
-                >
-                  <span style={{ color: '#FFFFFF' }}>{link.name}</span>
-                </a>
-              ))}
+              {navLinks.map((link, idx) => {
+                const isActive = idx === 0;
+                return (
+                  <a
+                    key={link.name}
+                    href={link.href}
+                    className="desktop-nav-link"
+                    style={{
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      position: 'relative',
+                      padding: '0.45rem 0.55rem',
+                      color: isActive ? '#16AC8F' : '#273F5F',
+                      fontFamily: 'var(--font-main)',
+                      fontSize: 'clamp(0.78rem, 0.85vw, 0.86rem)',
+                      fontWeight: isActive ? 800 : 600,
+                      letterSpacing: '0.04em',
+                      textDecoration: 'none',
+                      transition: 'color 0.2s ease',
+                      whiteSpace: 'nowrap',
+                    }}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.color = '#16AC8F';
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.color = isActive ? '#16AC8F' : '#273F5F';
+                    }}
+                  >
+                    <span>{link.name}</span>
+                    {isActive && (
+                      <span
+                        style={{
+                          position: 'absolute',
+                          bottom: '-2px',
+                          left: '50%',
+                          transform: 'translateX(-50%)',
+                          width: '20px',
+                          height: '2.5px',
+                          borderRadius: '2px',
+                          backgroundColor: '#16AC8F',
+                        }}
+                      />
+                    )}
+                  </a>
+                );
+              })}
+
+              {/* Turquoise Primary Book Appointment CTA Button */}
+              <button
+                type="button"
+                onClick={onOpenBooking}
+                aria-label="Book Appointment"
+                className="desktop-nav-cta-btn"
+                style={{
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '0.45rem',
+                  padding: '0.52rem clamp(0.85rem, 1vw, 1.25rem)',
+                  borderRadius: 'var(--radius-pill)',
+                  backgroundColor: '#16AC8F',
+                  border: 'none',
+                  color: '#FFFFFF',
+                  fontFamily: 'var(--font-main)',
+                  fontSize: 'clamp(0.78rem, 0.82vw, 0.85rem)',
+                  fontWeight: 700,
+                  letterSpacing: '0.03em',
+                  cursor: 'pointer',
+                  boxShadow: '0 4px 14px rgba(22, 172, 143, 0.35)',
+                  transition: 'background-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease',
+                  whiteSpace: 'nowrap',
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.backgroundColor = '#128C74';
+                  e.currentTarget.style.transform = 'translateY(-1px)';
+                  e.currentTarget.style.boxShadow = '0 6px 18px rgba(22, 172, 143, 0.45)';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.backgroundColor = '#16AC8F';
+                  e.currentTarget.style.transform = 'translateY(0)';
+                  e.currentTarget.style.boxShadow = '0 4px 14px rgba(22, 172, 143, 0.35)';
+                }}
+              >
+                <Calendar size={15} color="#FFFFFF" strokeWidth={2.4} />
+                <span>Book Appointment</span>
+              </button>
 
               <a
                 href="tel:09495964737"
                 style={{
                   display: 'inline-flex',
                   alignItems: 'center',
-                  gap: '0.5rem',
-                  padding: '0.52rem clamp(0.85rem, 1vw, 1.15rem)',
+                  gap: '0.45rem',
+                  padding: '0.5rem clamp(0.75rem, 0.9vw, 1rem)',
                   borderRadius: 'var(--radius-pill)',
-                  backgroundColor: 'var(--color-teal-500)',
-                  border: 'none',
-                  color: '#FFFFFF',
+                  backgroundColor: 'rgba(245, 246, 244, 0.9)',
+                  border: '1px solid #E1E2DB',
+                  color: '#273F5F',
                   fontFamily: 'var(--font-main)',
                   fontSize: 'clamp(0.76rem, 0.8vw, 0.82rem)',
                   fontWeight: 700,
-                  letterSpacing: '0.04em',
+                  letterSpacing: '0.03em',
                   textDecoration: 'none',
-                  boxShadow: '0 4px 14px rgba(1, 158, 162, 0.35)',
                   transition: 'all 0.2s ease',
                   whiteSpace: 'nowrap',
                 }}
                 onMouseEnter={(e) => {
-                  e.currentTarget.style.backgroundColor = 'var(--color-teal-600)';
-                  e.currentTarget.style.transform = 'translateY(-2px)';
-                  e.currentTarget.style.boxShadow = '0 6px 18px rgba(1, 158, 162, 0.45)';
+                  e.currentTarget.style.borderColor = '#16AC8F';
+                  e.currentTarget.style.color = '#16AC8F';
                 }}
                 onMouseLeave={(e) => {
-                  e.currentTarget.style.backgroundColor = 'var(--color-teal-500)';
-                  e.currentTarget.style.transform = 'translateY(0)';
-                  e.currentTarget.style.boxShadow = '0 4px 14px rgba(1, 158, 162, 0.35)';
+                  e.currentTarget.style.borderColor = '#E1E2DB';
+                  e.currentTarget.style.color = '#273F5F';
                 }}
               >
-                <Phone size={14} color="#FFFFFF" strokeWidth={2.4} />
-                <span style={{ color: '#FFFFFF' }}>094959 64737</span>
+                <Phone size={13} color="#16AC8F" strokeWidth={2.4} />
+                <span>094959 64737</span>
               </a>
 
               {/* WhatsApp Contact Button (Desktop mode only) */}

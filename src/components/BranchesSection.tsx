@@ -274,6 +274,7 @@ export const BranchesSection: React.FC<BranchesSectionProps> = ({ onOpenBooking 
         >
           {/* Eyebrow */}
           <span
+            className="branches-eyebrow"
             style={{
               fontFamily: 'var(--font-main)',
               fontSize: '0.85rem',
@@ -292,6 +293,7 @@ export const BranchesSection: React.FC<BranchesSectionProps> = ({ onOpenBooking 
 
           {/* Main Heading */}
           <h2
+            className="branches-main-title"
             style={{
               fontFamily: 'var(--font-display)',
               fontSize: 'clamp(2.1rem, 3.8vw, 3.2rem)',
@@ -306,6 +308,7 @@ export const BranchesSection: React.FC<BranchesSectionProps> = ({ onOpenBooking 
           </h2>
 
           <p
+            className="branches-sub-desc"
             style={{
               fontFamily: 'var(--font-main)',
               fontSize: 'clamp(0.95rem, 1.1vw, 1.1rem)',
@@ -380,6 +383,7 @@ export const BranchesSection: React.FC<BranchesSectionProps> = ({ onOpenBooking 
                 >
                   {/* Tag Pill: [ PONNANI ] style */}
                   <span
+                    className="branch-tag-pill"
                     style={{
                       backgroundColor: '#FACC15',
                       color: '#0F172A',
@@ -399,6 +403,7 @@ export const BranchesSection: React.FC<BranchesSectionProps> = ({ onOpenBooking 
 
                   {/* Status Pill: ● OPENED */}
                   <span
+                    className="branch-status-pill"
                     style={{
                       backgroundColor: '#FFFFFF',
                       color: isOpened ? '#15803D' : '#DC2626',
@@ -433,6 +438,7 @@ export const BranchesSection: React.FC<BranchesSectionProps> = ({ onOpenBooking 
 
                 {/* 2. Clinic Title */}
                 <h3
+                  className="branch-name-title"
                   style={{
                     fontFamily: 'var(--font-display)',
                     fontSize: 'clamp(1.45rem, 2.1vw, 1.85rem)',
@@ -458,6 +464,7 @@ export const BranchesSection: React.FC<BranchesSectionProps> = ({ onOpenBooking 
                 >
                   {/* Rating Badge: ★ 4.9 (32) */}
                   <span
+                    className="branch-rating-pill"
                     style={{
                       backgroundColor: 'rgba(255, 255, 255, 0.16)',
                       border: '1px solid rgba(255, 255, 255, 0.25)',
@@ -480,6 +487,7 @@ export const BranchesSection: React.FC<BranchesSectionProps> = ({ onOpenBooking 
 
                   {/* Clinic Tier Badge */}
                   <span
+                    className="branch-badge-pill"
                     style={{
                       backgroundColor: 'rgba(255, 255, 255, 0.16)',
                       border: '1px solid rgba(255, 255, 255, 0.25)',
@@ -504,6 +512,7 @@ export const BranchesSection: React.FC<BranchesSectionProps> = ({ onOpenBooking 
                   }}
                 >
                   <span
+                    className="branch-landmark-pill"
                     style={{
                       backgroundColor: 'rgba(255, 255, 255, 0.14)',
                       border: '1px solid rgba(255, 255, 255, 0.2)',
@@ -539,6 +548,7 @@ export const BranchesSection: React.FC<BranchesSectionProps> = ({ onOpenBooking 
                   {/* Website */}
                   <a
                     href="#top"
+                    className="branch-action-pill"
                     style={{
                       backgroundColor: 'rgba(255, 255, 255, 0.16)',
                       border: '1px solid rgba(255, 255, 255, 0.24)',
@@ -566,6 +576,7 @@ export const BranchesSection: React.FC<BranchesSectionProps> = ({ onOpenBooking 
                     href={branch.googleMapsUrl}
                     target="_blank"
                     rel="noopener noreferrer"
+                    className="branch-action-pill"
                     style={{
                       backgroundColor: 'rgba(255, 255, 255, 0.16)',
                       border: '1px solid rgba(255, 255, 255, 0.24)',
@@ -591,6 +602,7 @@ export const BranchesSection: React.FC<BranchesSectionProps> = ({ onOpenBooking 
                   <button
                     type="button"
                     onClick={() => openBranchGallery(branch, 0)}
+                    className="branch-action-pill"
                     style={{
                       backgroundColor: 'rgba(255, 255, 255, 0.16)',
                       border: '1px solid rgba(255, 255, 255, 0.24)',
@@ -720,9 +732,10 @@ export const BranchesSection: React.FC<BranchesSectionProps> = ({ onOpenBooking 
                       gap: '0.65rem',
                     }}
                   >
-                    <MapPin size={17} color="#FDE047" style={{ flexShrink: 0, marginTop: '2px' }} />
+                    <MapPin className="branch-map-pin" size={17} color="#FDE047" style={{ flexShrink: 0, marginTop: '2px' }} />
                     <div style={{ lineHeight: 1.35 }}>
                       <p
+                        className="branch-addr-line1"
                         style={{
                           margin: 0,
                           fontSize: '0.84rem',
@@ -733,6 +746,7 @@ export const BranchesSection: React.FC<BranchesSectionProps> = ({ onOpenBooking 
                         {branch.addressLine1}
                       </p>
                       <p
+                        className="branch-addr-line2"
                         style={{
                           margin: '2px 0 0 0',
                           fontSize: '0.78rem',
@@ -752,8 +766,9 @@ export const BranchesSection: React.FC<BranchesSectionProps> = ({ onOpenBooking 
                       gap: '0.65rem',
                     }}
                   >
-                    <Clock size={17} color="#FDE047" style={{ flexShrink: 0 }} />
+                    <Clock className="branch-clock-icon" size={17} color="#FDE047" style={{ flexShrink: 0 }} />
                     <p
+                      className="branch-hours-text"
                       style={{
                         margin: 0,
                         fontSize: '0.82rem',
@@ -786,6 +801,7 @@ export const BranchesSection: React.FC<BranchesSectionProps> = ({ onOpenBooking 
                   }}
                 >
                   <h4
+                    className="branch-fac-header"
                     style={{
                       margin: '0 0 0.55rem 0',
                       fontSize: '0.72rem',
@@ -812,6 +828,7 @@ export const BranchesSection: React.FC<BranchesSectionProps> = ({ onOpenBooking 
                     {branch.facilities.map((facility, i) => (
                       <li
                         key={i}
+                        className="branch-fac-item"
                         style={{
                           fontSize: '0.82rem',
                           color: '#FFFFFF',
@@ -822,6 +839,7 @@ export const BranchesSection: React.FC<BranchesSectionProps> = ({ onOpenBooking 
                         }}
                       >
                         <span
+                          className="branch-fac-dot"
                           style={{
                             width: '5px',
                             height: '5px',
@@ -838,6 +856,7 @@ export const BranchesSection: React.FC<BranchesSectionProps> = ({ onOpenBooking 
 
                 {/* 9. Testimonial Quote Box */}
                 <div
+                  className="branch-quote-box"
                   style={{
                     backgroundColor: 'rgba(255, 255, 255, 0.12)',
                     border: '1px solid rgba(255, 255, 255, 0.2)',
@@ -850,11 +869,13 @@ export const BranchesSection: React.FC<BranchesSectionProps> = ({ onOpenBooking 
                   }}
                 >
                   <Quote
+                    className="branch-quote-icon"
                     size={16}
                     color="#FDE047"
                     style={{ flexShrink: 0, marginTop: '2px', opacity: 0.9 }}
                   />
                   <p
+                    className="branch-quote-text"
                     style={{
                       margin: 0,
                       fontSize: '0.8rem',
@@ -880,6 +901,7 @@ export const BranchesSection: React.FC<BranchesSectionProps> = ({ onOpenBooking 
                   <button
                     type="button"
                     onClick={() => onOpenBooking(branch.bookingParam)}
+                    className="branch-primary-cta"
                     style={{
                       width: '100%',
                       backgroundColor: '#FFFFFF',
@@ -922,6 +944,7 @@ export const BranchesSection: React.FC<BranchesSectionProps> = ({ onOpenBooking 
                     {/* Call Button */}
                     <a
                       href={`tel:${branch.phone}`}
+                      className="branch-sub-call-btn"
                       style={{
                         backgroundColor: 'rgba(255, 255, 255, 0.16)',
                         border: '1px solid rgba(255, 255, 255, 0.25)',
@@ -1213,6 +1236,85 @@ export const BranchesSection: React.FC<BranchesSectionProps> = ({ onOpenBooking 
       </AnimatePresence>
 
       <style>{`
+        @media (min-width: 769px) {
+          #branches {
+            background-color: var(--surface-secondary, #F5F6F4) !important;
+          }
+          .branches-eyebrow {
+            color: #16AC8F !important;
+          }
+          .branches-main-title {
+            color: #273F5F !important;
+          }
+          .branches-sub-desc {
+            color: #4A6375 !important;
+          }
+          .branch-highlight-card {
+            background: linear-gradient(145deg, #FFFFFF 0%, #E8F2EF 100%) !important;
+            border: 1.5px solid #BACECA !important;
+            box-shadow: 0 16px 36px -8px rgba(39, 63, 95, 0.1) !important;
+            color: #273F5F !important;
+          }
+          .branch-name-title {
+            color: #273F5F !important;
+          }
+          .branch-tag-pill {
+            background-color: #16AC8F !important;
+            color: #FFFFFF !important;
+          }
+          .branch-rating-pill,
+          .branch-badge-pill,
+          .branch-landmark-pill,
+          .branch-action-pill {
+            background-color: #FFFFFF !important;
+            border-color: #BACECA !important;
+            color: #273F5F !important;
+          }
+          .branch-map-pin,
+          .branch-clock-icon {
+            color: #16AC8F !important;
+          }
+          .branch-addr-line1,
+          .branch-addr-line2,
+          .branch-hours-text {
+            color: #273F5F !important;
+          }
+          .branch-fac-header {
+            color: #273F5F !important;
+          }
+          .branch-fac-item {
+            color: #273F5F !important;
+          }
+          .branch-fac-dot {
+            background-color: #16AC8F !important;
+          }
+          .branch-quote-box {
+            background-color: #FFFFFF !important;
+            border-color: #BACECA !important;
+            color: #273F5F !important;
+          }
+          .branch-quote-icon {
+            color: #16AC8F !important;
+          }
+          .branch-quote-text {
+            color: #273F5F !important;
+          }
+          .branch-primary-cta {
+            background-color: #16AC8F !important;
+            color: #FFFFFF !important;
+            box-shadow: 0 4px 14px rgba(22, 172, 143, 0.35) !important;
+          }
+          .branch-primary-cta:hover {
+            background-color: #128C74 !important;
+            box-shadow: 0 8px 20px rgba(22, 172, 143, 0.45) !important;
+          }
+          .branch-sub-call-btn {
+            background-color: #FFFFFF !important;
+            border-color: #BACECA !important;
+            color: #273F5F !important;
+          }
+        }
+
         @media (max-width: 900px) {
           .branches-two-card-grid {
             grid-template-columns: 1fr !important;
