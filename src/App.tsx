@@ -42,11 +42,12 @@ export function App() {
     return false;
   });
 
-  // Track scroll and viewport for mobile vs desktop button behaviors
-  const [scrollY, setScrollY] = useState(0);
+  // Viewport and scroll-activated floating CTA states
   const [isMobile, setIsMobile] = useState(() =>
     typeof window !== 'undefined' ? window.innerWidth <= 768 : false
   );
+  // Floating "Book Appointment" CTA button: hidden on first-view landing page, appears when scrolling into Our Services
+  const [showMovingBookingButton, setShowMovingBookingButton] = useState(false);
 
   useEffect(() => {
     const lenis = initSmoothScroll();
@@ -54,14 +55,34 @@ export function App() {
     const handleResize = () => setIsMobile(window.innerWidth <= 768);
     handleResize();
 
+    const checkVisibility = (currentScroll?: number) => {
+      const servicesEl = document.getElementById('services');
+      if (servicesEl) {
+        const rect = servicesEl.getBoundingClientRect();
+        // Appears when scrolling down from landing page into Our Services section
+        const hasReachedServices = rect.top <= window.innerHeight * 0.85;
+        const currentY = currentScroll ?? window.scrollY;
+        const isPastLandingFirstView = currentY > window.innerHeight * 0.55;
+        setShowMovingBookingButton(hasReachedServices && isPastLandingFirstView);
+      } else {
+        const currentY = currentScroll ?? window.scrollY;
+        setShowMovingBookingButton(currentY > 600);
+      }
+    };
+
     const onScroll = (e: { scroll: number }) => {
-      setScrollY(e.scroll);
+      checkVisibility(e.scroll);
     };
     lenis.on('scroll', onScroll);
 
+    const onNativeScroll = () => checkVisibility();
+    window.addEventListener('scroll', onNativeScroll, { passive: true });
     window.addEventListener('resize', handleResize);
+    checkVisibility();
+
     return () => {
       lenis.off('scroll', onScroll);
+      window.removeEventListener('scroll', onNativeScroll);
       window.removeEventListener('resize', handleResize);
     };
   }, []);
@@ -74,9 +95,6 @@ export function App() {
       resumeSmoothScroll();
     }
   }, [bookingOpen]);
-
-  // Moving book appointment button: on desktop always visible. On mobile, starts after landing page first view (~380px)
-  const showMovingBookingButton = !isMobile || scrollY > 380;
 
   useEffect(() => {
     const handleLocationChange = () => {
@@ -231,7 +249,7 @@ export function App() {
       {/* Frame 18: High Impact Chartreuse Footer & CTA */}
       <FooterSection onOpenBooking={() => handleOpenBooking()} onOpenAdmin={handleNavigateToAdmin} />
 
-      {/* Floating "Book Appointment" CTA: always visible on desktop, starts after landing page first view on mobile */}
+      {/* Floating "Book Appointment" CTA: hidden on first-view landing page, appears when scrolling into Our Services */}
       <AnimatePresence>
         {showMovingBookingButton && (
           <motion.div

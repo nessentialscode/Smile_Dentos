@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, Phone, MapPin, Calendar } from 'lucide-react';
+import { X, Phone, MapPin } from 'lucide-react';
 import { WhatsAppIcon } from './WhatsAppIcon';
 
 interface NavbarProps {
@@ -80,102 +80,83 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenBooking, onOpenAdmin }) =>
               />
             </a>
 
-            {/* Desktop Nav Links + Appointment CTA + Phone (Styled according to Official Brand System & Ref Image 1) */}
+            {/* Desktop Nav Links + Phone (Styled according to Official Brand System & Ref Image 1) */}
             <nav
               className="desktop-nav"
               style={{
                 display: 'flex',
                 alignItems: 'center',
-                gap: 'clamp(0.45rem, 0.8vw, 1.15rem)',
+                gap: 'clamp(0.45rem, 0.7vw, 0.85rem)',
                 flexWrap: 'nowrap',
               }}
             >
-              {navLinks.map((link, idx) => {
-                const isActive = idx === 0;
-                return (
-                  <a
-                    key={link.name}
-                    href={link.href}
-                    className="desktop-nav-link"
-                    style={{
-                      display: 'inline-flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      position: 'relative',
-                      padding: '0.45rem 0.55rem',
-                      color: isActive ? '#16AC8F' : '#273F5F',
-                      fontFamily: 'var(--font-main)',
-                      fontSize: 'clamp(0.78rem, 0.85vw, 0.86rem)',
-                      fontWeight: isActive ? 800 : 600,
-                      letterSpacing: '0.04em',
-                      textDecoration: 'none',
-                      transition: 'color 0.2s ease',
-                      whiteSpace: 'nowrap',
-                    }}
-                    onMouseEnter={(e) => {
-                      e.currentTarget.style.color = '#16AC8F';
-                    }}
-                    onMouseLeave={(e) => {
-                      e.currentTarget.style.color = isActive ? '#16AC8F' : '#273F5F';
-                    }}
-                  >
-                    <span>{link.name}</span>
-                    {isActive && (
-                      <span
-                        style={{
-                          position: 'absolute',
-                          bottom: '-2px',
-                          left: '50%',
-                          transform: 'translateX(-50%)',
-                          width: '20px',
-                          height: '2.5px',
-                          borderRadius: '2px',
-                          backgroundColor: '#16AC8F',
-                        }}
-                      />
-                    )}
-                  </a>
-                );
-              })}
-
-              {/* Turquoise Primary Book Appointment CTA Button */}
-              <button
-                type="button"
-                onClick={onOpenBooking}
-                aria-label="Book Appointment"
-                className="desktop-nav-cta-btn"
+              {/* Rounded Capsule Pill for Section Links (Matches Phone Pill) */}
+              <div
+                className="desktop-nav-links-pill"
                 style={{
                   display: 'inline-flex',
                   alignItems: 'center',
-                  gap: '0.45rem',
-                  padding: '0.52rem clamp(0.85rem, 1vw, 1.25rem)',
+                  gap: 'clamp(0.15rem, 0.35vw, 0.4rem)',
+                  padding: '0.3rem 0.55rem',
                   borderRadius: 'var(--radius-pill)',
-                  backgroundColor: '#16AC8F',
-                  border: 'none',
-                  color: '#FFFFFF',
-                  fontFamily: 'var(--font-main)',
-                  fontSize: 'clamp(0.78rem, 0.82vw, 0.85rem)',
-                  fontWeight: 700,
-                  letterSpacing: '0.03em',
-                  cursor: 'pointer',
-                  boxShadow: '0 4px 14px rgba(22, 172, 143, 0.35)',
-                  transition: 'background-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease',
-                  whiteSpace: 'nowrap',
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.backgroundColor = '#128C74';
-                  e.currentTarget.style.transform = 'translateY(-1px)';
-                  e.currentTarget.style.boxShadow = '0 6px 18px rgba(22, 172, 143, 0.45)';
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.backgroundColor = '#16AC8F';
-                  e.currentTarget.style.transform = 'translateY(0)';
-                  e.currentTarget.style.boxShadow = '0 4px 14px rgba(22, 172, 143, 0.35)';
+                  backgroundColor: 'rgba(245, 246, 244, 0.92)',
+                  backdropFilter: 'blur(12px)',
+                  WebkitBackdropFilter: 'blur(12px)',
+                  border: '1px solid #E1E2DB',
+                  boxShadow: '0 2px 8px rgba(39, 63, 95, 0.04)',
                 }}
               >
-                <Calendar size={15} color="#FFFFFF" strokeWidth={2.4} />
-                <span>Book Appointment</span>
-              </button>
+                {navLinks.map((link, idx) => {
+                  const isActive = idx === 0;
+                  return (
+                    <a
+                      key={link.name}
+                      href={link.href}
+                      className="desktop-nav-link"
+                      style={{
+                        display: 'inline-flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        position: 'relative',
+                        padding: '0.35rem clamp(0.5rem, 0.65vw, 0.8rem)',
+                        borderRadius: 'var(--radius-pill)',
+                        color: isActive ? '#16AC8F' : '#273F5F',
+                        fontFamily: 'var(--font-main)',
+                        fontSize: 'clamp(0.74rem, 0.8vw, 0.82rem)',
+                        fontWeight: isActive ? 800 : 600,
+                        letterSpacing: '0.04em',
+                        textDecoration: 'none',
+                        transition: 'all 0.2s ease',
+                        whiteSpace: 'nowrap',
+                      }}
+                      onMouseEnter={(e) => {
+                        e.currentTarget.style.color = '#16AC8F';
+                        e.currentTarget.style.backgroundColor = 'rgba(22, 172, 143, 0.08)';
+                      }}
+                      onMouseLeave={(e) => {
+                        e.currentTarget.style.color = isActive ? '#16AC8F' : '#273F5F';
+                        e.currentTarget.style.backgroundColor = 'transparent';
+                      }}
+                    >
+                      <span>{link.name}</span>
+                      {isActive && (
+                        <span
+                          style={{
+                            position: 'absolute',
+                            bottom: '2px',
+                            left: '50%',
+                            transform: 'translateX(-50%)',
+                            width: '16px',
+                            height: '2px',
+                            borderRadius: '2px',
+                            backgroundColor: '#16AC8F',
+                          }}
+                        />
+                      )}
+                    </a>
+                  );
+                })}
+              </div>
 
               <a
                 href="tel:09495964737"
