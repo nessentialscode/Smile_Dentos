@@ -231,7 +231,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onOpenBooking }) => {
                   alignItems: 'center',
                   justifyContent: 'center',
                   gap: '0.45rem',
-                  backgroundColor: 'var(--color-brand-500)',
+                  backgroundColor: '#16AC8F',
                   color: '#FFFFFF',
                   padding: '0.82rem 1.2rem',
                   borderRadius: 'var(--radius-pill)',
@@ -239,18 +239,18 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onOpenBooking }) => {
                   fontSize: '0.88rem',
                   fontFamily: 'var(--font-main)',
                   letterSpacing: '0.04em',
-                  boxShadow: '0 8px 24px rgba(31, 95, 212, 0.35)',
+                  boxShadow: '0 8px 24px rgba(22, 172, 143, 0.35)',
                   cursor: 'pointer',
                   textAlign: 'center',
                   border: 'none',
                   transition: 'background-color 0.2s ease, transform 0.2s ease',
                 }}
                 onMouseEnter={(e) => {
-                  e.currentTarget.style.backgroundColor = 'var(--color-brand-600)';
+                  e.currentTarget.style.backgroundColor = '#128C74';
                   e.currentTarget.style.transform = 'translateY(-2px)';
                 }}
                 onMouseLeave={(e) => {
-                  e.currentTarget.style.backgroundColor = 'var(--color-brand-500)';
+                  e.currentTarget.style.backgroundColor = '#16AC8F';
                   e.currentTarget.style.transform = 'translateY(0)';
                 }}
               >
@@ -268,22 +268,31 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onOpenBooking }) => {
                   alignItems: 'center',
                   justifyContent: 'center',
                   gap: '0.45rem',
-                  backgroundColor: '#25D366',
-                  color: '#FFFFFF',
+                  backgroundColor: '#FFFFFF',
+                  color: '#16AC8F',
+                  border: '1.5px solid #16AC8F',
                   padding: '0.82rem 1.1rem',
                   borderRadius: 'var(--radius-pill)',
                   fontWeight: 800,
                   fontSize: '0.85rem',
                   fontFamily: 'var(--font-main)',
                   letterSpacing: '0.02em',
-                  boxShadow: '0 8px 24px rgba(37, 211, 102, 0.35)',
+                  boxShadow: '0 4px 14px rgba(0, 0, 0, 0.06)',
                   cursor: 'pointer',
                   textAlign: 'center',
                   textDecoration: 'none',
-                  border: 'none',
+                  transition: 'all 0.2s ease',
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.backgroundColor = 'rgba(22, 172, 143, 0.08)';
+                  e.currentTarget.style.transform = 'translateY(-2px)';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.backgroundColor = '#FFFFFF';
+                  e.currentTarget.style.transform = 'translateY(0)';
                 }}
               >
-                <WhatsAppIcon size={17} />
+                <WhatsAppIcon size={17} color="#16AC8F" />
                 <span>WhatsApp</span>
               </a>
             </div>
@@ -292,19 +301,20 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onOpenBooking }) => {
       </div>
 
       <style>{`
+        #hero {
+          background: linear-gradient(135deg, #FFFFFF 0%, #F5F6F4 40%, rgba(232, 242, 239, 0.6) 100%) !important;
+        }
+        .hero-main-title {
+          color: #273F5F !important;
+        }
+        .hero-highlight-word {
+          color: #16AC8F !important;
+        }
+        .hero-editorial-p {
+          color: #273F5F !important;
+        }
+
         @media (min-width: 769px) {
-          #hero {
-            background: linear-gradient(135deg, #FFFFFF 0%, #F5F6F4 40%, rgba(232, 242, 239, 0.6) 100%) !important;
-          }
-          .hero-main-title {
-            color: #273F5F !important;
-          }
-          .hero-highlight-word {
-            color: #16AC8F !important;
-          }
-          .hero-editorial-p {
-            color: #273F5F !important;
-          }
           .hero-desktop-cta {
             display: flex !important;
           }
@@ -328,12 +338,12 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onOpenBooking }) => {
             max-width: 100% !important;
           }
           .hero-main-title {
-            font-size: clamp(4.4rem, 16.5vw, 6.2rem) !important;
-            line-height: 0.90 !important;
+            font-size: clamp(3.2rem, 13vw, 5.2rem) !important;
+            line-height: 0.94 !important;
             letter-spacing: -0.04em !important;
             font-weight: 800 !important;
-            color: #FFFFFF !important;
-            text-shadow: 0 4px 24px rgba(0, 0, 0, 0.4) !important;
+            color: #273F5F !important;
+            text-shadow: none !important;
             margin: 0 0 0.85rem 0 !important;
             word-break: normal !important;
           }

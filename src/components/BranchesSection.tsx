@@ -1236,83 +1236,81 @@ export const BranchesSection: React.FC<BranchesSectionProps> = ({ onOpenBooking 
       </AnimatePresence>
 
       <style>{`
-        @media (min-width: 769px) {
-          #branches {
-            background-color: var(--surface-secondary, #F5F6F4) !important;
-          }
-          .branches-eyebrow {
-            color: #16AC8F !important;
-          }
-          .branches-main-title {
-            color: #273F5F !important;
-          }
-          .branches-sub-desc {
-            color: #4A6375 !important;
-          }
-          .branch-highlight-card {
-            background: linear-gradient(145deg, #FFFFFF 0%, #E8F2EF 100%) !important;
-            border: 1.5px solid #BACECA !important;
-            box-shadow: 0 16px 36px -8px rgba(39, 63, 95, 0.1) !important;
-            color: #273F5F !important;
-          }
-          .branch-name-title {
-            color: #273F5F !important;
-          }
-          .branch-tag-pill {
-            background-color: #16AC8F !important;
-            color: #FFFFFF !important;
-          }
-          .branch-rating-pill,
-          .branch-badge-pill,
-          .branch-landmark-pill,
-          .branch-action-pill {
-            background-color: #FFFFFF !important;
-            border-color: #BACECA !important;
-            color: #273F5F !important;
-          }
-          .branch-map-pin,
-          .branch-clock-icon {
-            color: #16AC8F !important;
-          }
-          .branch-addr-line1,
-          .branch-addr-line2,
-          .branch-hours-text {
-            color: #273F5F !important;
-          }
-          .branch-fac-header {
-            color: #273F5F !important;
-          }
-          .branch-fac-item {
-            color: #273F5F !important;
-          }
-          .branch-fac-dot {
-            background-color: #16AC8F !important;
-          }
-          .branch-quote-box {
-            background-color: #FFFFFF !important;
-            border-color: #BACECA !important;
-            color: #273F5F !important;
-          }
-          .branch-quote-icon {
-            color: #16AC8F !important;
-          }
-          .branch-quote-text {
-            color: #273F5F !important;
-          }
-          .branch-primary-cta {
-            background-color: #16AC8F !important;
-            color: #FFFFFF !important;
-            box-shadow: 0 4px 14px rgba(22, 172, 143, 0.35) !important;
-          }
-          .branch-primary-cta:hover {
-            background-color: #128C74 !important;
-            box-shadow: 0 8px 20px rgba(22, 172, 143, 0.45) !important;
-          }
-          .branch-sub-call-btn {
-            background-color: #FFFFFF !important;
-            border-color: #BACECA !important;
-            color: #273F5F !important;
-          }
+        #branches {
+          background-color: var(--surface-secondary, #F5F6F4) !important;
+        }
+        .branches-eyebrow {
+          color: #16AC8F !important;
+        }
+        .branches-main-title {
+          color: #273F5F !important;
+        }
+        .branches-sub-desc {
+          color: #4A6375 !important;
+        }
+        .branch-highlight-card {
+          background: linear-gradient(145deg, #FFFFFF 0%, #E8F2EF 100%) !important;
+          border: 1.5px solid #BACECA !important;
+          box-shadow: 0 16px 36px -8px rgba(39, 63, 95, 0.1) !important;
+          color: #273F5F !important;
+        }
+        .branch-name-title {
+          color: #273F5F !important;
+        }
+        .branch-tag-pill {
+          background-color: #16AC8F !important;
+          color: #FFFFFF !important;
+        }
+        .branch-rating-pill,
+        .branch-badge-pill,
+        .branch-landmark-pill,
+        .branch-action-pill {
+          background-color: #FFFFFF !important;
+          border-color: #BACECA !important;
+          color: #273F5F !important;
+        }
+        .branch-map-pin,
+        .branch-clock-icon {
+          color: #16AC8F !important;
+        }
+        .branch-addr-line1,
+        .branch-addr-line2,
+        .branch-hours-text {
+          color: #273F5F !important;
+        }
+        .branch-fac-header {
+          color: #273F5F !important;
+        }
+        .branch-fac-item {
+          color: #273F5F !important;
+        }
+        .branch-fac-dot {
+          background-color: #16AC8F !important;
+        }
+        .branch-quote-box {
+          background-color: #FFFFFF !important;
+          border-color: #BACECA !important;
+          color: #273F5F !important;
+        }
+        .branch-quote-icon {
+          color: #16AC8F !important;
+        }
+        .branch-quote-text {
+          color: #273F5F !important;
+        }
+        .branch-primary-cta {
+          background-color: #16AC8F !important;
+          color: #FFFFFF !important;
+          box-shadow: 0 4px 14px rgba(22, 172, 143, 0.35) !important;
+        }
+        .branch-primary-cta:hover {
+          background-color: #128C74 !important;
+          box-shadow: 0 8px 20px rgba(22, 172, 143, 0.45) !important;
+        }
+        .branch-sub-call-btn {
+          background-color: #FFFFFF !important;
+          border-color: #BACECA !important;
+          color: #273F5F !important;
         }
 
         @media (max-width: 900px) {

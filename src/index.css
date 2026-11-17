@@ -27,92 +27,92 @@
   --services-bg-mint: #E8F2EF;
 
   /* ==========================================
-     REFERENCE-INSPIRED DENTAL COLOR PALETTE
+     GLOBAL BRAND COLOR SYSTEM (APPLIED TO ALL VIEWPORTS)
      ========================================== */
 
-  /* BRAND & DENTAL BLUES */
-  --color-brand-50: #F1F7FC;  /* Very Light Blue */
-  --color-brand-100: #E7F2FB; /* Light Blue */
-  --color-brand-200: #C2DCF2;
-  --color-brand-300: #88BDE5;
-  --color-brand-400: #4298D4;
-  --color-brand-500: #1677D2; /* Primary Action Blue */
-  --color-brand-600: #145A9C; /* Primary Dental Blue */
-  --color-brand-700: #0B4F8A; /* Strong Blue (Hover) */
-  --color-brand-800: #123E6A; /* Deep Blue (Footer) */
-  --color-brand-900: #0C2847;
+  /* BRAND & DENTAL PALETTE */
+  --color-brand-50: #F5F6F4;
+  --color-brand-100: #E8F2EF;
+  --color-brand-200: #D4E5E1;
+  --color-brand-300: #BACECA;
+  --color-brand-400: #88BAB1;
+  --color-brand-500: #16AC8F; /* Primary Action Turquoise */
+  --color-brand-600: #128C74; /* Primary Brand Dark */
+  --color-brand-700: #0E6C5A; /* Strong Hover */
+  --color-brand-800: #273F5F; /* Deep Navy */
+  --color-brand-900: #1A2E44;
 
   /* CLINICAL CYAN / TEAL */
-  --color-teal-50: #E7FAFA;  /* Pale Cyan */
-  --color-teal-100: #C7F3F5;
-  --color-teal-200: #9CE7EA;
-  --color-teal-300: #62D5DA;
-  --color-teal-400: #29C0C7;
-  --color-teal-500: #08B9C3; /* Clinical Cyan */
-  --color-teal-600: #009FA8; /* Teal */
-  --color-teal-700: #028087;
-  --color-teal-800: #05666C;
-  --color-teal-900: #084D52;
+  --color-teal-50: #E8F2EF;
+  --color-teal-100: #D4E5E1;
+  --color-teal-200: #BACECA;
+  --color-teal-300: #88BAB1;
+  --color-teal-400: #49AF9B;
+  --color-teal-500: #16AC8F; /* Primary Turquoise */
+  --color-teal-600: #128C74;
+  --color-teal-700: #0E6C5A;
+  --color-teal-800: #273F5F;
+  --color-teal-900: #1A2E44;
 
   /* NEUTRAL FOUNDATION & TEXT */
   --color-neutral-0: #FFFFFF;
-  --color-neutral-50: #F7FAFC; /* Soft White */
-  --color-neutral-100: #F1F7FC; /* Very Light Blue */
-  --color-neutral-200: #D8E6EF; /* Border */
-  --color-neutral-300: #C2D5E3;
+  --color-neutral-50: #F5F6F4;
+  --color-neutral-100: #F0F4F2;
+  --color-neutral-200: #E1E2DB;
+  --color-neutral-300: #D0D4CE;
   --color-neutral-400: #93AABF;
   --color-neutral-500: #71899E;
-  --color-neutral-600: #5B7183; /* Secondary Text */
+  --color-neutral-600: #4A6375; /* Secondary Text */
   --color-neutral-700: #354E62;
-  --color-neutral-800: #18344D; /* Dark Text / Headings */
-  --color-neutral-900: #102334;
-  --color-neutral-950: #0A1723;
+  --color-neutral-800: #273F5F; /* Deep Navy Text / Headings */
+  --color-neutral-900: #1A2B40;
+  --color-neutral-950: #050B19;
 
   /* SEMANTIC ALIASES */
-  --color-background: var(--color-neutral-0);
-  --color-background-subtle: var(--color-brand-50);
-  --color-surface: var(--color-neutral-0);
-  --color-surface-accent: var(--color-teal-50);
-  --color-surface-blue: var(--color-brand-100);
-  --color-text-primary: var(--color-neutral-800);
-  --color-text-secondary: var(--color-neutral-600);
-  --color-text-muted: var(--color-neutral-500);
-  --color-border: var(--color-neutral-200);
-  --color-border-subtle: var(--color-brand-100);
-  --color-brand-primary: var(--color-brand-600);
-  --color-brand-secondary: var(--color-teal-500);
-  --color-action-primary: var(--color-brand-500);
-  --color-action-primary-hover: var(--color-brand-700);
-  --color-action-secondary: var(--color-teal-500);
-  --color-action-secondary-hover: var(--color-teal-600);
-  --color-focus: var(--color-teal-500);
+  --color-background: var(--surface-secondary);
+  --color-background-subtle: var(--surface-secondary);
+  --color-surface: var(--surface-primary);
+  --color-surface-accent: #E8F2EF;
+  --color-surface-blue: #D4E5E1;
+  --color-text-primary: var(--text-primary);
+  --color-text-secondary: var(--text-secondary);
+  --color-text-muted: #64748B;
+  --color-border: var(--border-subtle);
+  --color-border-subtle: var(--brand-mint-light);
+  --color-brand-primary: var(--brand-primary);
+  --color-brand-secondary: var(--brand-secondary);
+  --color-action-primary: var(--brand-primary);
+  --color-action-primary-hover: #128C74;
+  --color-action-secondary: var(--brand-secondary);
+  --color-action-secondary-hover: var(--brand-primary);
+  --color-focus: var(--brand-primary);
 
   /* SEMANTIC STATUS */
   --color-success: #16A34A;
   --color-warning: #F59E0B;
   --color-error: #EF4444;
-  --color-info: var(--color-brand-500);
+  --color-info: var(--brand-primary);
 
   /* LEGACY COMPATIBILITY MAPPINGS */
-  --color-rust: var(--color-brand-50);
-  --color-rust-dark: var(--color-brand-800);
-  --color-rust-deep: var(--color-brand-900);
-  --color-rust-subtle: var(--color-brand-100);
+  --color-rust: #F5F6F4;
+  --color-rust-dark: #273F5F;
+  --color-rust-deep: #1A2E44;
+  --color-rust-subtle: #E8F2EF;
   
-  --color-cream: var(--color-neutral-0);
-  --color-cream-card: var(--color-neutral-0);
-  --color-cream-border: var(--color-neutral-200);
+  --color-cream: #FFFFFF;
+  --color-cream-card: #FFFFFF;
+  --color-cream-border: #E1E2DB;
   
-  --color-lime: var(--color-teal-500);
-  --color-lime-glow: rgba(8, 185, 195, 0.35);
-  --color-lime-dark: var(--color-teal-600);
+  --color-lime: #16AC8F;
+  --color-lime-glow: rgba(22, 172, 143, 0.35);
+  --color-lime-dark: #128C74;
 
-  --color-lavender: var(--color-brand-500);
-  --color-lavender-light: var(--color-brand-50);
-  --color-lavender-tag: var(--color-brand-100);
+  --color-lavender: #16AC8F;
+  --color-lavender-light: #F5F6F4;
+  --color-lavender-tag: #E8F2EF;
 
   --color-white: #FFFFFF;
-  --color-black: var(--color-neutral-800);
+  --color-black: #273F5F;
 
   /* Typography */
   --font-main: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
@@ -128,92 +128,15 @@
   --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
 }
 
-/* ==========================================================================
-   DESKTOP THEME OVERRIDES (LOCKED MOBILE REMAINS ON BASELINE TOKENS)
-   ========================================================================== */
-@media (min-width: 769px) {
-  :root {
-    --color-background: var(--surface-secondary);
-    --color-background-subtle: var(--surface-secondary);
-    --color-surface: var(--surface-primary);
-    --color-surface-accent: #E8F2EF;
-    --color-surface-blue: #D4E5E1;
-    --color-text-primary: var(--text-primary);
-    --color-text-secondary: var(--text-secondary);
-    --color-text-muted: #64748B;
-    --color-border: var(--border-subtle);
-    --color-border-subtle: var(--brand-mint-light);
-    --color-brand-primary: var(--brand-primary);
-    --color-brand-secondary: var(--brand-secondary);
-    --color-action-primary: var(--brand-primary);
-    --color-action-primary-hover: #128C74;
-    --color-action-secondary: var(--brand-secondary);
-    --color-action-secondary-hover: var(--brand-primary);
-    --color-focus: var(--brand-primary);
-
-    --color-brand-50: #F5F6F4;
-    --color-brand-100: #E8F2EF;
-    --color-brand-200: #D4E5E1;
-    --color-brand-300: #BACECA;
-    --color-brand-400: #88BAB1;
-    --color-brand-500: #16AC8F;
-    --color-brand-600: #128C74;
-    --color-brand-700: #0E6C5A;
-    --color-brand-800: #273F5F;
-    --color-brand-900: #1A2E44;
-
-    --color-teal-50: #E8F2EF;
-    --color-teal-100: #D4E5E1;
-    --color-teal-200: #BACECA;
-    --color-teal-300: #88BAB1;
-    --color-teal-400: #49AF9B;
-    --color-teal-500: #16AC8F;
-    --color-teal-600: #128C74;
-    --color-teal-700: #0E6C5A;
-    --color-teal-800: #273F5F;
-    --color-teal-900: #1A2E44;
-
-    --color-neutral-0: #FFFFFF;
-    --color-neutral-50: #F5F6F4;
-    --color-neutral-100: #F0F4F2;
-    --color-neutral-200: #E1E2DB;
-    --color-neutral-300: #D0D4CE;
-    --color-neutral-600: #4A6375;
-    --color-neutral-700: #354E62;
-    --color-neutral-800: #273F5F;
-    --color-neutral-900: #1A2B40;
-
-    --color-rust: #F5F6F4;
-    --color-rust-dark: #273F5F;
-    --color-rust-deep: #1A2E44;
-    --color-rust-subtle: #E8F2EF;
-    
-    --color-cream: #FFFFFF;
-    --color-cream-card: #FFFFFF;
-    --color-cream-border: #E1E2DB;
-    
-    --color-lime: #16AC8F;
-    --color-lime-glow: rgba(22, 172, 143, 0.35);
-    --color-lime-dark: #128C74;
-
-    --color-lavender: #16AC8F;
-    --color-lavender-light: #F5F6F4;
-    --color-lavender-tag: #E8F2EF;
-
-    --color-white: #FFFFFF;
-    --color-black: #273F5F;
-  }
-
-  ::-webkit-scrollbar-thumb {
-    background: #BACECA;
-  }
-  ::-webkit-scrollbar-thumb:hover {
-    background: #16AC8F;
-  }
-  ::selection {
-    background: #BACECA;
-    color: #273F5F;
-  }
+::-webkit-scrollbar-thumb {
+  background: #BACECA;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #16AC8F;
+}
+::selection {
+  background: #BACECA;
+  color: #273F5F;
 }
 
 *, *::before, *::after {

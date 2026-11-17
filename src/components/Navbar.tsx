@@ -236,10 +236,10 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenBooking, onOpenAdmin }) =>
                   width: '38px',
                   height: '38px',
                   borderRadius: '50%',
-                  backgroundColor: 'var(--color-teal-500)',
+                  backgroundColor: '#16AC8F',
                   border: 'none',
                   color: '#FFFFFF',
-                  boxShadow: '0 4px 12px rgba(1, 158, 162, 0.35)',
+                  boxShadow: '0 4px 12px rgba(22, 172, 143, 0.35)',
                   textDecoration: 'none',
                 }}
               >
@@ -353,7 +353,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenBooking, onOpenAdmin }) =>
                   {link.name}
                 </a>
               ))}
-              <div style={{ width: '60px', height: '2px', backgroundColor: 'var(--color-teal-500)', margin: '0.5rem 0' }} />
+              <div style={{ width: '60px', height: '2px', backgroundColor: '#16AC8F', margin: '0.5rem 0' }} />
               <div style={{ display: 'flex', flexDirection: 'column', gap: '0.85rem', width: '100%', maxWidth: '290px' }}>
                 <button
                   onClick={() => {
@@ -361,7 +361,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenBooking, onOpenAdmin }) =>
                     onOpenBooking();
                   }}
                   style={{
-                    backgroundColor: 'var(--color-brand-500)',
+                    backgroundColor: '#16AC8F',
                     color: '#FFFFFF',
                     padding: '0.85rem 2rem',
                     borderRadius: 'var(--radius-pill)',
@@ -369,7 +369,8 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenBooking, onOpenAdmin }) =>
                     fontSize: '1rem',
                     width: '100%',
                     cursor: 'pointer',
-                    boxShadow: '0 4px 14px rgba(31, 95, 212, 0.35)',
+                    boxShadow: '0 4px 14px rgba(22, 172, 143, 0.35)',
+                    border: 'none',
                   }}
                 >
                   Book Appointment
@@ -381,9 +382,9 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenBooking, onOpenAdmin }) =>
                     alignItems: 'center',
                     justifyContent: 'center',
                     gap: '0.5rem',
-                    backgroundColor: 'var(--color-teal-50)',
-                    border: '1px solid var(--color-teal-300)',
-                    color: 'var(--color-teal-700)',
+                    backgroundColor: '#E8F2EF',
+                    border: '1px solid #BACECA',
+                    color: '#273F5F',
                     padding: '0.75rem 1.5rem',
                     borderRadius: 'var(--radius-pill)',
                     fontWeight: 700,
@@ -391,7 +392,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenBooking, onOpenAdmin }) =>
                     textDecoration: 'none',
                   }}
                 >
-                  <Phone size={16} />
+                  <Phone size={16} color="#16AC8F" />
                   <span>Call: 094959 64737</span>
                 </a>
                 <a

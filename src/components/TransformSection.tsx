@@ -10,7 +10,7 @@ export const TransformSection: React.FC<TransformSectionProps> = ({ onOpenBookin
     <section
       id="about"
       style={{
-        backgroundColor: '#0038A2',
+        backgroundColor: 'var(--surface-secondary, #F5F6F4)',
         paddingTop: 'clamp(5rem, 9vw, 9rem)',
         paddingBottom: 'clamp(5rem, 9vw, 9rem)',
         position: 'relative',
@@ -240,48 +240,46 @@ export const TransformSection: React.FC<TransformSectionProps> = ({ onOpenBookin
       </div>
 
       <style>{`
-        @media (min-width: 769px) {
-          #about {
-            background-color: var(--surface-secondary, #F5F6F4) !important;
-          }
-          .transform-title {
-            color: #273F5F !important;
-          }
-          .transform-starburst {
-            color: #16AC8F !important;
-          }
-          .transform-highlight {
-            color: #16AC8F !important;
-          }
-          .transform-desc {
-            color: #4A6375 !important;
-          }
-          .transform-location {
-            color: #273F5F !important;
-          }
-          .transform-location-icon {
-            color: #16AC8F !important;
-          }
-          .transform-separator {
-            background-color: #E1E2DB !important;
-          }
-          .transform-call-label {
-            color: #4A6375 !important;
-          }
-          .transform-call-label:hover {
-            color: #16AC8F !important;
-          }
-          .transform-hours-pill {
-            background-color: #E8F2EF !important;
-            border-color: #BACECA !important;
-            color: #273F5F !important;
-          }
-          .transform-phone-link {
-            color: #273F5F !important;
-          }
-          .transform-phone-link:hover {
-            color: #16AC8F !important;
-          }
+        #about {
+          background-color: var(--surface-secondary, #F5F6F4) !important;
+        }
+        .transform-title {
+          color: #273F5F !important;
+        }
+        .transform-starburst {
+          color: #16AC8F !important;
+        }
+        .transform-highlight {
+          color: #16AC8F !important;
+        }
+        .transform-desc {
+          color: #4A6375 !important;
+        }
+        .transform-location {
+          color: #273F5F !important;
+        }
+        .transform-location-icon {
+          color: #16AC8F !important;
+        }
+        .transform-separator {
+          background-color: #E1E2DB !important;
+        }
+        .transform-call-label {
+          color: #4A6375 !important;
+        }
+        .transform-call-label:hover {
+          color: #16AC8F !important;
+        }
+        .transform-hours-pill {
+          background-color: #E8F2EF !important;
+          border-color: #BACECA !important;
+          color: #273F5F !important;
+        }
+        .transform-phone-link {
+          color: #273F5F !important;
+        }
+        .transform-phone-link:hover {
+          color: #16AC8F !important;
         }
 
         @media (max-width: 860px) {

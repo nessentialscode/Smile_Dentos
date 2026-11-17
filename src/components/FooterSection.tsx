@@ -12,7 +12,7 @@ export const FooterSection: React.FC<FooterSectionProps> = ({ onOpenBooking }) =
     <footer
       id="footer"
       style={{
-        backgroundColor: '#0038A2',
+        backgroundColor: 'var(--brand-navy, #273F5F)',
         color: '#FFFFFF',
         paddingTop: 'clamp(5rem, 8vw, 8rem)',
         paddingBottom: '2.5rem',
@@ -407,18 +407,16 @@ export const FooterSection: React.FC<FooterSectionProps> = ({ onOpenBooking }) =
       </div>
 
       <style>{`
-        @media (min-width: 769px) {
-          #footer {
-            background-color: var(--brand-navy, #273F5F) !important;
-          }
-          .footer-cta-btn {
-            background-color: #16AC8F !important;
-            box-shadow: 0 10px 30px rgba(22, 172, 143, 0.35) !important;
-          }
-          .footer-cta-btn:hover {
-            background-color: #128C74 !important;
-            box-shadow: 0 16px 40px rgba(22, 172, 143, 0.45) !important;
-          }
+        #footer {
+          background-color: var(--brand-navy, #273F5F) !important;
+        }
+        .footer-cta-btn {
+          background-color: #16AC8F !important;
+          box-shadow: 0 10px 30px rgba(22, 172, 143, 0.35) !important;
+        }
+        .footer-cta-btn:hover {
+          background-color: #128C74 !important;
+          box-shadow: 0 16px 40px rgba(22, 172, 143, 0.45) !important;
         }
 
         @media (max-width: 900px) {

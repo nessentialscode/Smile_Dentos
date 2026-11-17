@@ -527,7 +527,7 @@ export const SpecialistsSection: React.FC<SpecialistsSectionProps> = ({
       <section
         id="specialists"
         style={{
-          backgroundColor: '#6DDBDE',
+          backgroundColor: 'var(--brand-mint-light, #BACECA)',
           borderBottomLeftRadius: 'clamp(32px, 4vw, 48px)',
           borderBottomRightRadius: 'clamp(32px, 4vw, 48px)',
           position: 'relative',
@@ -2276,43 +2276,41 @@ export const SpecialistsSection: React.FC<SpecialistsSectionProps> = ({
       </div>
 
       <style>{`
-        @media (min-width: 769px) {
-          #specialists {
-            background-color: var(--brand-mint-light, #BACECA) !important;
-          }
-          .specialists-wave-path {
-            fill: var(--services-bg-mint, #E8F2EF) !important;
-          }
-          .specialists-see-all-btn {
-            background-color: #16AC8F !important;
-            border-color: #16AC8F !important;
-            outline-color: rgba(22, 172, 143, 0.4) !important;
-            color: #FFFFFF !important;
-            box-shadow: 0 6px 20px rgba(22, 172, 143, 0.35) !important;
-          }
-          .specialists-see-all-btn:hover {
-            background-color: #128C74 !important;
-            border-color: #128C74 !important;
-            box-shadow: 0 10px 24px rgba(22, 172, 143, 0.5) !important;
-          }
-          .specialists-eyebrow-text {
-            color: #16AC8F !important;
-          }
-          .specialists-eyebrow-line {
-            background-color: #16AC8F !important;
-          }
-          .specialists-main-title {
-            color: #273F5F !important;
-          }
-          .specialist-nav-btn {
-            border-color: #16AC8F !important;
-            color: #16AC8F !important;
-            background-color: #FFFFFF !important;
-          }
-          .specialist-nav-btn:hover {
-            background-color: #16AC8F !important;
-            color: #FFFFFF !important;
-          }
+        #specialists {
+          background-color: var(--brand-mint-light, #BACECA) !important;
+        }
+        .specialists-wave-path {
+          fill: var(--services-bg-mint, #E8F2EF) !important;
+        }
+        .specialists-see-all-btn {
+          background-color: #16AC8F !important;
+          border-color: #16AC8F !important;
+          outline-color: rgba(22, 172, 143, 0.4) !important;
+          color: #FFFFFF !important;
+          box-shadow: 0 6px 20px rgba(22, 172, 143, 0.35) !important;
+        }
+        .specialists-see-all-btn:hover {
+          background-color: #128C74 !important;
+          border-color: #128C74 !important;
+          box-shadow: 0 10px 24px rgba(22, 172, 143, 0.5) !important;
+        }
+        .specialists-eyebrow-text {
+          color: #16AC8F !important;
+        }
+        .specialists-eyebrow-line {
+          background-color: #16AC8F !important;
+        }
+        .specialists-main-title {
+          color: #273F5F !important;
+        }
+        .specialist-nav-btn {
+          border-color: #16AC8F !important;
+          color: #16AC8F !important;
+          background-color: #FFFFFF !important;
+        }
+        .specialist-nav-btn:hover {
+          background-color: #16AC8F !important;
+          color: #FFFFFF !important;
         }
       `}</style>
     </div>

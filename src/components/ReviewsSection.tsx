@@ -120,8 +120,8 @@ export const ReviewsSection: React.FC = () => {
     <section
       id="reviews"
       style={{
-        backgroundColor: '#F0F2F6',
-        color: 'var(--color-neutral-900)',
+        backgroundColor: 'var(--surface-secondary, #F5F6F4)',
+        color: '#273F5F',
         paddingTop: 'clamp(4.5rem, 7vw, 8rem)',
         paddingBottom: 'clamp(4.5rem, 7vw, 8rem)',
         position: 'relative',
@@ -429,58 +429,56 @@ export const ReviewsSection: React.FC = () => {
       </div>
 
       <style>{`
-        @media (min-width: 769px) {
-          #reviews {
-            background-color: var(--surface-secondary, #F5F6F4) !important;
-          }
-          .reviews-main-title {
-            color: #273F5F !important;
-          }
-          .reviews-sub-desc {
-            color: #4A6375 !important;
-          }
-          .reviews-rate-link {
-            border-color: #16AC8F !important;
-            color: #16AC8F !important;
-          }
-          .reviews-rate-link:hover {
-            background-color: #16AC8F !important;
-            color: #FFFFFF !important;
-          }
-          .reviews-nav-btn {
-            border-color: #16AC8F !important;
-            color: #16AC8F !important;
-          }
-          .reviews-nav-btn:hover {
-            background-color: #16AC8F !important;
-            color: #FFFFFF !important;
-          }
-          .review-card-item {
-            background-color: #FFFFFF !important;
-            border: 1px solid #E1E2DB !important;
-            box-shadow: 0 10px 30px rgba(39, 63, 95, 0.06) !important;
-          }
-          .review-card-item:hover {
-            box-shadow: 0 16px 40px rgba(22, 172, 143, 0.12) !important;
-            border-color: #BACECA !important;
-          }
-          .review-category-pill {
-            background-color: #E8F2EF !important;
-            border-color: #BACECA !important;
-            color: #273F5F !important;
-          }
-          .review-lead-quote {
-            color: #273F5F !important;
-          }
-          .review-body-text {
-            color: #4A6375 !important;
-          }
-          .review-bottom-row {
-            border-top-color: #E1E2DB !important;
-          }
-          .review-author-name {
-            color: #273F5F !important;
-          }
+        #reviews {
+          background-color: var(--surface-secondary, #F5F6F4) !important;
+        }
+        .reviews-main-title {
+          color: #273F5F !important;
+        }
+        .reviews-sub-desc {
+          color: #4A6375 !important;
+        }
+        .reviews-rate-link {
+          border-color: #16AC8F !important;
+          color: #16AC8F !important;
+        }
+        .reviews-rate-link:hover {
+          background-color: #16AC8F !important;
+          color: #FFFFFF !important;
+        }
+        .reviews-nav-btn {
+          border-color: #16AC8F !important;
+          color: #16AC8F !important;
+        }
+        .reviews-nav-btn:hover {
+          background-color: #16AC8F !important;
+          color: #FFFFFF !important;
+        }
+        .review-card-item {
+          background-color: #FFFFFF !important;
+          border: 1px solid #E1E2DB !important;
+          box-shadow: 0 10px 30px rgba(39, 63, 95, 0.06) !important;
+        }
+        .review-card-item:hover {
+          box-shadow: 0 16px 40px rgba(22, 172, 143, 0.12) !important;
+          border-color: #BACECA !important;
+        }
+        .review-category-pill {
+          background-color: #E8F2EF !important;
+          border-color: #BACECA !important;
+          color: #273F5F !important;
+        }
+        .review-lead-quote {
+          color: #273F5F !important;
+        }
+        .review-body-text {
+          color: #4A6375 !important;
+        }
+        .review-bottom-row {
+          border-top-color: #E1E2DB !important;
+        }
+        .review-author-name {
+          color: #273F5F !important;
         }
 
         @media (max-width: 640px) {

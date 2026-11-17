@@ -545,8 +545,8 @@ export const ServicesSection: React.FC<ServicesSectionProps> = ({
     <section
       id="services"
       style={{
-        backgroundColor: '#F8FAFC',
-        color: '#0A2540',
+        backgroundColor: 'var(--services-bg-mint, #E8F2EF)',
+        color: '#273F5F',
         paddingTop: 'clamp(4rem, 6.5vw, 6.5rem)',
         paddingBottom: 'clamp(2rem, 3.5vw, 3.5rem)',
         position: 'relative',
@@ -675,305 +675,267 @@ export const ServicesSection: React.FC<ServicesSectionProps> = ({
       {/* Responsive Styles & Theme Application */}
       <style>{`
         /* ============================================================
-           MOBILE DEFAULT PRESENTATION (STRICTLY PRESERVED & LOCKED)
+           SERVICES SECTION (MATCHING REFERENCE IMAGES 2 & 3 ON ALL VIEWPORTS)
+           Single Full-Bleed Photographic Card with Layered Elements
            ============================================================ */
-        .service-card-item {
-          background-color: #FFFFFF;
-          border-radius: 22px;
-          border: 1px solid rgba(226, 232, 240, 0.85);
-          padding: 12px 12px 18px 12px;
-          display: flex;
-          flex-direction: column;
-          box-shadow: 0 4px 20px -3px rgba(15, 23, 42, 0.04), 0 2px 6px -1px rgba(15, 23, 42, 0.02);
-          cursor: pointer;
-          position: relative;
-          transition: transform 0.28s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.28s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.25s ease;
+        #services {
+          background-color: var(--services-bg-mint, #E8F2EF) !important;
         }
-        .service-card-item:hover {
-          transform: translateY(-6px);
-          box-shadow: 0 20px 35px -8px rgba(8, 185, 195, 0.14), 0 8px 16px -4px rgba(15, 23, 42, 0.06);
-          border-color: rgba(8, 185, 195, 0.35);
+        .services-subheading-line {
+          background-color: #16AC8F !important;
+        }
+        .services-subheading-text {
+          color: #16AC8F !important;
+        }
+        .services-main-title {
+          color: #273F5F !important;
+        }
+        .services-title-highlight {
+          color: #16AC8F !important;
+        }
+        .services-main-desc {
+          color: #4A6375 !important;
         }
 
-        /* Hide desktop layered card elements on mobile */
-        .service-card-desktop-bg,
-        .service-card-desktop-overlay,
-        .service-card-desktop-content {
+        /* Hide legacy mobile wrapper everywhere */
+        .service-card-mobile-wrap {
           display: none !important;
         }
 
-        /* Show mobile container on mobile */
-        .service-card-mobile-wrap {
+        /* Full-Bleed Photographic Card Container */
+        .service-card-item {
+          position: relative !important;
+          overflow: hidden !important;
+          border-radius: 28px !important;
+          padding: 0 !important;
+          height: 485px !important;
+          min-height: 485px !important;
+          background-color: #07182B !important;
+          border: 1px solid rgba(255, 255, 255, 0.08) !important;
+          box-shadow: 0 16px 36px -6px rgba(5, 11, 25, 0.45), 0 4px 12px rgba(0, 0, 0, 0.2) !important;
+          display: flex !important;
+          flex-direction: column !important;
+          transition: transform 0.32s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.32s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.25s ease !important;
+        }
+
+        .service-card-item:hover {
+          transform: translateY(-7px) !important;
+          border-color: rgba(223, 255, 36, 0.45) !important;
+          box-shadow: 0 24px 48px -8px rgba(5, 11, 25, 0.65), 0 0 24px rgba(223, 255, 36, 0.18) !important;
+        }
+
+        /* Full-Card Dental Photograph */
+        .service-card-desktop-bg {
+          display: block !important;
+          position: absolute !important;
+          inset: 0 !important;
+          width: 100% !important;
+          height: 100% !important;
+          object-fit: cover !important;
+          z-index: 0 !important;
+          transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1) !important;
+        }
+
+        .service-card-item:hover .service-card-desktop-bg {
+          transform: scale(1.05) !important;
+        }
+
+        /* Dark Navy Photographic Overlay with Bottom Gradient */
+        .service-card-desktop-overlay {
+          display: block !important;
+          position: absolute !important;
+          inset: 0 !important;
+          z-index: 1 !important;
+          background: linear-gradient(
+            180deg,
+            rgba(7, 24, 43, 0.35) 0%,
+            rgba(7, 24, 43, 0.48) 32%,
+            rgba(10, 41, 64, 0.82) 58%,
+            rgba(5, 11, 25, 0.96) 82%,
+            #050B19 100%
+          ) !important;
+          pointer-events: none !important;
+        }
+
+        /* Layered Content Container */
+        .service-card-desktop-content {
+          display: flex !important;
+          flex-direction: column !important;
+          justify-content: space-between !important;
+          height: 100% !important;
+          width: 100% !important;
+          position: relative !important;
+          z-index: 2 !important;
+          padding: 24px 22px 22px 22px !important;
+          box-sizing: border-box !important;
+        }
+
+        /* Top Badges Row */
+        .service-card-desktop-top-row {
+          display: flex !important;
+          align-items: center !important;
+          justify-content: space-between !important;
+          gap: 10px !important;
+          width: 100% !important;
+        }
+
+        /* Top-Left # PROCEDURE PHOTO Badge */
+        .service-card-proc-pill {
+          display: inline-flex !important;
+          align-items: center !important;
+          gap: 5px !important;
+          background: rgba(7, 24, 43, 0.68) !important;
+          backdrop-filter: blur(10px) !important;
+          -webkit-backdrop-filter: blur(10px) !important;
+          border: 1px solid rgba(255, 255, 255, 0.16) !important;
+          border-radius: 9999px !important;
+          padding: 5px 12px !important;
+          box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25) !important;
+        }
+        .service-card-proc-hash {
+          color: #DFFF24 !important;
+          font-size: 0.78rem !important;
+          font-weight: 800 !important;
+          line-height: 1 !important;
+        }
+        .service-card-proc-text {
+          color: #FFFFFF !important;
+          font-size: 0.66rem !important;
+          font-weight: 700 !important;
+          letter-spacing: 0.08em !important;
+          text-transform: uppercase !important;
+          line-height: 1 !important;
+        }
+
+        /* Top-Right Category Pill Badge */
+        .service-card-cat-pill {
+          display: inline-flex !important;
+          align-items: center !important;
+          background: rgba(255, 255, 255, 0.14) !important;
+          backdrop-filter: blur(10px) !important;
+          -webkit-backdrop-filter: blur(10px) !important;
+          border: 1px solid rgba(255, 255, 255, 0.22) !important;
+          border-radius: 9999px !important;
+          padding: 5px 13px !important;
+          font-size: 0.66rem !important;
+          font-weight: 700 !important;
+          letter-spacing: 0.08em !important;
+          text-transform: uppercase !important;
+          color: #FFFFFF !important;
+          box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2) !important;
+        }
+
+        /* Bottom Area */
+        .service-card-desktop-bottom-area {
           display: flex !important;
           flex-direction: column !important;
           width: 100% !important;
-          height: 100% !important;
+          margin-top: auto !important;
         }
 
-        /* ============================================================
-           DESKTOP SPECIFIC PRESENTATION (MATCHING REFERENCE IMAGES 2 & 3)
-           Single Full-Bleed Photographic Card with Layered Elements
-           ============================================================ */
-        @media (min-width: 769px) {
-          #services {
-            background-color: var(--services-bg-mint, #E8F2EF) !important;
-          }
-          .services-subheading-line {
-            background-color: #16AC8F !important;
-          }
-          .services-subheading-text {
-            color: #16AC8F !important;
-          }
-          .services-main-title {
-            color: #273F5F !important;
-          }
-          .services-title-highlight {
-            color: #16AC8F !important;
-          }
-          .services-main-desc {
-            color: #4A6375 !important;
-          }
+        /* 1. Small Uppercase Lime Category Label */
+        .service-card-desktop-cat-label {
+          color: #DFFF24 !important;
+          font-size: 0.72rem !important;
+          font-weight: 700 !important;
+          letter-spacing: 0.09em !important;
+          text-transform: uppercase !important;
+          margin-bottom: 6px !important;
+          display: block !important;
+        }
 
-          /* Hide mobile container on desktop */
-          .service-card-mobile-wrap {
-            display: none !important;
-          }
+        /* 2. Service Title in White */
+        .service-card-desktop-title {
+          color: #FFFFFF !important;
+          font-family: var(--font-display, inherit) !important;
+          font-size: 1.48rem !important;
+          font-weight: 700 !important;
+          line-height: 1.22 !important;
+          letter-spacing: -0.018em !important;
+          margin: 0 0 8px 0 !important;
+        }
 
-          /* Full-Bleed Photographic Card Container */
-          .service-card-item {
-            position: relative !important;
-            overflow: hidden !important;
-            border-radius: 28px !important;
-            padding: 0 !important;
-            height: 485px !important;
-            min-height: 485px !important;
-            background-color: #07182B !important;
-            border: 1px solid rgba(255, 255, 255, 0.08) !important;
-            box-shadow: 0 16px 36px -6px rgba(5, 11, 25, 0.45), 0 4px 12px rgba(0, 0, 0, 0.2) !important;
-            display: flex !important;
-            flex-direction: column !important;
-            transition: transform 0.32s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.32s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.25s ease !important;
-          }
+        /* 3. Service Description in Soft White / Light Grey */
+        .service-card-desktop-desc {
+          color: rgba(255, 255, 255, 0.76) !important;
+          font-family: var(--font-main, sans-serif) !important;
+          font-size: 0.86rem !important;
+          line-height: 1.5 !important;
+          margin: 0 0 16px 0 !important;
+          display: -webkit-box !important;
+          -webkit-line-clamp: 3 !important;
+          -webkit-box-orient: vertical !important;
+          overflow: hidden !important;
+          min-height: 3.8em !important;
+        }
 
-          .service-card-item:hover {
-            transform: translateY(-7px) !important;
-            border-color: rgba(223, 255, 36, 0.45) !important;
-            box-shadow: 0 24px 48px -8px rgba(5, 11, 25, 0.65), 0 0 24px rgba(223, 255, 36, 0.18) !important;
-          }
+        /* 4 & 5. Bottom Row */
+        .service-card-desktop-action-row {
+          display: flex !important;
+          align-items: center !important;
+          justify-content: space-between !important;
+          gap: 12px !important;
+          padding-top: 12px !important;
+          border-top: 1px solid rgba(255, 255, 255, 0.09) !important;
+        }
 
-          /* Full-Card Dental Photograph */
-          .service-card-desktop-bg {
-            display: block !important;
-            position: absolute !important;
-            inset: 0 !important;
-            width: 100% !important;
-            height: 100% !important;
-            object-fit: cover !important;
-            z-index: 0 !important;
-            transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1) !important;
-          }
+        /* Bottom Supporting Info: Small Lime Dot + Supporting Text */
+        .service-card-desktop-support {
+          display: inline-flex !important;
+          align-items: center !important;
+          gap: 7px !important;
+          min-width: 0 !important;
+        }
+        .service-card-lime-dot {
+          width: 6px !important;
+          height: 6px !important;
+          border-radius: 50% !important;
+          background-color: #DFFF24 !important;
+          display: inline-block !important;
+          flex-shrink: 0 !important;
+          box-shadow: 0 0 6px rgba(223, 255, 36, 0.7) !important;
+        }
+        .service-card-support-text {
+          color: rgba(255, 255, 255, 0.8) !important;
+          font-size: 0.78rem !important;
+          font-weight: 500 !important;
+          letter-spacing: 0.01em !important;
+          white-space: nowrap !important;
+          overflow: hidden !important;
+          text-overflow: ellipsis !important;
+        }
 
-          .service-card-item:hover .service-card-desktop-bg {
-            transform: scale(1.05) !important;
-          }
-
-          /* Dark Navy Photographic Overlay with Bottom Gradient */
-          .service-card-desktop-overlay {
-            display: block !important;
-            position: absolute !important;
-            inset: 0 !important;
-            z-index: 1 !important;
-            background: linear-gradient(
-              180deg,
-              rgba(7, 24, 43, 0.35) 0%,
-              rgba(7, 24, 43, 0.48) 32%,
-              rgba(10, 41, 64, 0.82) 58%,
-              rgba(5, 11, 25, 0.96) 82%,
-              #050B19 100%
-            ) !important;
-            pointer-events: none !important;
-          }
-
-          /* Layered Content Container */
-          .service-card-desktop-content {
-            display: flex !important;
-            flex-direction: column !important;
-            justify-content: space-between !important;
-            height: 100% !important;
-            width: 100% !important;
-            position: relative !important;
-            z-index: 2 !important;
-            padding: 24px 22px 22px 22px !important;
-            box-sizing: border-box !important;
-          }
-
-          /* Top Badges Row */
-          .service-card-desktop-top-row {
-            display: flex !important;
-            align-items: center !important;
-            justify-content: space-between !important;
-            gap: 10px !important;
-            width: 100% !important;
-          }
-
-          /* Top-Left # PROCEDURE PHOTO Badge */
-          .service-card-proc-pill {
-            display: inline-flex !important;
-            align-items: center !important;
-            gap: 5px !important;
-            background: rgba(7, 24, 43, 0.68) !important;
-            backdrop-filter: blur(10px) !important;
-            -webkit-backdrop-filter: blur(10px) !important;
-            border: 1px solid rgba(255, 255, 255, 0.16) !important;
-            border-radius: 9999px !important;
-            padding: 5px 12px !important;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25) !important;
-          }
-          .service-card-proc-hash {
-            color: #DFFF24 !important;
-            font-size: 0.78rem !important;
-            font-weight: 800 !important;
-            line-height: 1 !important;
-          }
-          .service-card-proc-text {
-            color: #FFFFFF !important;
-            font-size: 0.66rem !important;
-            font-weight: 700 !important;
-            letter-spacing: 0.08em !important;
-            text-transform: uppercase !important;
-            line-height: 1 !important;
-          }
-
-          /* Top-Right Category Pill Badge */
-          .service-card-cat-pill {
-            display: inline-flex !important;
-            align-items: center !important;
-            background: rgba(255, 255, 255, 0.14) !important;
-            backdrop-filter: blur(10px) !important;
-            -webkit-backdrop-filter: blur(10px) !important;
-            border: 1px solid rgba(255, 255, 255, 0.22) !important;
-            border-radius: 9999px !important;
-            padding: 5px 13px !important;
-            font-size: 0.66rem !important;
-            font-weight: 700 !important;
-            letter-spacing: 0.08em !important;
-            text-transform: uppercase !important;
-            color: #FFFFFF !important;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2) !important;
-          }
-
-          /* Bottom Area */
-          .service-card-desktop-bottom-area {
-            display: flex !important;
-            flex-direction: column !important;
-            width: 100% !important;
-            margin-top: auto !important;
-          }
-
-          /* 1. Small Uppercase Lime Category Label */
-          .service-card-desktop-cat-label {
-            color: #DFFF24 !important;
-            font-size: 0.72rem !important;
-            font-weight: 700 !important;
-            letter-spacing: 0.09em !important;
-            text-transform: uppercase !important;
-            margin-bottom: 6px !important;
-            display: block !important;
-          }
-
-          /* 2. Service Title in White */
-          .service-card-desktop-title {
-            color: #FFFFFF !important;
-            font-family: var(--font-display, inherit) !important;
-            font-size: 1.48rem !important;
-            font-weight: 700 !important;
-            line-height: 1.22 !important;
-            letter-spacing: -0.018em !important;
-            margin: 0 0 8px 0 !important;
-          }
-
-          /* 3. Service Description in Soft White / Light Grey */
-          .service-card-desktop-desc {
-            color: rgba(255, 255, 255, 0.76) !important;
-            font-family: var(--font-main, sans-serif) !important;
-            font-size: 0.86rem !important;
-            line-height: 1.5 !important;
-            margin: 0 0 16px 0 !important;
-            display: -webkit-box !important;
-            -webkit-line-clamp: 3 !important;
-            -webkit-box-orient: vertical !important;
-            overflow: hidden !important;
-            min-height: 3.8em !important;
-          }
-
-          /* 4 & 5. Bottom Row */
-          .service-card-desktop-action-row {
-            display: flex !important;
-            align-items: center !important;
-            justify-content: space-between !important;
-            gap: 12px !important;
-            padding-top: 12px !important;
-            border-top: 1px solid rgba(255, 255, 255, 0.09) !important;
-          }
-
-          /* Bottom Supporting Info: Small Lime Dot + Supporting Text */
-          .service-card-desktop-support {
-            display: inline-flex !important;
-            align-items: center !important;
-            gap: 7px !important;
-            min-width: 0 !important;
-          }
-          .service-card-lime-dot {
-            width: 6px !important;
-            height: 6px !important;
-            border-radius: 50% !important;
-            background-color: #DFFF24 !important;
-            display: inline-block !important;
-            flex-shrink: 0 !important;
-            box-shadow: 0 0 6px rgba(223, 255, 36, 0.7) !important;
-          }
-          .service-card-support-text {
-            color: rgba(255, 255, 255, 0.8) !important;
-            font-size: 0.78rem !important;
-            font-weight: 500 !important;
-            letter-spacing: 0.01em !important;
-            white-space: nowrap !important;
-            overflow: hidden !important;
-            text-overflow: ellipsis !important;
-          }
-
-          /* Bright Lime Pill-Shaped Action Button */
-          .service-card-book-btn {
-            display: inline-flex !important;
-            align-items: center !important;
-            gap: 6px !important;
-            background-color: #DFFF24 !important;
-            color: #07182B !important;
-            padding: 7px 16px !important;
-            border-radius: 9999px !important;
-            font-size: 0.8rem !important;
-            font-weight: 700 !important;
-            letter-spacing: -0.01em !important;
-            cursor: pointer !important;
-            white-space: nowrap !important;
-            flex-shrink: 0 !important;
-            transition: all 0.22s ease !important;
-            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2) !important;
-          }
-          .service-card-item:hover .service-card-book-btn {
-            background-color: #E8FF4A !important;
-            box-shadow: 0 0 16px rgba(223, 255, 36, 0.6) !important;
-            transform: scale(1.02) !important;
-          }
-          .service-card-arrow-icon {
-            font-size: 0.92rem !important;
-            line-height: 1 !important;
-            font-weight: 800 !important;
-            transition: transform 0.2s ease !important;
-          }
-          .service-card-item:hover .service-card-arrow-icon {
-            transform: translate(2px, -2px) !important;
-          }
+        /* Bright Lime Pill-Shaped Action Button */
+        .service-card-book-btn {
+          display: inline-flex !important;
+          align-items: center !important;
+          gap: 6px !important;
+          background-color: #DFFF24 !important;
+          color: #07182B !important;
+          padding: 7px 16px !important;
+          border-radius: 9999px !important;
+          font-size: 0.8rem !important;
+          font-weight: 700 !important;
+          letter-spacing: -0.01em !important;
+          cursor: pointer !important;
+          white-space: nowrap !important;
+          flex-shrink: 0 !important;
+          transition: all 0.22s ease !important;
+          box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2) !important;
+        }
+        .service-card-item:hover .service-card-book-btn {
+          background-color: #E8FF4A !important;
+          box-shadow: 0 0 16px rgba(223, 255, 36, 0.6) !important;
+          transform: scale(1.02) !important;
+        }
+        .service-card-arrow-icon {
+          font-size: 0.92rem !important;
+          line-height: 1 !important;
+          font-weight: 800 !important;
+          transition: transform 0.2s ease !important;
+        }
+        .service-card-item:hover .service-card-arrow-icon {
+          transform: translate(2px, -2px) !important;
         }
 
         @media (max-width: 1024px) {
@@ -984,6 +946,10 @@ export const ServicesSection: React.FC<ServicesSectionProps> = ({
         @media (max-width: 640px) {
           .services-grid {
             grid-template-columns: 1fr !important;
+          }
+          .service-card-item {
+            height: 460px !important;
+            min-height: 460px !important;
           }
         }
       `}</style>
