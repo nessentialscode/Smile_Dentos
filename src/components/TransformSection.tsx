@@ -73,32 +73,6 @@ export const TransformSection: React.FC<TransformSectionProps> = ({ onOpenBookin
             <br />
             <span>art </span>
             <span className="transform-highlight" style={{ color: 'var(--color-teal-300)' }}>Dental Care</span>
-            {/* Inline Horizontal Capsule Aligner Pill (Strictly matching Frame 04) */}
-            <span
-              style={{
-                display: 'inline-block',
-                verticalAlign: 'middle',
-                marginLeft: 'clamp(0.4rem, 1.2vw, 0.85rem)',
-                width: 'clamp(54px, 6.5vw, 84px)',
-                height: 'clamp(28px, 3.5vw, 44px)',
-                borderRadius: 'var(--radius-pill)',
-                overflow: 'hidden',
-                border: '2px solid rgba(255, 255, 255, 0.4)',
-                boxShadow: '0 4px 14px rgba(0, 0, 0, 0.25)',
-                transform: 'translateY(-2px)',
-              }}
-            >
-              <img
-                src="/images/aligner_pill.jpg"
-                alt="Clear aligner smile pill"
-                style={{
-                  width: '100%',
-                  height: '100%',
-                  objectFit: 'cover',
-                  objectPosition: 'center 40%',
-                }}
-              />
-            </span>
           </motion.h2>
         </div>
 

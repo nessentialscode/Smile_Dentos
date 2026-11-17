@@ -121,7 +121,7 @@ const initialServices: ServiceItem[] = [
     id: 'dental-implants',
     title: 'Dental Implants',
     category: 'RESTORATIVE SURGERY',
-    description: 'Our computer-guided implantology ensures sub-millimeter precision, minimal discomfort, and rapid healing for seamless single, multiple, or full-arch restorations.',
+    description: 'Permanent, natural-looking replacement for missing teeth that restores your bite and smile.',
     tags: 'Titanium • Permanent • Predictable',
     image: '/images/service_implants.png',
     imagePosition: 'center 30%',
@@ -131,7 +131,7 @@ const initialServices: ServiceItem[] = [
     id: 'root-canal-treatment',
     title: 'Root Canal Treatment',
     category: 'ENDODONTICS',
-    description: 'Utilizing rotary endodontic instruments and apex locators to eliminate infection painlessly, preserving your natural tooth structure.',
+    description: 'Gentle, painless treatment to relieve toothache and save your infected natural tooth.',
     tags: 'Painless • Safe • Tooth Saving',
     image: '/images/service_endodontics.png',
     imagePosition: 'center 35%',
@@ -141,7 +141,7 @@ const initialServices: ServiceItem[] = [
     id: 'braces-aligners',
     title: 'Braces & Aligners',
     category: 'ORTHODONTICS',
-    description: 'Custom 3D scanned treatment paths provide predictable tooth movement with nearly invisible aligners or precision ceramic brackets.',
+    description: 'Straighten crooked teeth and fix bite issues with clear aligners or modern braces.',
     tags: 'Modern • Comfortable • Predictable',
     image: '/images/service_orthodontics.png',
     imagePosition: 'center 40%',
@@ -151,7 +151,7 @@ const initialServices: ServiceItem[] = [
     id: 'teeth-whitening',
     title: 'Teeth Whitening',
     category: 'COSMETIC DENTISTRY',
-    description: 'Enamel-safe, pH-balanced professional whitening gel activated with cold LED light gives you an instantly radiant smile without tooth sensitivity.',
+    description: 'Safe, fast in-clinic whitening to remove deep stains and brighten your smile.',
     tags: 'Safe • Effective • Long-lasting',
     image: '/images/service_whitening.png',
     imagePosition: 'center 45%',
@@ -161,7 +161,7 @@ const initialServices: ServiceItem[] = [
     id: 'veneers-crowns',
     title: 'Veneers & Crowns',
     category: 'AESTHETIC RESTORATION',
-    description: 'Custom designed to match your facial profile, correcting gaps, chips, uneven edges, and deep discoloration with lifelike translucency.',
+    description: 'Custom porcelain covers that repair chipped, worn, or discolored teeth beautifully.',
     tags: 'Strong • Natural • Long-lasting',
     image: '/images/service_cosmetic_dentistry.png',
     imagePosition: 'center 45%',
@@ -171,7 +171,7 @@ const initialServices: ServiceItem[] = [
     id: 'preventive-family-care',
     title: 'Preventive & Family Care',
     category: 'GENERAL DENTISTRY',
-    description: 'A warm, gentle clinic environment designed to make visits relaxed and positive for children and adults alike.',
+    description: 'Routine checkups, cleanings, and protective care to keep the whole family cavity-free.',
     tags: 'Checkups • Cleanings • Protection',
     image: '/images/service_preventive_family.jpg',
     imagePosition: 'center 25%',
@@ -185,7 +185,7 @@ const additionalServices: ServiceItem[] = [
     id: 'periodontal-gum-surgery',
     title: 'Periodontal Therapy & Gum Surgery',
     category: 'PERIODONTICS',
-    description: 'Comprehensive clinical care for bleeding gums, bone loss, and periodontitis using minimally invasive ultrasonic cleaning, laser sterilization, and regenerative surgical grafting.',
+    description: 'Deep cleaning and gentle gum treatments to stop bleeding, swelling, and tooth loosening.',
     tags: 'Healthy Gums • Deep Care • Protection',
     image: '/images/backup_original/service_periodontal.jpg',
     imagePosition: 'center 35%',
@@ -195,7 +195,7 @@ const additionalServices: ServiceItem[] = [
     id: 'minor-maxillofacial-surgeries',
     title: 'Minor Maxillofacial Surgeries',
     category: 'ORAL SURGERY',
-    description: 'Painless in-office oral surgical procedures performed under profound local anesthesia in sterile operatory suites with fast-healing clinical protocols.',
+    description: 'Safe, comfortable minor oral procedures including wisdom tooth removal with quick recovery.',
     tags: 'Gentle • Precise • Quick Healing',
     image: '/images/service_surgery.png',
     imagePosition: 'center 35%',
@@ -205,7 +205,7 @@ const additionalServices: ServiceItem[] = [
     id: 'full-partial-dentures',
     title: 'Full Dentures & Partial Dentures',
     category: 'PROSTHODONTICS',
-    description: 'Custom-molded dental prosthetics engineered for exceptional comfort, secure retention, and natural aesthetics, restoring full chewing power and youthful contours.',
+    description: 'Comfortable, custom-fitted replacement teeth to restore confident chewing and speaking.',
     tags: 'Custom Fit • Natural • Comfortable',
     image: '/images/service_dentures.jpg',
     imagePosition: 'center 30%',
@@ -215,7 +215,7 @@ const additionalServices: ServiceItem[] = [
     id: 'tmj-treatment-splints',
     title: 'TMJ Treatment & Splints',
     category: 'TMJ & FACIAL PAIN',
-    description: 'Targeted temporomandibular joint evaluation and custom-fabricated splints designed to decompress jaw joints, eliminate morning soreness, and protect teeth from grinding wear.',
+    description: 'Custom night guards and therapy to relieve jaw pain, clicking, and nighttime teeth grinding.',
     tags: 'Pain Relief • Custom Guards • Balance',
     image: '/images/service_tmj.jpg',
     imagePosition: 'center 25%',
@@ -225,7 +225,7 @@ const additionalServices: ServiceItem[] = [
     id: 'pediatric-dental-care',
     title: 'Pediatric Dental Care',
     category: 'PEDIATRIC DENTISTRY',
-    description: 'Compassionate dental care tailored for young smiles in a cheerful, fear-free atmosphere, focusing on cavity prevention, comfortable treatment, and healthy smile development.',
+    description: "Friendly, fear-free dental visits designed to keep children's growing smiles healthy.",
     tags: 'Gentle • Fun • Fear-Free',
     image: '/images/service_pediatric.jpg',
     imagePosition: 'center 25%',
@@ -235,7 +235,7 @@ const additionalServices: ServiceItem[] = [
     id: 'mucosal-pathology-biopsy',
     title: 'Mucosal Pathology & Biopsy Procedures',
     category: 'ORAL PATHOLOGY',
-    description: 'Precise clinical evaluations and minor soft-tissue biopsies for persistent mouth sores, white or red mucosal patches, and oral lesions with dedicated histopathological diagnosis.',
+    description: 'Expert diagnosis and gentle testing for mouth sores, patches, and unusual oral spots.',
     tags: 'Accurate • Early Detection • Safe',
     image: '/images/service_mucosal_pathology.png',
     imagePosition: 'center 35%',
@@ -319,13 +319,8 @@ export const ServicesSection: React.FC<ServicesSectionProps> = ({
               {service.description}
             </p>
 
-            {/* 4 & 5. Bottom Row: Small Lime Indicator + Supporting Text & Bright Lime Pill CTA */}
+            {/* 4. Bottom Row: Bright Lime Pill Action Button */}
             <div className="service-card-desktop-action-row">
-              <div className="service-card-desktop-support">
-                <span className="service-card-lime-dot" />
-                <span className="service-card-support-text">State-of-the-art care</span>
-              </div>
-
               <div
                 className="service-card-book-btn"
                 role="button"
@@ -857,52 +852,26 @@ export const ServicesSection: React.FC<ServicesSectionProps> = ({
 
         /* 3. Service Description in Soft White / Light Grey */
         .service-card-desktop-desc {
-          color: rgba(255, 255, 255, 0.76) !important;
+          color: rgba(255, 255, 255, 0.78) !important;
           font-family: var(--font-main, sans-serif) !important;
-          font-size: 0.86rem !important;
-          line-height: 1.5 !important;
+          font-size: 0.88rem !important;
+          line-height: 1.48 !important;
           margin: 0 0 16px 0 !important;
           display: -webkit-box !important;
-          -webkit-line-clamp: 3 !important;
+          -webkit-line-clamp: 2 !important;
           -webkit-box-orient: vertical !important;
           overflow: hidden !important;
-          min-height: 3.8em !important;
+          min-height: 2.7em !important;
         }
 
-        /* 4 & 5. Bottom Row */
+        /* 4. Bottom Row Action Button */
         .service-card-desktop-action-row {
           display: flex !important;
           align-items: center !important;
-          justify-content: space-between !important;
+          justify-content: flex-end !important;
           gap: 12px !important;
           padding-top: 12px !important;
           border-top: 1px solid rgba(255, 255, 255, 0.09) !important;
-        }
-
-        /* Bottom Supporting Info: Small Lime Dot + Supporting Text */
-        .service-card-desktop-support {
-          display: inline-flex !important;
-          align-items: center !important;
-          gap: 7px !important;
-          min-width: 0 !important;
-        }
-        .service-card-lime-dot {
-          width: 6px !important;
-          height: 6px !important;
-          border-radius: 50% !important;
-          background-color: #DFFF24 !important;
-          display: inline-block !important;
-          flex-shrink: 0 !important;
-          box-shadow: 0 0 6px rgba(223, 255, 36, 0.7) !important;
-        }
-        .service-card-support-text {
-          color: rgba(255, 255, 255, 0.8) !important;
-          font-size: 0.78rem !important;
-          font-weight: 500 !important;
-          letter-spacing: 0.01em !important;
-          white-space: nowrap !important;
-          overflow: hidden !important;
-          text-overflow: ellipsis !important;
         }
 
         /* Bright Lime Pill-Shaped Action Button */

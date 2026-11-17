@@ -150,14 +150,14 @@ const initialBranchesData: BranchCardData[] = [
         caption: 'Modern clinical rooms in Madathil Complex, Mavandiyoor.',
       },
       {
-        url: '/images/service_endodontics.jpg',
-        title: 'Rotary Endodontics & Operatory',
-        caption: 'Painless single-visit microscopic root canal therapy.',
+        url: '/images/branch_edayoor_portrait_1.jpg',
+        title: 'ഇനി നമുക്ക് ചിരിക്കാം',
+        caption: 'വിദഗ്ദ്ധ പരിചരണവും ആത്മവിശ്വാസമുള്ള മനോഹര പുഞ്ചിരിയും.',
       },
       {
-        url: '/images/service_orthodontics.jpg',
-        title: 'Orthodontic & Invisalign Suite',
-        caption: 'Digital aligner scans and smile alignment treatments.',
+        url: '/images/branch_edayoor_portrait_2.jpg',
+        title: 'ഇനി മനോഹരമായ പല്ലുകൾ',
+        caption: '',
       },
       {
         url: '/images/service_surgery.jpg',
@@ -644,7 +644,7 @@ export const BranchesSection: React.FC<BranchesSectionProps> = ({ onOpenBooking 
                   title="Click to view clinic gallery"
                 >
                   <img
-                    src={`${branch.image}?v=4`}
+                    src={`${branch.image}?v=6`}
                     alt={branch.name}
                     style={{
                       width: '100%',
@@ -657,62 +657,65 @@ export const BranchesSection: React.FC<BranchesSectionProps> = ({ onOpenBooking 
                     onMouseLeave={(e) => (e.currentTarget.style.transform = 'scale(1)')}
                   />
 
-                  {/* Gradient vignette for text contrast */}
-                  <div
-                    style={{
-                      position: 'absolute',
-                      inset: 0,
-                      background: 'linear-gradient(to top, rgba(15, 23, 42, 0.72) 0%, rgba(15, 23, 42, 0.1) 50%, transparent 100%)',
-                      pointerEvents: 'none',
-                    }}
-                  />
+                  {/* Gradient vignette & clinic badge overlay (hidden for Edayoor specifically to keep image text-free) */}
+                  {branch.id !== 'edayoor' && (
+                    <>
+                      <div
+                        style={{
+                          position: 'absolute',
+                          inset: 0,
+                          background: 'linear-gradient(to top, rgba(15, 23, 42, 0.72) 0%, rgba(15, 23, 42, 0.1) 50%, transparent 100%)',
+                          pointerEvents: 'none',
+                        }}
+                      />
 
-                  {/* Clinic badge overlay */}
-                  <div
-                    style={{
-                      position: 'absolute',
-                      bottom: '10px',
-                      left: '12px',
-                      right: '12px',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'space-between',
-                      pointerEvents: 'none',
-                    }}
-                  >
-                    <span
-                      style={{
-                        backgroundColor: 'rgba(15, 23, 42, 0.65)',
-                        backdropFilter: 'blur(8px)',
-                        color: '#FFFFFF',
-                        fontSize: '0.72rem',
-                        fontWeight: 600,
-                        padding: '3px 8px',
-                        borderRadius: '6px',
-                        border: '1px solid rgba(255, 255, 255, 0.2)',
-                      }}
-                    >
-                      {branch.shortName} Dental Center
-                    </span>
+                      <div
+                        style={{
+                          position: 'absolute',
+                          bottom: '10px',
+                          left: '12px',
+                          right: '12px',
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'space-between',
+                          pointerEvents: 'none',
+                        }}
+                      >
+                        <span
+                          style={{
+                            backgroundColor: 'rgba(15, 23, 42, 0.65)',
+                            backdropFilter: 'blur(8px)',
+                            color: '#FFFFFF',
+                            fontSize: '0.72rem',
+                            fontWeight: 600,
+                            padding: '3px 8px',
+                            borderRadius: '6px',
+                            border: '1px solid rgba(255, 255, 255, 0.2)',
+                          }}
+                        >
+                          {branch.shortName} Dental Center
+                        </span>
 
-                    <span
-                      style={{
-                        backgroundColor: 'rgba(255, 255, 255, 0.92)',
-                        color: '#0F172A',
-                        fontSize: '0.7rem',
-                        fontWeight: 700,
-                        padding: '3px 9px',
-                        borderRadius: '9999px',
-                        display: 'inline-flex',
-                        alignItems: 'center',
-                        gap: '4px',
-                        boxShadow: '0 2px 6px rgba(0,0,0,0.2)',
-                      }}
-                    >
-                      <Camera size={12} color="#0F172A" />
-                      <span>Tour Clinic</span>
-                    </span>
-                  </div>
+                        <span
+                          style={{
+                            backgroundColor: 'rgba(255, 255, 255, 0.92)',
+                            color: '#0F172A',
+                            fontSize: '0.7rem',
+                            fontWeight: 700,
+                            padding: '3px 9px',
+                            borderRadius: '9999px',
+                            display: 'inline-flex',
+                            alignItems: 'center',
+                            gap: '4px',
+                            boxShadow: '0 2px 6px rgba(0,0,0,0.2)',
+                          }}
+                        >
+                          <Camera size={12} color="#0F172A" />
+                          <span>Tour Clinic</span>
+                        </span>
+                      </div>
+                    </>
+                  )}
                 </div>
 
                 {/* 7. Address & Working Hours Block */}
@@ -1122,7 +1125,7 @@ export const BranchesSection: React.FC<BranchesSectionProps> = ({ onOpenBooking 
                   style={{
                     width: '100%',
                     height: '100%',
-                    objectFit: 'cover',
+                    objectFit: 'contain',
                   }}
                 />
 
@@ -1185,9 +1188,11 @@ export const BranchesSection: React.FC<BranchesSectionProps> = ({ onOpenBooking 
                 <p style={{ margin: 0, fontWeight: 600, fontSize: '0.92rem', color: '#FFFFFF' }}>
                   {activeGallery.photos[activeGallery.currentIndex].title}
                 </p>
-                <p style={{ margin: '3px 0 0.85rem 0', fontSize: '0.8rem', color: '#94A3B8' }}>
-                  {activeGallery.photos[activeGallery.currentIndex].caption}
-                </p>
+                {activeGallery.photos[activeGallery.currentIndex].caption && (
+                  <p style={{ margin: '3px 0 0.85rem 0', fontSize: '0.8rem', color: '#94A3B8' }}>
+                    {activeGallery.photos[activeGallery.currentIndex].caption}
+                  </p>
+                )}
 
                 {/* Thumbnail strip */}
                 <div
